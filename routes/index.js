@@ -28,13 +28,7 @@ router.get('/supervisor', async (req, res) => {
   console.log(cardData);
   console.log("---------------- card DATA END--------------------")
 
-  // console.log("---------------- report DATA---------------------")
-  // console.log(reportData);
-  // console.log("---------------- report DATA END--------------------")
-
-  // console.log("---------------- certificate DATA---------------------")
-  // console.log(certificateData);
-  // console.log("---------------- certificate DATA END--------------------")
+  
 
 
   res.render('Supervisor', { "cardData": cardData, "reportData": reportData, "certificateData": certificateData })
@@ -53,40 +47,34 @@ if (req.session.user==='inspector') {
   res.redirect('/')
 }
 })
-
 router.post('/auth', async function (req, res) {
   console.log(req.body);
+
   if (req.body.user_role === 'supervisor') {
-    const user = await User.findOne({ 'userId': req.body.id, 'password': req.body.password }).exec();
-    console.log(user);
-    if (user) {
-      console.log('User Found ');
+    // Check if credentials match the hardcoded values
+    if (req.body.id === "user123" && req.body.password === "supervisor1@3") {
+      console.log('Hardcoded Supervisor User Found');
       req.session.user = "supervisor";
-      console.log("Session : "+req.session.user);
-      res.redirect('/supervisor')
-    } else {
-      console.log('Not Found ');
-      res.redirect('/')
+      console.log("Session:", req.session.user);
+      return res.redirect('/supervisor');
     }
+
+    
   }
+
   if (req.body.user_role === 'inspector') {
-    console.log("HELLLLLLLLLLLLLLLLLO");
-    let user = false;
-    if (req.body.id == "user456" && req.body.password == "inspector1@3")
-    {
-      user =true;
-    }
-    // const user = await User.findOne({ 'userId': req.body.id, 'password': req.body.password }).exec();
-    console.log(user);
-    if (user) {
-      console.log('User Found ');
+    console.log("Inspector Login Attempt");
+    if (req.body.id === "user456" && req.body.password === "inspector1@3") {
+      console.log('Hardcoded Inspector User Found');
       req.session.user = "inspector";
-      res.redirect('/inspector')
-    } else {
-      console.log('Not Found ');
-      res.redirect('/')
+      return res.redirect('/inspector');
     }
   }
+
+  // If user_role is not valid
+  console.log('Invalid User Role');
+  return res.redirect('/');
 });
+
 
 module.exports = router;

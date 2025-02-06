@@ -52,7 +52,7 @@ app.use(function(req, res, next) {
 //   res.render('error');
 // });
 // 'mongodb+srv://arsalan:123@cluster0.1pceytg.mongodb.net/aetco?retryWrites=true&w=majority'
-mongoose.connect(process.env.DB)
+mongoose.connect('mongodb+srv://ateco:InJWjrl8nNaEZ7ij@cluster0.9fandnt.mongodb.net/ateco?retryWrites=true&w=majority&appName=Cluster0')
 .then(()=>{
   console.log("connected to MongoDB");
   app.listen(4200,()=>{
