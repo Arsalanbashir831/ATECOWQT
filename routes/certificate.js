@@ -49,7 +49,7 @@ router.post("/insert", async (req, res) => {
             console.log(err);
         })
 
-        await qrcode.toFile("./uploads/certificates/" + body['certificateNo'] + "/qrcode.png", "https://atecosaudia-welderqualification-database.com/certificate/view/" + body['certificateNo']);
+        await qrcode.toFile("./uploads/certificates/" + body['certificateNo'] + "/qrcode.png", "https://atecowqt.onrender.com/certificate/view/" + body['certificateNo']);
 
         const cerf = await Certificate.create(req.body);
         const record = cerf
@@ -130,7 +130,7 @@ router.post("/update/:certificateNo", async (req, res) => {
 
         }
 
-        await qrcode.toFile("./uploads/certificates/" + certificateNo + "/qrcode.png", "https://atecosaudia-welderqualification-database.com/certificate/view/" + certificateNo);
+        await qrcode.toFile("./uploads/certificates/" + certificateNo + "/qrcode.png", "https://atecowqt.onrender.com/certificate/view/" + certificateNo);
 
         body['certificateNo'] = certificateNo;
         
