@@ -36,7 +36,14 @@ h6{font-size: 11px;}
              <%= record.clientName %></h3>
         </div>
       </th>
-      <th><img style="width:150px" src="/certificates/<%= record.certificateNo %>/profile.jpg" alt=""></th>
+      <th>
+        <!-- <img style="width:150px" src="/certificates/<%= record.certificateNo %>/profile.jpg" alt=""> -->
+      <img 
+  src="<%= record.profilePic %>" 
+  alt="Profile for <%= record.certificateNo %>" 
+  style="width:150px">
+
+      </th>
     
     </thead>
 
@@ -299,8 +306,11 @@ h6{font-size: 11px;}
 
                     <div style="display: flex; justify-content: end; align-items: center; background-color: rgb(223, 223, 223); width: 100%;">
                       <p >To verify the information about the certificate. Please scan the QR code using any QR scan app</p>
-                      <img width="90px" src="/certificates/<%= record.certificateNo%>/qrcode.png" alt="">
-                     
+                      <!-- <img width="90px" src="/certificates/<%= record.certificateNo%>/qrcode.png" alt=""> -->
+                    <img 
+  src="<%= record.qrLink %>" 
+  alt="QR Code for <%= record.certificateNo %>" 
+  width="90">
                     </div>
           
                 </div>

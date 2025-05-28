@@ -1,160 +1,161 @@
-var express = require('express');
-var mongoose = require('mongoose');
-var qrcode = require('qrcode');
-const fs = require('fs');
-const Certificate = require('../models/certificateModel');
-const path = require('path');
-var router = express.Router();
+// routes/certificate.js
+const express = require("express");
+const qrcode = require("qrcode");
+const cloudinary = require("cloudinary").v2;
+const Certificate = require("../models/certificateModel");
 
-router.get("/", async (req, res) => {
-    res.render("insertCertificate")
-})
+async function computeCertNo(req, res, next) {
+	const last = await Certificate.findOne().sort({ _id: -1 });
+	const count = last ? last.count + 1 : 1;
+	req.count = count;
+	req.certificateNo = `certificate_${count}`;
+	req.welderId = `w-${count}`;
+	next();
+}
 
-router.post("/insert", async (req, res) => {
+module.exports = (upload) => {
+	const router = express.Router();
 
-    try {
-        const body = req.body;
-        // body['serial_no'] = Report.find().count()+1;
-        
-        const last_one = await Certificate.findOne().sort({ _id: -1 }).exec();
+	// show the form
+	router.get("/", (req, res) => res.render("insertCertificate"));
 
-        let no = 1;
-        console.log(last_one == NaN);
-        if (last_one && last_one != NaN) {
-            console.log(last_one)
-            no = last_one.count + 1;
-            console.log("HELOOOOOOOOOOOOOOOOOOOOo")
-        }
-        console.log(no);
-        body['count'] = no;
-        body['certificateNo'] = "certificate_" + String(no);
-        body['welderId'] = "w-" + no;
-        console.log(body['certificateNo']);
-        if (fs.existsSync("./uploads/certificates/" + body['certificateNo']) == false) {
-            fs.mkdirSync("./uploads/certificates/" + body['certificateNo'], (err) => {
-                console.log(err);
-            })
-        }
+	// handle insert
+	router.post(
+		"/insert",
+		computeCertNo, // <— sets req.certificateNo, req.count, req.welderId
+		upload.single("profile"), // <— CloudinaryStorage uses req.certificateNo
+		async (req, res, next) => {
+			try {
+				// Cloudinary URL for profile:
+				const profileImageUrl = req.file.path;
 
+				// generate QR code in-memory:
+				const viewUrl = `${process.env.FRONTEND_URL}/certificate/view/${req.certificateNo}`;
+				const qrDataUri = await qrcode.toDataURL(viewUrl, {
+					margin: 1,
+					width: 200,
+				});
 
-        // const iqama = req.files.iqama;
-        const profile = req.files.profile;
+				// upload QR under same folder, named cert-<id>-qr
+				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
+					folder: `certificates/${req.certificateNo}`,
+					public_id: `cert-${req.certificateNo}-qr`,
+					overwrite: true,
+				});
 
+				// save to Mongo:
+				await Certificate.create({
+					...req.body,
+					count: req.count,
+					certificateNo: req.certificateNo,
+					welderId: req.welderId,
+					profilePic: req.file.path,
+					qrLink: qrUpload.secure_url,
+				});
 
-        // await iqama.mv("./uploads/certificates/" + body['certificateNo'] + "/iqama.jpg", (err)=>{
-        //     console.log(err);
-        // })
+				res.redirect(`/certificate/view/${req.certificateNo}`);
+			} catch (err) {
+				next(err);
+			}
+		}
+	);
 
-        await profile.mv("./uploads/certificates/" + body['certificateNo'] + "/profile.jpg", (err) => {
-            console.log(err);
-        })
+	// VIEW
+	router.get("/view/:certificateNo", async (req, res, next) => {
+		try {
+			const record = await Certificate.findOne({
+				certificateNo: req.params.certificateNo,
+			});
+			if (!record) return res.status(404).send("Not found");
+			console.log("➡️ record.profileImageUrl =", record);
+			res.render("viewCertificate", { record });
+		} catch (err) {
+			next(err);
+		}
+	});
 
-        await qrcode.toFile("./uploads/certificates/" + body['certificateNo'] + "/qrcode.png", "https://atecowqt.onrender.com/certificate/view/" + body['certificateNo']);
+	// UPDATE (render edit form)
+	router.post("/edit/:certificateNo", async (req, res, next) => {
+		try {
+			const record = await Certificate.findOne({
+				certificateNo: req.params.certificateNo,
+			});
+			if (!record) return res.status(404).send("Not found");
+			res.render("EditCertificate", { record });
+		} catch (err) {
+			next(err);
+		}
+	});
 
-        const cerf = await Certificate.create(req.body);
-        const record = cerf
-        // res.send(cerf);
-        res.redirect("/certificate/view/" + body['certificateNo']);
-    }
-    catch(err){
-        res.send(err);
-    }
+	// UPDATE (apply changes)
+	router.post(
+		"/update/:certificateNo",
+		upload.single("profile"),
+		async (req, res, next) => {
+			try {
+				const certNo = req.params.certificateNo;
+				const updates = { ...req.body, certificateNo: certNo };
 
-})
+				// 1) New profile? storage will overwrite the old asset with the same public_id:
+				if (req.file) {
+					updates.profilePic = req.file.path;
+				}
 
-router.get("/view/:certificateNo", async (req, res) => {
-    const certificateNo = req.params.certificateNo;
+				// 2) Regenerate & re-upload QR with overwrite:
+				const viewUrl = `${process.env.FRONTEND_URL}/certificate/view/${certNo}`;
+				const qrDataUri = await qrcode.toDataURL(viewUrl, {
+					margin: 1,
+					width: 200,
+				});
+				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
+					folder: `certificates/${certNo}`,
+					public_id: `cert-${certNo}-qr`,
+					overwrite: true,
+				});
+				updates.qrLink = qrUpload.secure_url;
 
-    const record = await Certificate.findOne({ "certificateNo": certificateNo }).exec();
+				// 3) Preserve count & welderId
+				const existing = await Certificate.findOne({ certificateNo: certNo });
+				updates.count = existing.count;
+				updates.welderId = existing.welderId;
 
-    if (record) {
-        res.render("viewCertificate", { record });
-        console.log(record.certificateNo);
-    }
-    else {
-        res.status(404).send("No Record Found");
-    }
+				// 4) Apply the update
+				await Certificate.findOneAndUpdate({ certificateNo: certNo }, updates, {
+					new: true,
+				});
 
-})
+				res.redirect(`/certificate/view/${certNo}`);
+			} catch (err) {
+				next(err);
+			}
+		}
+	);
 
-router.post("/edit/:certificateNo", async (req, res) => {
-    const record = await Certificate.findOne({ "certificateNo": req.params.certificateNo }).exec();
+	// DELETE
+	router.get("/delete/:certificateNo", async (req, res, next) => {
+		try {
+			const certNo = req.params.certificateNo;
 
-    if (record) {
-        res.render("EditCertificate", { record });
-        console.log(record.certificateNo);
-    }
-    else {
-        res.status(404).send("No Record Found");
-    }
-})
+			// 1) remove both profile + qr from Cloudinary
+			await cloudinary.api.delete_resources(
+				[
+					`certificates/${certNo}/cert-${certNo}`, // profile image
+					`certificates/${certNo}/cert-${certNo}-qr`, // QR code
+				],
+				{ resource_type: "image" }
+			);
 
-router.get("/delete/:doc_id", async (req, res) => {
-    try {
-        const doc_id = req.params.doc_id;
-        // Find the document to delete
-        const deletedRecord = await Certificate.findOneAndDelete({ certificateNo: doc_id });
+			// 2) optionally delete the empty folder
+			await cloudinary.api.delete_folder(`certificates/${certNo}`);
 
-        if (deletedRecord) {
-            if (fs.existsSync(`./uploads/certificates/${doc_id}`)) {
-                fs.rmdirSync(`./uploads/certificates/${doc_id}`, { recursive: true, force: true });
-            }
-            res.redirect('/supervisor')
-            // res.status(200).json({ message: "Record deleted successfully" });
-        } else {
-            res.status(404).json({ error: "Record not found" });
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).send(error);
-    }
-});
+			// 3) remove from Mongo
+			await Certificate.findOneAndDelete({ certificateNo: certNo });
 
+			res.redirect("/supervisor");
+		} catch (err) {
+			next(err);
+		}
+	});
 
-router.post("/update/:certificateNo", async (req, res) => {
-    try {
-        let body = req.body;
-        let certificateNo = req.params.certificateNo;
-
-
-        if (req.files !== null) {
-            if (req.files.profile !== null && req.files.profile !== undefined) {
-                const profile = req.files.profile;
-                await profile.mv("./uploads/certificates/" + certificateNo + "/profile.jpg")
-            }
-
-            // if (req.files.iqama !== undefined && req.files.iqama !== null){
-            //     const iqama = req.files.iqama;
-            //     await iqama.mv("./uploads/certificates/" + certificateNo + "/iqama.jpg")
-            // }
-
-        }
-
-        await qrcode.toFile("./uploads/certificates/" + certificateNo + "/qrcode.png", "https://atecowqt.onrender.com/certificate/view/" + certificateNo);
-
-        body['certificateNo'] = certificateNo;
-        
-
-        const da = await Certificate.findOneAndDelete({ "certificateNo": certificateNo })
-        if (da['count'] === null) {
-            body['count'] = certificateNo.split("_")[1];
-        }
-        else
-            body['count'] = da['count']
-
-        body['welderId'] = "w-" + certificateNo.split("_")[1];
-        console.log(body['count']);
-
-        const updated = await Certificate.create(req.body);
-        
-        res.redirect("/certificate/view/" + certificateNo);
-    }
-    catch (err) {
-        console.error(err);
-        res.send(err);
-    }
-
-
-})
-module.exports = router;
-
+	return router;
+};
