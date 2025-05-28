@@ -1,172 +1,156 @@
-var express = require('express');
-var mongoose = require('mongoose');
-var qrcode = require('qrcode');
-const fs = require('fs');
-const Card = require('../models/cardModel');
-const path = require('path');
-const { time } = require('console');
-var router = express.Router();
+// routes/card.js
+const express = require("express");
+const qrcode = require("qrcode");
+const cloudinary = require("cloudinary").v2;
+const Card = require("../models/cardModel");
 
-router.get("/", async (req, res) => {
-    res.render("insertCard");
-})
+// before Multer runs, assign req.card_no & req.count
+async function computeCardNo(req, res, next) {
+	const last = await Card.findOne().sort({ _id: -1 });
+	const count = last ? last.count + 1 : 1;
+	req.count = count;
+	req.card_no = `c-${count}`;
+	req.welder_id = `w-${count}`;
+	next();
+}
 
-router.post("/insert", async (req, res) => {
+function setCardNoFromParam(req, res, next) {
+	req.card_no = req.params.card_no;
+	next();
+}
 
-    try {
-        let body = req.body;
-        const last_one = await Card.findOne().sort({ _id: -1 }).exec();
-        let no = 1;
-        if (last_one) {
-            console.log(last_one)
-            no = last_one.count + 1;
-        }
-        body['count'] = no;
-        body['welder_id'] = "w-" + no;
-        body['card_no'] = "c-" + no;
+module.exports = (upload) => {
+	const router = express.Router();
 
+	// form
+	router.get("/", (req, res) => res.render("insertCard"));
 
+	// INSERT
+	router.post(
+		"/insert",
+		computeCardNo, // sets req.card_no, req.count, req.welder_id
+		upload.single("card"), // uses uploadCard
+		async (req, res, next) => {
+			try {
+				// 1) get the full HTTPS URL of the uploaded photo
+				const imageUrl = req.file.path;
 
-        let folder_name = "./uploads/" + body['card_no'];
-        console.log(folder_name)
-        if (!fs.existsSync(folder_name)) {
-            fs.mkdirSync(folder_name, (err) => {
-                if (err) {
-                    console.error('Error creating directory:', err);
-                } else {
-                    console.log('Directory created successfully');
-                }
-            });
-        }
+				// 2) generate QR data URI and upload
+				const viewLink = `${process.env.FRONTEND_URL}/card/view/${req.card_no}`;
+				const qrDataUri = await qrcode.toDataURL(viewLink, {
+					width: 200,
+					margin: 1,
+				});
+				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
+					folder: `cards/${req.card_no}`,
+					public_id: `card-${req.card_no}-qr`,
+					overwrite: true,
+				});
 
+				// 3) create the Card with real URLs
+				const card = await Card.create({
+					...req.body,
+					count: req.count,
+					card_no: req.card_no,
+					welder_id: req.welder_id,
+					image: imageUrl,
+					qr: qrUpload.secure_url,
+				});
 
-        if (req.files !== null) {
-            const file = req.files.card;
-            let fname = body['card_no'] + ".jpg"
-            await file.mv("./uploads/" + body['card_no'] + "/" + fname, (err) => {
-                if (err) {
-                    console.error('Error moving File:', err);
-                } else {
-                    console.log('File moving successfully');
-                    body['image'] = body['card_no'] + ".jpg"
-                }
-            })
-        }
+				res.render("viewCard", { record: card });
+			} catch (err) {
+				next(err);
+			}
+		}
+	);
 
-        await qrcode.toFile("./uploads/" + body['card_no'] + "/" + body['card_no'] + ".png", "https://atecowqt.onrender.com/card/view/" + body['card_no']);
-        body['qr'] = body['card_no'] + ".png"
-        const card = await Card.create(body);
-        const record = card
-        res.render("viewCard", { 'record': record })
-        // res.send(card);
-    }
-    catch (err){
-        res.send(err);
-    }
-})
+	// EDIT
+	router.get("/edit/:card_no", async (req, res) => {
+		let card_no = req.params.card_no;
+		const record = await Card.findOne({ card_no: card_no }).exec();
+		console.log(record);
+		if (record) {
+			res.render("editCard", { record: record });
+		} else {
+			res.status(404).json({ Status: "FAILED" });
+		}
+	});
 
-router.get("/view/:card_no", async (req, res) => {
-    let card_no = req.params.card_no;
+	// VIEW
+	router.get("/view/:card_no", async (req, res, next) => {
+		try {
+			const record = await Card.findOne({ card_no: req.params.card_no });
+			if (!record) return res.status(404).send("Not found");
+			res.render("viewCard", { record });
+		} catch (err) {
+			next(err);
+		}
+	});
 
-    const record = await Card.findOne({ "card_no": card_no }).exec()
-    console.log(record)
-    if (record) {
-        res.render("viewCard", { 'record': record })
-    }
-    else {
-        res.status(404).json({ "Status": "FAILED" });
-    }
-})
+	// UPDATE
+	router.post(
+		"/update/:card_no",
+		setCardNoFromParam, // ← this ensures storage.params sees req.card_no
+		upload.single("card"), // ← now uses the right folder `cards/c-6`
+		async (req, res, next) => {
+			try {
+				const cn = req.params.card_no;
+				const updates = { ...req.body, card_no: cn };
 
+				// new upload overwrote the right path
+				if (req.file) updates.image = req.file.path;
 
-router.get("/edit/:card_no", async (req, res) => {
-    let card_no = req.params.card_no;
-    const record = await Card.findOne({ "card_no": card_no }).exec();
-    console.log(record)
-    if (record) {
-        res.render("editCard", { 'record': record })
-    }
-    else {
-        res.status(404).json({ "Status": "FAILED" });
-    }
-})
-router.get("/delete/:card_no", async (req, res) => {
-    try {
-        const card_no = req.params.card_no;
-        // Find the document to delete
-        const deletedRecord = await Card.findOneAndDelete({ card_no: card_no });
+				// regenerate QR in the same folder
+				const viewLink = `${process.env.FRONTEND_URL}/card/view/${cn}`;
+				const qrDataUri = await qrcode.toDataURL(viewLink, {
+					width: 200,
+					margin: 1,
+				});
+				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
+					folder: `cards/${cn}`,
+					public_id: `card-${cn}-qr`,
+					overwrite: true,
+				});
+				updates.qr = qrUpload.secure_url;
 
-        if (deletedRecord) {
-            if (fs.existsSync(`./uploads/${card_no}`)) {
-                fs.rmdirSync(`./uploads/${card_no}`, { recursive: true, force: true });
-            }
-            res.redirect('/supervisor')
-            // res.status(200).json({ message: "Record deleted successfully" });
-        } else {
-            res.status(404).json({ error: "Record not found" });
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
+				// preserve count & welder_id
+				const existing = await Card.findOne({ card_no: cn });
+				updates.count = existing.count;
+				updates.welder_id = existing.welder_id;
 
+				await Card.findOneAndUpdate({ card_no: cn }, updates, { new: true });
+				res.redirect(`/card/view/${cn}`);
+			} catch (err) {
+				next(err);
+			}
+		}
+	);
 
-router.post("/update/:card_no", async (req, res) => {
-    let card_no = req.params.card_no;
-    console.log(req.files);
+	// DELETE
+	router.get("/delete/:card_no", async (req, res, next) => {
+		const cn = req.params.card_no;
 
-    let body = req.body;
-    let folder_name = "./uploads/" + card_no;
-    console.log(card_no)
+		try {
+			// destroy the main photo
+			await cloudinary.uploader.destroy(`cards/${cn}/card-${cn}`, {
+				resource_type: "image",
+			});
+			// destroy the QR
+			await cloudinary.uploader.destroy(`cards/${cn}/card-${cn}-qr`, {
+				resource_type: "image",
+			});
+			// now delete the (now empty) folder
+			await cloudinary.api.delete_folder(`cards/${cn}`);
 
-    try {
+			// finally remove the DB record
+			await Card.findOneAndDelete({ card_no: cn });
 
-        if (req.files !== null) {
-            const file = req.files.card;
-            if (fs.existsSync(folder_name)) {
-                console.log("EXISTS");
-                fs.rmdirSync(folder_name, { recursive: true, force: true });
-            }
+			res.redirect("/supervisor");
+		} catch (err) {
+			console.error("Cloudinary delete failed:", err);
+			next(err);
+		}
+	});
 
-            fs.mkdirSync(folder_name, (err) => {
-                if (err) {
-                    console.error('Error creating directory:', err);
-                } else {
-                    console.log('Directory created successfully');
-                }
-            });
-
-            let fname = body['card_no'] + ".jpg"
-            await file.mv("./uploads/" + "/" + body['card_no'] + "/" + fname, (err) => {
-                if (err) {
-                    console.error('Error moving File:', err);
-                } else {
-                    console.log('File moving successfully');
-                }
-            })
-        }
-
-        await qrcode.toFile("./uploads/" + body['card_no'] + "/" + body['card_no'] + ".png", "https://atecowqt.onrender.com/card/view/" + body['card_no']);
-        body['qr'] = body['card_no'] + ".png"
-        body['image'] = body['card_no'] + ".jpg"
-
-        body['card_no'] = card_no;
-
-        const da = await Card.findOneAndDelete({ "card_no": card_no }).exec();
-        body['count'] = da.count;
-        body['welder_id'] = da.welder_id;
-        console.log("-------------------DELETED-------------------------")
-        console.log(da)
-
-        const updatedRecord = await Card.create(body);
-
-
-        res.redirect("/card/view/" + card_no);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(404).send(err);
-    }
-})
-module.exports = router;
+	return router;
+};

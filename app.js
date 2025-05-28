@@ -17,7 +17,8 @@ cloudinary.config({
 	api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const storage = new CloudinaryStorage({
+// --- certificates storage+upload ---
+const certStorage = new CloudinaryStorage({
 	cloudinary,
 	params: async (req, file) => ({
 		folder: `certificates/${req.certificateNo}`,
@@ -27,8 +28,20 @@ const storage = new CloudinaryStorage({
 		resource_type: "image",
 	}),
 });
+const uploadCert = multer({ storage: certStorage });
 
-const upload = multer({ storage });
+// --- cards storage+upload ---
+const cardStorage = new CloudinaryStorage({
+	cloudinary,
+	params: async (req, file) => ({
+		folder: `cards/${req.card_no}`,
+		public_id: `card-${req.card_no}`,
+		format: "jpg",
+		overwrite: true,
+		resource_type: "image",
+	}),
+});
+const uploadCard = multer({ storage: cardStorage });
 
 // ––– Express app setup –––
 const app = express();
@@ -48,15 +61,15 @@ app.use(express.static(path.join(__dirname, "public")));
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const reportRouter = require("./routes/report");
-const cardRouter = require("./routes/card");
 // note: we’ll inject `upload` into the certificate router
-const certificateRouter = require("./routes/certificate")(upload);
+const certificateRouter = require("./routes/certificate")(uploadCert);
+const cardRouter = require("./routes/card")(uploadCard);
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/report", reportRouter);
-app.use("/card", cardRouter);
 app.use("/certificate", certificateRouter);
+app.use("/card", cardRouter);
 
 // catch 404
 app.use(function (req, res, next) {

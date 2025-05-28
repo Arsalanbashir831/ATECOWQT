@@ -1,256 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- <link rel="stylesheet" href="style.css" /> -->
+		<title>Document</title>
+	</head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- <link rel="stylesheet" href="style.css" /> -->
-  <title>Document</title>
-</head>
-
-<body style="width: 216mm; height: 279mm; margin: auto">
-
-  <form action="/card/update/<%= record.card_no %>" method="post" enctype="multipart/form-data">
-  <div class="card">
-    <div class="flex-between">
-      <img  style="width: 150px; height: 100px;" class="logo" src="/images/logo.png" alt="logo" />
-      <div style="text-align: center; color: #14ab55">
-        <p style="text-transform: uppercase">
-          Ateco Arabian Testing Evolution
-        </p>
-        <p style="margin: 8px 0; font-size: 13px">
-          شارع الزین العابدین, Ar Rabiyah, Dammam 32437
-        </p>
-        <p style="text-transform: uppercase">Welder Qualification Card</p>
-      </div>
-      <!-- <img  style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
-    </div>
-    <div>
-      <label style=" cursor: pointer; background-color: rgb(4, 111, 0); color: white; padding: 5px;" for="files"
-        class="btn">Select Image</label>
-      <input id="files" value="/<%= record.card_no %>/<%= record.image %>" style="visibility:hidden;" name="card" type="file" accept="image/jpg" onchange="previewImage(event)">
-
-    </div>
-    <br>
-    <div class="flex">
-      <img src="/<%= record.card_no %>/<%= record.image %>" id="preview-selected-image" style="width: 200px; height: 200px;" class="person-img"/>
-      <table id="table-1">
-        <tbody>
-          <tr>
-            <td>Company</td>
-            <td>: <input type ="text" name="company" value="<%=record.company %>"/></td>
-          </tr>
-          <tr>
-            <td>Welder Name</td>
-            <td>:<input type="text" name="welder_name" value="<%=record.welder_name %>" id=""></td>
-          </tr>
-          <tr>
-            <td>Iqama No</td>
-            <td>:<input type="text" name="iqama_no" value="<%=record.iqama_no  %>" id=""></td>
-          </tr>
-          <!-- <tr>
+	<body style="width: 216mm; height: 279mm; margin: auto">
+		<form
+			action="/card/update/<%= record.card_no %>"
+			method="post"
+			enctype="multipart/form-data">
+			<div class="card">
+				<div class="flex-between">
+					<img
+						style="width: 150px; height: 100px"
+						class="logo"
+						src="/images/logo.png"
+						alt="logo" />
+					<div style="text-align: center; color: #14ab55">
+						<p style="text-transform: uppercase">
+							Ateco Arabian Testing Evolution
+						</p>
+						<p style="margin: 8px 0; font-size: 13px">
+							شارع الزین العابدین, Ar Rabiyah, Dammam 32437
+						</p>
+						<p style="text-transform: uppercase">Welder Qualification Card</p>
+					</div>
+					<!-- <img  style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
+				</div>
+				<div>
+					<label
+						style="
+							cursor: pointer;
+							background-color: rgb(4, 111, 0);
+							color: white;
+							padding: 5px;
+						"
+						for="files"
+						class="btn"
+						>Select Image</label
+					>
+					<input
+						id="files"
+						value="/<%= record.card_no %>/<%= record.image %>"
+						style="visibility: hidden"
+						name="card"
+						type="file"
+						accept="image/jpg"
+						onchange="previewImage(event)" />
+				</div>
+				<br />
+				<div class="flex">
+					<img
+						src="<%= record.image %>"
+						alt="Welder photo"
+						class="person-img" />
+					<table id="table-1">
+						<tbody>
+							<tr>
+								<td>Company</td>
+								<td>
+									:
+									<input
+										type="text"
+										name="company"
+										value="<%=record.company %>" />
+								</td>
+							</tr>
+							<tr>
+								<td>Welder Name</td>
+								<td>
+									:<input
+										type="text"
+										name="welder_name"
+										value="<%=record.welder_name %>"
+										id="" />
+								</td>
+							</tr>
+							<tr>
+								<td>Iqama No</td>
+								<td>
+									:<input
+										type="text"
+										name="iqama_no"
+										value="<%=record.iqama_no  %>"
+										id="" />
+								</td>
+							</tr>
+							<!-- <tr>
               <td>Welder ID</td>
               <td>: AT-02</td>
             </tr> -->
-          <!-- <tr>
+							<!-- <tr>
               <td>Card No</td>
               <td>: CAL-2023-1213</td>
             </tr> -->
-        </tbody>
-      </table>
-    </div>
-    <div class="flex-between" style="margin-top: 20px">
-      <div>
-        <input type="text" value="<%=record.authorized_by %>" name="authorized_by" id="">
-        <p style="margin-top: 3px">Authorized by</p>
-      </div>
-      <div>
-        <input type="text" value="<%=record.welding_inspector %>" name="welding_inspector" id="">
-        <p style="margin-top: 3px">Welding Inspector</p>
-      </div>
-    </div>
-    <p style="margin-top: 8px; font-size: 14px">
-      This is to certify that this person has been tested in accordance with
-      requirements of <span style="color: #14ab55">ASME SEC IX - <input value="<%=record.year %>" type="text" name="year" id=""></span>
-    </p>
-  </div>
-  <div style="border: 2px black solid; margin-top: 10px">
-    <table id="table-2" style="width: 100%">
-      <tr>
-        <td>Card No</td>
-        <td><input type="text" hidden name="card_no" id="" value="<%=record.card_no %>"></td>
-        <td>WPS/PQR No.</td>
-        <td><input type="text" value="<%=record.wps_pqr_no %>" name="wps_pqr_no" id=""></td>
-      </tr>
-      <tr>
-        <td>Process</td>
-        <td><input type="text" name="process" value="<%=record.process %>" id=""></td>
-        <td>Joint Type</td>
-        <td><input type="text" value="<%=record.joint_type %>" name="joint_type" id=""></td>
-      </tr>
-      <tr>
-        <td>Test Position</td>
-        <td><input type="text" name="test_position" value="<%=record.test_position %>" id=""></td>
-        <td>Position Qualified</td>
-        <td><input type="text" value="<%=record.position_qualified %>" name="position_qualified" id=""></td>
-      </tr>
-      <tr>
-        <td>Vertical Progression</td>
-        <td><input type="text" value="<%=record.vertical_progression %>" name="vertical_progression" id=""></td>
-        <td>Test Thickness</td>
-        <td><input type="text" value="<%=record.test_thickness %>" name="test_thickness" id=""></td>
-      </tr>
-      <tr>
-        <td>Test Dia</td>
-        <td><input type="text" value="<%=record.test_dia %>" name="test_dia" id=""></td>
+						</tbody>
+					</table>
+				</div>
+				<div class="flex-between" style="margin-top: 20px">
+					<div>
+						<input
+							type="text"
+							value="<%=record.authorized_by %>"
+							name="authorized_by"
+							id="" />
+						<p style="margin-top: 3px">Authorized by</p>
+					</div>
+					<div>
+						<input
+							type="text"
+							value="<%=record.welding_inspector %>"
+							name="welding_inspector"
+							id="" />
+						<p style="margin-top: 3px">Welding Inspector</p>
+					</div>
+				</div>
+				<p style="margin-top: 8px; font-size: 14px">
+					This is to certify that this person has been tested in accordance with
+					requirements of
+					<span style="color: #14ab55"
+						>ASME SEC IX -
+						<input value="<%=record.year %>" type="text" name="year" id=""
+					/></span>
+				</p>
+			</div>
+			<div style="border: 2px black solid; margin-top: 10px">
+				<table id="table-2" style="width: 100%">
+					<tr>
+						<td>Card No</td>
+						<td>
+							<input
+								type="text"
+								hidden
+								name="card_no"
+								id=""
+								value="<%=record.card_no %>" />
+						</td>
+						<td>WPS/PQR No.</td>
+						<td>
+							<input
+								type="text"
+								value="<%=record.wps_pqr_no %>"
+								name="wps_pqr_no"
+								id="" />
+						</td>
+					</tr>
+					<tr>
+						<td>Process</td>
+						<td>
+							<input
+								type="text"
+								name="process"
+								value="<%=record.process %>"
+								id="" />
+						</td>
+						<td>Joint Type</td>
+						<td>
+							<input
+								type="text"
+								value="<%=record.joint_type %>"
+								name="joint_type"
+								id="" />
+						</td>
+					</tr>
+					<tr>
+						<td>Test Position</td>
+						<td>
+							<input
+								type="text"
+								name="test_position"
+								value="<%=record.test_position %>"
+								id="" />
+						</td>
+						<td>Position Qualified</td>
+						<td>
+							<input
+								type="text"
+								value="<%=record.position_qualified %>"
+								name="position_qualified"
+								id="" />
+						</td>
+					</tr>
+					<tr>
+						<td>Vertical Progression</td>
+						<td>
+							<input
+								type="text"
+								value="<%=record.vertical_progression %>"
+								name="vertical_progression"
+								id="" />
+						</td>
+						<td>Test Thickness</td>
+						<td>
+							<input
+								type="text"
+								value="<%=record.test_thickness %>"
+								name="test_thickness"
+								id="" />
+						</td>
+					</tr>
+					<tr>
+						<td>Test Dia</td>
+						<td>
+							<input
+								type="text"
+								value="<%=record.test_dia %>"
+								name="test_dia"
+								id="" />
+						</td>
 
-        <td>Thickness Qualified</td>
-        <td><input type="text" value="<%= record.thickness_qualified %>" name="thickness_qualified" id=""></td>
-        
-      </tr>
-      <tr>
-        <td>P No Qualified</td>
-        <td><input type="text"value="<%=record.p_no_qualified %>" name="p_no_qualified" id=""></td>
+						<td>Thickness Qualified</td>
+						<td>
+							<input
+								type="text"
+								value="<%= record.thickness_qualified %>"
+								name="thickness_qualified"
+								id="" />
+						</td>
+					</tr>
+					<tr>
+						<td>P No Qualified</td>
+						<td>
+							<input
+								type="text"
+								value="<%=record.p_no_qualified %>"
+								name="p_no_qualified"
+								id="" />
+						</td>
 
-        <td>Diameter Qualified</td>
-        <td><input type="text" name="diameter_qualified" value="<%=record.diameter_qualified %>" id=""></td>
+						<td>Diameter Qualified</td>
+						<td>
+							<input
+								type="text"
+								name="diameter_qualified"
+								value="<%=record.diameter_qualified %>"
+								id="" />
+						</td>
+					</tr>
+					<tr>
+						<td>F No Qualified</td>
+						<td>
+							<input
+								type="text"
+								name="f_no_qualified"
+								value="<%=record.f_no_qualified %>"
+								id="" />
+						</td>
+						<td>Electrode Class Used</td>
+						<td>
+							<input
+								type="text"
+								name="electrode_class_used"
+								value="<%=record.electrode_class_used %>"
+								id="" />
+						</td>
+					</tr>
+					<tr>
+						<td>Place of Issue</td>
+						<td>
+							<input
+								type="text"
+								value="<%=record.place_of_issue %>"
+								name="place_of_issue"
+								id="" />
+						</td>
+						<td>Test Method</td>
+						<td>
+							<input
+								type="text"
+								value="<%=record.test_method %>"
+								name="test_method"
+								id="" />
+						</td>
+					</tr>
+					<tr>
+						<td>Date of Test</td>
+						<td>
+							<input
+								type="date"
+								value="<%=record.date_of_test %>"
+								name="date_of_test"
+								id="" />
+						</td>
+						<td>Date of Exp</td>
+						<td>
+							<input
+								type="date"
+								value="<%=record. date_of_expiry%>"
+								name="date_of_expiry"
+								id="" />
+						</td>
+					</tr>
+				</table>
+				<p style="border: 2px black solid; padding: 5px; font-size: 15px">
+					This card, on its own qualifies the welder for 6 months from the Date
+					of test. Beynd this date welding records must be consulted to ensure
+					the welder's qualification has been maintained.
+				</p>
+			</div>
 
-      </tr>
-      <tr>
-        <td>F No Qualified</td>
-        <td><input type="text" name="f_no_qualified" value="<%=record.f_no_qualified %>" id=""></td>
-        <td>Electrode Class Used</td>
-        <td><input type="text" name="electrode_class_used" value="<%=record.electrode_class_used %>" id=""></td>
-      </tr>
-      <tr>
-        <td>Place of Issue</td>
-        <td><input type="text"value="<%=record.place_of_issue %>" name="place_of_issue" id=""></td>
-        <td>Test Method</td>
-        <td><input type="text" value="<%=record.test_method %>" name="test_method" id=""></td>
-      </tr>
-      <tr>
-        <td>Date of Test</td>
-        <td><input type="date" value="<%=record.date_of_test %>" name="date_of_test" id=""></td>
-        <td>Date of Exp</td>
-        <td><input type="date" value="<%=record. date_of_expiry%>" name="date_of_expiry" id=""></td>
-      </tr>
-    </table>
-    <p style="border: 2px black solid; padding: 5px; font-size: 15px">
-      This card, on its own qualifies the welder for 6 months from the Date of
-      test. Beynd this date welding records must be consulted to ensure the
-      welder's qualification has been maintained.
-    </p>
-  </div>
+			<input type="submit" value="Update" />
+		</form>
 
-  <input type="submit" value="Update"/>
-</form>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				font-family: sans-serif;
+				font-weight: 600;
+			}
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      font-weight: 600;
+			.card {
+				margin-top: 10px;
+				padding: 10px;
+				border: 4px black solid;
+			}
 
-    }
+			.flex {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
 
-    .card {
-      margin-top: 10px;
-      padding: 10px;
-      border: 4px black solid
-    }
+			.flex-between {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
 
-    .flex {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+			.logo {
+				height: 150px;
+				width: 200px;
+			}
 
-    .flex-between {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+			.qrcode {
+				height: 150px;
+				width: 150px;
+			}
 
-    .logo {
-      height: 150px;
-      width: 200px
-    }
+			.person-img {
+				height: 200px;
+				width: 200px;
+				object-fit: cover;
+			}
 
-    .qrcode {
-      height: 150px;
-      width: 150px;
-    }
+			#table-1 {
+				border-collapse: separate;
+				border-spacing: 0 20px;
+				/* Adjust the second value for vertical spacing */
+			}
 
-    .person-img {
-      height: 200px;
-      width: 200px;
-      object-fit: cover
-    }
+			#table-2 {
+				border-collapse: separate;
+				border-spacing: 0;
+			}
 
-    #table-1 {
-      border-collapse: separate;
-      border-spacing: 0 20px;
-      /* Adjust the second value for vertical spacing */
-    }
+			#table-2 td {
+				border: 2px black solid;
+				padding: 5px;
+			}
 
-    #table-2 {
-      border-collapse: separate;
-      border-spacing: 0;
-    }
+			td:nth-child(even) {
+				color: #14ab55;
+				/* Apply your styling for even rows */
+			}
+		</style>
+	</body>
 
-    #table-2 td {
-      border: 2px black solid;
-      padding: 5px;
-    }
+	<script>
+		/**
+		 * Create an arrow function that will be called when an image is selected.
+		 */
+		const previewImage = (event) => {
+			/**
+			 * Get the selected files.
+			 */
+			const imageFiles = event.target.files;
+			/**
+			 * Count the number of files selected.
+			 */
+			const imageFilesLength = imageFiles.length;
+			/**
+			 * If at least one image is selected, then proceed to display the preview.
+			 */
+			if (imageFilesLength > 0) {
+				/**
+				 * Get the image path.
+				 */
+				const imageSrc = URL.createObjectURL(imageFiles[0]);
+				/**
+				 * Select the image preview element.
+				 */
+				const imagePreviewElement = document.querySelector(
+					"#preview-selected-image"
+				);
+				/**
+				 * Assign the path to the image preview element.
+				 */
+				imagePreviewElement.src = imageSrc;
+				/**
+				 * Show the element by changing the display value to "block".
+				 */
+				imagePreviewElement.style.display = "block";
 
-    td:nth-child(even) {
-      color: #14ab55;
-      /* Apply your styling for even rows */
-    }
-  </style>
-
-</body>
-
-<script>
-
-  /**
- * Create an arrow function that will be called when an image is selected.
- */
-const previewImage = (event) => {
-    /**
-     * Get the selected files.
-     */
-    const imageFiles = event.target.files;
-    /**
-     * Count the number of files selected.
-     */
-    const imageFilesLength = imageFiles.length;
-    /**
-     * If at least one image is selected, then proceed to display the preview.
-     */
-    if (imageFilesLength > 0) {
-        /**
-         * Get the image path.
-         */
-        const imageSrc = URL.createObjectURL(imageFiles[0]);
-        /**
-         * Select the image preview element.
-         */
-        const imagePreviewElement = document.querySelector("#preview-selected-image");
-        /**
-         * Assign the path to the image preview element.
-         */
-        imagePreviewElement.src = imageSrc;
-        /**
-         * Show the element by changing the display value to "block".
-         */
-        imagePreviewElement.style.display = "block";
-
-        const files = document.querySelector("#files");
-        files.value = imageSrc;
-    }
-};
-</script>
-
+				const files = document.querySelector("#files");
+				files.value = imageSrc;
+			}
+		};
+	</script>
 </html>
