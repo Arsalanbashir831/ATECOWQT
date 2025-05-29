@@ -81,49 +81,19 @@ module.exports = (upload) => {
 
 	// UPDATE (render edit form)
 	router.post(
-		"/update/:certificateNo",
-		setCertNoFromParam, // ← ensure req.certificateNo is set
-		upload.single("profile"), // now storage.params sees req.certificateNo
+		"/edit/:certificateNo",
+		setCertNoFromParam,
 		async (req, res, next) => {
-			try {
-				const certNo = req.params.certificateNo;
-				const updates = { ...req.body, certificateNo: certNo };
-
-				// 1) If there’s a new profile, Multer+Storage will overwrite
-				if (req.file) {
-					updates.profilePic = req.file.path;
-				}
-
-				// 2) Regenerate QR
-				const viewUrl = `${process.env.FRONTEND_URL}/certificate/view/${certNo}`;
-				const qrDataUri = await qrcode.toDataURL(viewUrl, {
-					margin: 1,
-					width: 200,
-				});
-				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
-					folder: `certificates/${certNo}`,
-					public_id: `cert-${certNo}-qr`,
-					overwrite: true,
-				});
-				updates.qrLink = qrUpload.secure_url;
-
-				// 3) Preserve count & welderId
-				const existing = await Certificate.findOne({ certificateNo: certNo });
-				updates.count = existing.count;
-				updates.welderId = existing.welderId;
-
-				// 4) Write it back
-				await Certificate.findOneAndUpdate({ certificateNo: certNo }, updates, {
-					new: true,
-				});
-
-				res.redirect(`/certificate/view/${certNo}`);
-			} catch (err) {
-				next(err);
-			}
+		  try {
+			const certNo = req.params.certificateNo;
+			const record = await Certificate.findOne({ certificateNo: certNo });
+			if (!record) return res.status(404).send("Certificate not found");
+			res.render("EditCertificate", { record });
+		  } catch (err) {
+			next(err);
+		  }
 		}
-	);
-
+	  );
 	// UPDATE (apply changes)
 	router.post(
 		"/update/:certificateNo",
