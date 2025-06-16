@@ -28,7 +28,7 @@ module.exports = (upload) => {
 	// INSERT
 	router.post(
 		"/insert",
-		computeCardNo, // sets req.card_no, req.count, req.welder_id
+		computeCardNo, // sets req.card_no, req.count
 		upload.single("card"), // uses uploadCard
 		async (req, res, next) => {
 			try {
@@ -49,10 +49,9 @@ module.exports = (upload) => {
 
 				// 3) create the Card with real URLs
 				const card = await Card.create({
-					...req.body,
+					...req.body, // welder_id comes from payload
 					count: req.count,
 					card_no: req.card_no,
-					welder_id: req.welder_id,
 					image: imageUrl,
 					qr: qrUpload.secure_url,
 				});
@@ -90,17 +89,15 @@ module.exports = (upload) => {
 	// UPDATE
 	router.post(
 		"/update/:card_no",
-		setCardNoFromParam, // ← this ensures storage.params sees req.card_no
-		upload.single("card"), // ← now uses the right folder `cards/c-6`
+		setCardNoFromParam,
+		upload.single("card"),
 		async (req, res, next) => {
 			try {
 				const cn = req.params.card_no;
 				const updates = { ...req.body, card_no: cn };
 
-				// new upload overwrote the right path
 				if (req.file) updates.image = req.file.path;
 
-				// regenerate QR in the same folder
 				const viewLink = `${process.env.FRONTEND_URL}/card/view/${cn}`;
 				const qrDataUri = await qrcode.toDataURL(viewLink, {
 					width: 200,
@@ -113,10 +110,9 @@ module.exports = (upload) => {
 				});
 				updates.qr = qrUpload.secure_url;
 
-				// preserve count & welder_id
+				// preserve count only, welder_id comes from payload
 				const existing = await Card.findOne({ card_no: cn });
 				updates.count = existing.count;
-				updates.welder_id = existing.welder_id;
 
 				await Card.findOneAndUpdate({ card_no: cn }, updates, { new: true });
 				res.redirect(`/card/view/${cn}`);

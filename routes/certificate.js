@@ -121,10 +121,9 @@ module.exports = (upload) => {
 				});
 				updates.qrLink = qrUpload.secure_url;
 
-				// 3) Preserve count & welderId
+				// 3) Preserve only count
 				const existing = await Certificate.findOne({ certificateNo: certNo });
 				updates.count = existing.count;
-				updates.welderId = existing.welderId;
 
 				// 4) Apply the update
 				await Certificate.findOneAndUpdate({ certificateNo: certNo }, updates, {
