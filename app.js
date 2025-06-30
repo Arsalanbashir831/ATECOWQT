@@ -61,15 +61,17 @@ app.use(express.static(path.join(__dirname, "public")));
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const reportRouter = require("./routes/report");
-// note: we’ll inject `upload` into the certificate router
+// note: we'll inject `upload` into the certificate router
 const certificateRouter = require("./routes/certificate")(uploadCert);
 const cardRouter = require("./routes/card")(uploadCard);
+const apiRouter = require("./routes/api");
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/report", reportRouter);
 app.use("/certificate", certificateRouter);
 app.use("/card", cardRouter);
+app.use("/api", apiRouter);
 
 // catch 404
 app.use(function (req, res, next) {
