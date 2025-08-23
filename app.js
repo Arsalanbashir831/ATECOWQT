@@ -33,36 +33,66 @@ const certStorage = new CloudinaryStorage({
 	cloudinary,
 	params: async (req, file) => {
 		try {
-			if (!req.certificateNo) {
-				throw new Error('Certificate number not set in request');
+			// For certificate insertion, certificateNo should be set by computeCertNo middleware
+			// For certificate updates, it comes from the URL parameter
+			const certificateNo = req.certificateNo || req.params?.certificateNo || 'temp';
+			
+			if (!certificateNo || certificateNo === 'temp') {
+				console.warn('Certificate number not available, using temporary folder');
 			}
+			
 			return {
-				folder: `certificates/${req.certificateNo}`,
-				public_id: `cert-${req.certificateNo}`,
+				folder: `certificates/${certificateNo}`,
+				public_id: `cert-${certificateNo}`,
 				format: "jpg",
 				overwrite: true,
 				resource_type: "image",
 			};
 		} catch (error) {
 			console.error('Error in Cloudinary storage params:', error);
-			throw error;
+			// Return a fallback configuration instead of throwing
+			return {
+				folder: 'certificates/temp',
+				public_id: `cert-temp-${Date.now()}`,
+				format: "jpg",
+				overwrite: true,
+				resource_type: "image",
+			};
 		}
 	},
 });
-const uploadCert = multer({ 
-	storage: certStorage,
-	fileFilter: (req, file, cb) => {
-		console.log('Processing file:', file.originalname, 'Type:', file.mimetype);
-		if (file.mimetype.startsWith('image/')) {
-			cb(null, true);
-		} else {
-			cb(new Error('Only image files are allowed'), false);
+
+// Create a custom upload middleware with error handling
+const createUploadMiddleware = () => {
+	const upload = multer({ 
+		storage: certStorage,
+		fileFilter: (req, file, cb) => {
+			console.log('Processing file:', file.originalname, 'Type:', file.mimetype);
+			if (file.mimetype.startsWith('image/')) {
+				cb(null, true);
+			} else {
+				cb(new Error('Only image files are allowed'), false);
+			}
+		},
+		limits: {
+			fileSize: 5 * 1024 * 1024 // 5MB limit
 		}
-	},
-	limits: {
-		fileSize: 5 * 1024 * 1024 // 5MB limit
-	}
-});
+	});
+
+	// Return a middleware that handles errors
+	return (req, res, next) => {
+		upload.single('profile')(req, res, (err) => {
+			if (err) {
+				console.error('Upload error:', err);
+				req.fileError = err;
+				// Don't call next(err) here, let the route handle it
+			}
+			next();
+		});
+	};
+};
+
+const uploadCert = createUploadMiddleware();
 
 // --- cards storage+upload ---
 const cardStorage = new CloudinaryStorage({

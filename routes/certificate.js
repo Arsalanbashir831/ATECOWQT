@@ -45,6 +45,51 @@ module.exports = (upload) => {
 		res.sendFile(path.join(__dirname, '../test-form.html'));
 	});
 
+	// upload test form
+	router.get("/upload-test", (req, res) => {
+		res.sendFile(path.join(__dirname, '../upload-test.html'));
+	});
+
+	// test upload endpoint
+	router.post("/test-upload", upload, (req, res) => {
+		try {
+			console.log('Test upload - File:', req.file);
+			console.log('Test upload - Body:', req.body);
+			console.log('Test upload - File error:', req.fileError);
+			
+			if (req.fileError) {
+				return res.status(400).json({
+					error: 'Upload failed',
+					message: req.fileError.message
+				});
+			}
+			
+			if (!req.file) {
+				return res.status(400).json({
+					error: 'No file uploaded',
+					message: 'Please select a file to upload'
+				});
+			}
+			
+			res.json({
+				success: true,
+				file: {
+					originalname: req.file.originalname,
+					filename: req.file.filename,
+					path: req.file.path,
+					size: req.file.size,
+					mimetype: req.file.mimetype
+				}
+			});
+		} catch (error) {
+			console.error('Test upload error:', error);
+			res.status(500).json({
+				error: 'Server error',
+				message: error.message
+			});
+		}
+	});
+
 	// handle insert
 	router.post(
 		"/insert",
@@ -55,12 +100,17 @@ module.exports = (upload) => {
 			console.log('Request headers:', req.headers['content-type']);
 			next();
 		},
-		upload.single("profile"), // <— CloudinaryStorage uses req.certificateNo
+		upload, // <— Use the pre-configured upload middleware
 		async (req, res, next) => {
 			try {
 				console.log('Certificate insertion started for:', req.certificateNo);
 				console.log('Request body:', req.body);
 				console.log('File uploaded:', req.file);
+
+				// Check for upload errors
+				if (req.fileError) {
+					throw new Error(`File upload error: ${req.fileError.message}`);
+				}
 
 				// Validate required fields
 				if (!req.body.clientName || !req.body.welderName) {
@@ -156,10 +206,24 @@ module.exports = (upload) => {
 	// UPDATE (apply changes)
 	router.post(
 		"/update/:certificateNo",
-		upload.single("profile"),
+		(req, res, next) => {
+			console.log('📁 About to process update file upload...');
+			console.log('Certificate number for update:', req.params.certificateNo);
+			next();
+		},
+		upload, // <— Use the pre-configured upload middleware
 		async (req, res, next) => {
 			try {
 				const certNo = req.params.certificateNo;
+				console.log('Certificate update started for:', certNo);
+				console.log('Request body:', req.body);
+				console.log('File uploaded:', req.file);
+
+				// Check for upload errors
+				if (req.fileError) {
+					throw new Error(`File upload error: ${req.fileError.message}`);
+				}
+
 				const updates = { ...req.body, certificateNo: certNo };
 
 				// 1) New profile? storage will overwrite the old asset with the same public_id:
