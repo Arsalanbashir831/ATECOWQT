@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Certificate Insertion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .success {
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Certificate Insertion</h1>
+    <form id="certificateForm" action="/certificate/insert" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="clientName">Client Name *</label>
+            <input type="text" id="clientName" name="clientName" value="Test Client" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="welderName">Welder Name *</label>
+            <input type="text" id="welderName" name="welderName" value="Test Welder" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="profile">Profile Image *</label>
+            <input type="file" id="profile" name="profile" accept="image/*" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="identification_wps">WPS Identification</label>
+            <input type="text" id="identification_wps" name="identification_wps" value="TEST-WPS-001">
+        </div>
+        
+        <div class="form-group">
+            <label for="iqamaNo">Iqama/ID No</label>
+            <input type="text" id="iqamaNo" name="iqamaNo" value="TEST-IQAMA-001">
+        </div>
+        
+        <div class="form-group">
+            <label for="qualifcationStandard">Qualification Standard</label>
+            <input type="text" id="qualifcationStandard" name="qualifcationStandard" value="AWS D1.1">
+        </div>
+        
+        <div class="form-group">
+            <label for="supervisorName">Supervisor Name</label>
+            <input type="text" id="supervisorName" name="supervisorName" value="Test Supervisor">
+        </div>
+        
+        <div class="form-group">
+            <label for="welderInspector">Welder Inspector</label>
+            <input type="text" id="welderInspector" name="welderInspector" value="Test Inspector">
+        </div>
+        
+        <button type="submit">Submit Certificate</button>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('certificateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<p>Submitting certificate...</p>';
+            
+            fetch('/certificate/insert', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.redirected) {
+                    resultDiv.innerHTML = '<p class="success">✅ Certificate submitted successfully! Redirecting...</p>';
+                    window.location.href = response.url;
+                } else if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            })
+            .then(text => {
+                resultDiv.innerHTML = '<p class="success">✅ Certificate submitted successfully!</p>';
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
