@@ -3,6 +3,7 @@ const User = require('../models/userModel')
 const Report = require('../models/reportModel')
 const Card = require('../models/cardModel')
 const Certificate = require('../models/certificateModel')
+const Operator = require('../models/operatorModel')
 const session = require('express-session')
 
 var router = express.Router();
@@ -23,6 +24,7 @@ router.get('/supervisor', async (req, res) => {
   const cardData = await Card.find().exec()
   const reportData = await Report.find().exec()
   const certificateData = await Certificate.find().exec()
+  const operatorData = await Operator.find().exec()
 
   console.log("---------------- card DATA---------------------")
   console.log(cardData);
@@ -31,7 +33,7 @@ router.get('/supervisor', async (req, res) => {
   
 
 
-  res.render('Supervisor', { "cardData": cardData, "reportData": reportData, "certificateData": certificateData })
+  res.render('Supervisor', { "cardData": cardData, "reportData": reportData, "certificateData": certificateData, "operatorData": operatorData })
    
 }else{
   res.redirect('/')

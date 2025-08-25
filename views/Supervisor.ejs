@@ -23,6 +23,9 @@
                             <form action="/card/" method="GET"> <button class="btn btn-outline-success me-2" type="submit">Add Qualification Welder Card</button></form>
                         </li>
                         <li class="nav-item">
+                            <form action="/operator/" method="GET"> <button class="btn btn-outline-success me-2" type="submit">Add Operator Performance Certificate</button></form>
+                        </li>
+                        <li class="nav-item">
                             <form action="/"><button class="btn btn-outline-danger me-2" type="submit">Logout</button></form>
                         </li>
                     </ul>
@@ -190,6 +193,56 @@
         </div>
     </div>
 
+    <!-- Operator Performance Certificates Section -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-left mb-4">Operator Performance Certificate Database</h2>
+                <input type="text" class="form-control mb-2" id="operatorSearch" placeholder="Search...">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped" id="operatorTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Index No</th>
+                                <th>Issued In</th>
+                                <th>Operator ID</th>
+                                <th>Operator Name</th>
+                                <th>Certificate No.</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof operatorData !== 'undefined' && operatorData.length > 0) { %>
+                                <% operatorData.forEach(function(operator, index){ %>
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td><%= operator.createdAt %></td>
+                                        <td><%= operator.operatorId %></td>
+                                        <td><%= operator.operatorName %></td>
+                                        <td><%= operator.certificateNo %></td>
+                                        <td style="display: flex; align-items: stretch;">
+                                            <form action="/operator/edit/<%= operator.operatorNo %>" method="POST">
+                                                <input type="submit" value="Edit">
+                                            </form>
+                                            <form action="/operator/view/<%= operator.operatorNo %>" method="GET">
+                                                <input type="submit" value="View">
+                                            </form>
+                                            <a style="text-decoration: none; color: black; border: 1px solid gray; padding: 2px 8px;" href="/operator/delete/<%= operator.operatorNo %>" onclick="return confirm('Are you sure you want to delete this operator?')">Delete</a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="text-center">No operator certificates found. <a href="/operator/">Add your first operator certificate</a></td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script>
@@ -236,6 +289,23 @@
         const searchText = certificateSearchInput.value.toLowerCase();
 
         Array.from(cert_rows).forEach(row => {
+            const rowData = row.textContent.toLowerCase();
+            if (rowData.includes(searchText)) {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    const operatorSearchInput = document.getElementById('operatorSearch');
+    const operatorTable = document.getElementById('operatorTable').getElementsByTagName('tbody')[0];
+    const op_rows = operatorTable.getElementsByTagName('tr');
+
+    operatorSearchInput.addEventListener('input', function() {
+        const searchText = operatorSearchInput.value.toLowerCase();
+
+        Array.from(op_rows).forEach(row => {
             const rowData = row.textContent.toLowerCase();
             if (rowData.includes(searchText)) {
                 row.style.display = 'table-row';

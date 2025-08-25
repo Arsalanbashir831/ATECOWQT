@@ -107,6 +107,19 @@ const cardStorage = new CloudinaryStorage({
 });
 const uploadCard = multer({ storage: cardStorage });
 
+// --- operator storage+upload ---
+const operatorStorage = new CloudinaryStorage({
+	cloudinary,
+	params: async (req, file) => ({
+		folder: `operators/${req.operatorNo || req.params?.operatorNo || 'temp'}`,
+		public_id: `operator-${req.operatorNo || req.params?.operatorNo || 'temp'}`,
+		format: "jpg",
+		overwrite: true,
+		resource_type: "image",
+	}),
+});
+const uploadOperator = multer({ storage: operatorStorage });
+
 // ––– Express app setup –––
 const app = express();
 
@@ -128,6 +141,7 @@ const reportRouter = require("./routes/report");
 // note: we'll inject `upload` into the certificate router
 const certificateRouter = require("./routes/certificate")(uploadCert);
 const cardRouter = require("./routes/card")(uploadCard);
+const operatorRouter = require("./routes/operator")(uploadOperator);
 const apiRouter = require("./routes/api");
 
 app.use("/", indexRouter);
@@ -135,6 +149,7 @@ app.use("/users", usersRouter);
 app.use("/report", reportRouter);
 app.use("/certificate", certificateRouter);
 app.use("/card", cardRouter);
+app.use("/operator", operatorRouter);
 app.use("/api", apiRouter);
 
 // catch 404

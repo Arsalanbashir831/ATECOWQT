@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Operator Performance Certificate</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+    .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { font-size: 24px; font-weight: bold; margin: 0; color: #333; }
+    .header hr { border: none; border-top: 2px solid #333; margin: 10px 0; }
+    .section { margin-bottom: 30px; }
+    .section-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #333; border-bottom: 2px solid #333; padding-bottom: 5px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
+    .form-group textarea { height: 60px; resize: vertical; }
+    .photo-section { text-align: center; margin: 20px 0; }
+    .photo-upload { border: 2px dashed #ccc; padding: 20px; border-radius: 8px; cursor: pointer; transition: border-color 0.3s; }
+    .photo-upload:hover { border-color: #007bff; }
+    .photo-preview { max-width: 150px; max-height: 150px; margin-top: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    .data-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .data-table th, .data-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    .data-table th { background-color: #f8f9fa; font-weight: bold; }
+    .data-table input { width: 100%; padding: 5px; border: none; background: transparent; }
+    .test-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .test-table th, .test-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    .test-table th { background-color: #f8f9fa; font-weight: bold; }
+    .test-table input[type="checkbox"] { width: auto; }
+    .test-table input[type="text"] { width: 100%; padding: 5px; border: none; background: transparent; }
+    .submit-btn { background-color: #007bff; color: white; padding: 12px 30px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; }
+    .submit-btn:hover { background-color: #0056b3; }
+    .cancel-btn { background-color: #6c757d; color: white; padding: 12px 30px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; margin-left: 10px; }
+    .cancel-btn:hover { background-color: #545b62; }
+    .current-photo { max-width: 150px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <form action="/operator/update/<%= record.operatorNo %>" method="post" enctype="multipart/form-data">
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>Edit Operator Performance Certificate</h1>
+        <hr>
+      </div>
+
+      <!-- Operator Data & Test Description Section -->
+      <div class="section">
+        <div class="section-title">Welding Operator Data & Test Description</div>
+        
+        <div class="form-grid">
+          <div>
+            <div class="form-group">
+              <label for="operatorName">Operator Name:</label>
+              <input type="text" id="operatorName" name="operatorName" value="<%= record.operatorName || '' %>" required>
+            </div>
+            <div class="form-group">
+              <label for="operatorId">Operator ID/Symbol:</label>
+              <input type="text" id="operatorId" name="operatorId" value="<%= record.operatorId || '' %>" readonly>
+            </div>
+            <div class="form-group">
+              <label for="wpsFollowed">WPS followed:</label>
+              <input type="text" id="wpsFollowed" name="wpsFollowed" value="<%= record.wpsFollowed || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="jointWeldType">Joint/Weld Type:</label>
+              <input type="text" id="jointWeldType" name="jointWeldType" value="<%= record.jointWeldType || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="baseMetalSpec">Base Metal Spec.:</label>
+              <input type="text" id="baseMetalSpec" name="baseMetalSpec" value="<%= record.baseMetalSpec || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="testCouponSize">Test Coupon Size:</label>
+              <textarea id="testCouponSize" name="testCouponSize"><%= record.testCouponSize || '' %></textarea>
+            </div>
+          </div>
+          
+          <div>
+            <div class="form-group">
+              <label for="certificateNo">Certificate No.:</label>
+              <input type="text" id="certificateNo" name="certificateNo" value="<%= record.certificateNo || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="iqamaPassport">Iqama/Passport:</label>
+              <input type="text" id="iqamaPassport" name="iqamaPassport" value="<%= record.iqamaPassport || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="dateOfIssue">Date of Issue:</label>
+              <input type="date" id="dateOfIssue" name="dateOfIssue" value="<%= record.dateOfIssue || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="dateOfWelding">Date of Welding:</label>
+              <input type="date" id="dateOfWelding" name="dateOfWelding" value="<%= record.dateOfWelding || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="baseMetalPNo">Base Metal P-No.:</label>
+              <input type="text" id="baseMetalPNo" name="baseMetalPNo" value="<%= record.baseMetalPNo || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="fillerSfaSpec">Filler (SFA) Spec.:</label>
+              <input type="text" id="fillerSfaSpec" name="fillerSfaSpec" value="<%= record.fillerSfaSpec || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="fillerClassAws">Filler Class.(AWS):</label>
+              <input type="text" id="fillerClassAws" name="fillerClassAws" value="<%= record.fillerClassAws || '' %>">
+            </div>
+            <div class="form-group">
+              <label for="positions">Position(s):</label>
+              <input type="text" id="positions" name="positions" value="<%= record.positions || '' %>">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Photo Upload -->
+        <div class="photo-section">
+          <% if (record.profilePic) { %>
+            <div>Current Photo:</div>
+            <img src="<%= record.profilePic %>" alt="Current Photo" class="current-photo">
+          <% } %>
+          <label for="profile" class="photo-upload">
+            <div>📷 Click to upload new operator photo (optional)</div>
+            <input type="file" id="profile" name="profile" accept="image/*" style="display: none;">
+          </label>
+          <img id="photoPreview" class="photo-preview" style="display: none;">
+        </div>
+      </div>
+
+      <!-- Testing Variables - Machine Welding Equipment -->
+      <div class="section">
+        <div class="section-title">Testing Variables and Qualification Limits</div>
+        <div style="font-weight: bold; margin-bottom: 10px;">Testing Variables and Qualification Limits When Using Machine Welding Equipment</div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Welding Variables</th>
+              <th>Actual Values</th>
+              <th>Range Qualified</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Type of Welding (Machine)</td>
+              <td><input type="text" name="typeOfWeldingMachine" value="<%= record.typeOfWeldingMachine || 'Machine Welding' %>"></td>
+              <td><input type="text" value="Machine Welding" readonly></td>
+            </tr>
+            <tr>
+              <td>Welding Process</td>
+              <td><input type="text" name="weldingProcessMachine" value="<%= record.weldingProcessMachine || 'GTAW-Pulse' %>"></td>
+              <td><input type="text" value="GTAW-Pulse" readonly></td>
+            </tr>
+            <tr>
+              <td>Direct or Remote Visual Control</td>
+              <td><input type="text" name="directRemoteVisualControl" value="<%= record.directRemoteVisualControl || 'Direct' %>"></td>
+              <td><input type="text" value="Direct" readonly></td>
+            </tr>
+            <tr>
+              <td>Automatic Arc Voltage Control (GTAW)</td>
+              <td><input type="text" name="automaticArcVoltageControl" value="<%= record.automaticArcVoltageControl || 'With' %>"></td>
+              <td><input type="text" value="With" readonly></td>
+            </tr>
+            <tr>
+              <td>Automatic Joint Tracking</td>
+              <td><input type="text" name="automaticJointTracking" value="<%= record.automaticJointTracking || 'None' %>"></td>
+              <td><input type="text" value="None" readonly></td>
+            </tr>
+            <tr>
+              <td>Position(s)</td>
+              <td><input type="text" name="positionsMachine" value="<%= record.positionsMachine || '2G (Rotated)' %>"></td>
+              <td><input type="text" value="Flat & Horizontal (Rotated)" readonly></td>
+            </tr>
+            <tr>
+              <td>Base Material Thickness</td>
+              <td><input type="text" name="baseMaterialThickness" value="<%= record.baseMaterialThickness || '5.5mm' %>"></td>
+              <td><input type="text" value="5.5mm to Unlimited" readonly></td>
+            </tr>
+            <tr>
+              <td>Consumable Insert (GTAW or PAW)</td>
+              <td><input type="text" name="consumableInsert" value="<%= record.consumableInsert || 'None' %>"></td>
+              <td><input type="text" value="None" readonly></td>
+            </tr>
+            <tr>
+              <td>Backing (With or Without)</td>
+              <td><input type="text" name="backing" value="<%= record.backing || 'With' %>"></td>
+              <td><input type="text" value="With" readonly></td>
+            </tr>
+            <tr>
+              <td>Single or Multiple Passes Per Side</td>
+              <td><input type="text" name="singleMultiplePasses" value="<%= record.singleMultiplePasses || 'Multiple' %>"></td>
+              <td><input type="text" value="Single / Multiple Passes" readonly></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Type of Qualification Test -->
+      <div class="section">
+        <div class="section-title">Type of Qualification Test</div>
+        
+        <table class="test-table">
+          <thead>
+            <tr>
+              <th>Type of Qualification Test</th>
+              <th>Test Performed</th>
+              <th>Results</th>
+              <th>Report Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Visual Examination</td>
+              <td><input type="checkbox" name="visualExamination[performed]" value="true" <%= record.visualExamination && record.visualExamination.performed ? 'checked' : '' %>></td>
+              <td><input type="text" name="visualExamination[results]" value="<%= record.visualExamination && record.visualExamination.results || 'Satisfactory' %>"></td>
+              <td><input type="text" name="visualExamination[reportNumber]" value="<%= record.visualExamination && record.visualExamination.reportNumber || '' %>"></td>
+            </tr>
+            <tr>
+              <td>Liquid Penetrant Examination (PT)</td>
+              <td><input type="checkbox" name="liquidPenetrantExamination[performed]" value="true" <%= record.liquidPenetrantExamination && record.liquidPenetrantExamination.performed ? 'checked' : '' %>></td>
+              <td><input type="text" name="liquidPenetrantExamination[results]" value="<%= record.liquidPenetrantExamination && record.liquidPenetrantExamination.results || '' %>"></td>
+              <td><input type="text" name="liquidPenetrantExamination[reportNumber]" value="<%= record.liquidPenetrantExamination && record.liquidPenetrantExamination.reportNumber || '' %>"></td>
+            </tr>
+            <tr>
+              <td>Ultrasonic Testing (UT)</td>
+              <td><input type="checkbox" name="ultrasonicTesting[performed]" value="true" <%= record.ultrasonicTesting && record.ultrasonicTesting.performed ? 'checked' : '' %>></td>
+              <td><input type="text" name="ultrasonicTesting[results]" value="<%= record.ultrasonicTesting && record.ultrasonicTesting.results || '' %>"></td>
+              <td><input type="text" name="ultrasonicTesting[reportNumber]" value="<%= record.ultrasonicTesting && record.ultrasonicTesting.reportNumber || '' %>"></td>
+            </tr>
+            <tr>
+              <td>Bend Test</td>
+              <td><input type="checkbox" name="bendTest[performed]" value="true" <%= record.bendTest && record.bendTest.performed ? 'checked' : '' %>></td>
+              <td><input type="text" name="bendTest[results]" value="<%= record.bendTest && record.bendTest.results || 'Acceptable' %>"></td>
+              <td><input type="text" name="bendTest[reportNumber]" value="<%= record.bendTest && record.bendTest.reportNumber || 'S910724 Issue 1' %>"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Submit Buttons -->
+      <div style="text-align: center;">
+        <button type="submit" class="submit-btn">Update Operator Certificate</button>
+        <a href="/operator/view/<%= record.operatorNo %>" class="cancel-btn" style="text-decoration: none;">Cancel</a>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    // Photo preview functionality
+    document.getElementById('profile').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('photoPreview');
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>
