@@ -141,9 +141,10 @@ app.use(session({
     secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'strict'
+    sameSite: 'lax' // Use 'lax' for better compatibility
   },
-  name: 'ateco-session'
+  name: 'ateco-session',
+  proxy: process.env.NODE_ENV === 'production' // Trust proxy in production
 }));
 
 // serve static for your frontend assets

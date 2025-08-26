@@ -573,6 +573,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-Requested-With': 'XMLHttpRequest'
                         },
                         body: formData
                     });
@@ -580,39 +581,67 @@
                     console.log('Response status:', response.status);
                     console.log('Response redirected:', response.redirected);
                     console.log('Response URL:', response.url);
+                    console.log('Response headers:', response.headers);
                     
-                    // Check for successful redirect (302 status)
-                    if (response.status === 302 || response.redirected) {
-                        showSuccess('Login successful! Redirecting...');
-                        // Get the redirect URL from Location header or response.url
-                        const redirectUrl = response.headers.get('Location') || response.url;
-                        console.log('Redirecting to:', redirectUrl);
-                        setTimeout(() => {
-                            window.location.href = redirectUrl;
-                        }, 1000);
-                    } else if (response.status === 200) {
-                        // Check if response contains redirect information
-                        const result = await response.text();
-                        if (result.includes('Found. Redirecting to') || result.includes('/supervisor') || result.includes('/inspector')) {
+                    // Try to parse JSON response first
+                    try {
+                        const result = await response.json();
+                        console.log('JSON response:', result);
+                        
+                        if (result.success) {
                             showSuccess('Login successful! Redirecting...');
-                            // Extract redirect URL from response text
-                            const match = result.match(/Redirecting to (\/\w+)/);
-                            const redirectUrl = match ? match[1] : '/supervisor';
+                            
+                            // Verify session is set before redirecting
+                            setTimeout(async () => {
+                                try {
+                                    const sessionCheck = await fetch('/check-session');
+                                    const sessionData = await sessionCheck.json();
+                                    console.log('Session check result:', sessionData);
+                                    
+                                    if (sessionData.authenticated) {
+                                        window.location.href = result.redirectUrl;
+                                    } else {
+                                        console.error('Session not set properly');
+                                        showError('❌ Session error. Please try again.');
+                                    }
+                                } catch (error) {
+                                    console.error('Session check failed:', error);
+                                    // Proceed with redirect anyway
+                                    window.location.href = result.redirectUrl;
+                                }
+                            }, 1000);
+                        } else if (result.error) {
+                            showError(result.message || 'Authentication failed. Please check your credentials.');
+                        }
+                    } catch (parseError) {
+                        console.log('Not JSON response, checking for redirect...');
+                        
+                        // Check for successful redirect (302 status)
+                        if (response.status === 302 || response.redirected) {
+                            showSuccess('Login successful! Redirecting...');
+                            // Get the redirect URL from Location header or response.url
+                            const redirectUrl = response.headers.get('Location') || response.url;
+                            console.log('Redirecting to:', redirectUrl);
                             setTimeout(() => {
                                 window.location.href = redirectUrl;
                             }, 1000);
-                        } else {
-                            showError('❌ Authentication failed. Please try again.');
-                        }
-                    } else {
-                        // Handle error responses
-                        try {
-                            const result = await response.json();
-                            if (result.error) {
-                                showError(result.message || 'Authentication failed. Please check your credentials.');
+                        } else if (response.status === 200) {
+                            // Check if response contains redirect information
+                            const result = await response.text();
+                            console.log('Response text:', result);
+                            if (result.includes('Found. Redirecting to') || result.includes('/supervisor') || result.includes('/inspector')) {
+                                showSuccess('Login successful! Redirecting...');
+                                // Extract redirect URL from response text
+                                const match = result.match(/Redirecting to (\/\w+)/);
+                                const redirectUrl = match ? match[1] : '/supervisor';
+                                setTimeout(() => {
+                                    window.location.href = redirectUrl;
+                                }, 1000);
+                            } else {
+                                showError('❌ Authentication failed. Please try again.');
                             }
-                        } catch (parseError) {
-                            // If not JSON, check for error patterns
+                        } else {
+                            // Handle error responses
                             const result = await response.text();
                             if (result.includes('Invalid') || result.includes('error') || response.status === 401) {
                                 showError('❌ Invalid credentials. Please check your User ID and Password.');

@@ -8,9 +8,14 @@ var router = express.Router();
 
 // Authentication middleware
 const requireAuth = (req, res, next) => {
+  console.log('requireAuth check - Session:', req.session);
+  console.log('requireAuth check - Session user:', req.session.user);
+  
   if (req.session.user) {
+    console.log('requireAuth: User authenticated, proceeding');
     next();
   } else {
+    console.log('requireAuth: No user session, redirecting to login');
     res.redirect('/');
   }
 };
@@ -45,7 +50,16 @@ const USERS = {
 };
 
 router.get('/', function (req, res, next) {
-  // Clear any existing session
+  console.log('Root route accessed - Session before destroy:', req.session);
+  
+  // Only destroy session if user is not authenticated
+  if (req.session.user) {
+    console.log('User already authenticated, redirecting to appropriate dashboard');
+    const redirectUrl = req.session.user === 'supervisor' ? '/supervisor' : '/inspector';
+    return res.redirect(redirectUrl);
+  }
+  
+  // Clear any existing session only if not authenticated
   req.session.destroy();
   
   // Handle error parameters
@@ -121,6 +135,8 @@ router.post('/auth', async function (req, res) {
     const { id, password, user_role } = req.body;
     
     console.log(`Authentication attempt - ID: ${id}, Role: ${user_role}`);
+    console.log('Environment:', process.env.NODE_ENV || 'development');
+    console.log('Request headers:', req.headers);
     
     // Input validation
     if (!id || !password || !user_role) {
@@ -161,13 +177,33 @@ router.post('/auth', async function (req, res) {
       req.session.loginTime = new Date();
       
       console.log(`Authentication successful for ${user_role}: ${user.name}`);
+      console.log('Session after setting:', req.session);
       
       // Log successful login
       console.log(`User ${user.name} (${user.email}) logged in at ${new Date().toISOString()}`);
       
-      // Redirect based on role
-      const redirectUrl = user_role === 'supervisor' ? '/supervisor' : '/inspector';
-      res.redirect(redirectUrl);
+      // Check if this is an AJAX request
+      const isAjax = req.headers['x-requested-with'] === 'XMLHttpRequest' || 
+                     req.headers['content-type']?.includes('application/x-www-form-urlencoded');
+      
+      if (isAjax) {
+        // Return JSON response for AJAX requests
+        const redirectUrl = user_role === 'supervisor' ? '/supervisor' : '/inspector';
+        return res.json({
+          success: true,
+          message: 'Login successful',
+          redirectUrl: redirectUrl,
+          user: {
+            name: user.name,
+            role: user_role,
+            email: user.email
+          }
+        });
+      } else {
+        // Redirect for traditional form submissions
+        const redirectUrl = user_role === 'supervisor' ? '/supervisor' : '/inspector';
+        res.redirect(redirectUrl);
+      }
     } else {
       console.log(`Authentication failed: Invalid credentials for ${user_role}`);
       // Return JSON response for AJAX requests
@@ -229,10 +265,16 @@ router.get('/check-session', (req, res) => {
 
 // Debug route to check session after login
 router.get('/debug-session', (req, res) => {
+  console.log('Debug session route accessed');
+  console.log('Session:', req.session);
+  console.log('Session ID:', req.sessionID);
+  console.log('Cookies:', req.headers.cookie);
+  
   res.json({
     session: req.session,
     sessionID: req.sessionID,
-    cookies: req.headers.cookie
+    cookies: req.headers.cookie,
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
