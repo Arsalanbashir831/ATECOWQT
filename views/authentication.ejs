@@ -3,140 +3,585 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
-    <title>Login Page</title>
+    <title>ATECO - Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e4d2b;
+            --secondary-color: #2d5a3d;
+            --accent-color: #0066cc;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #6c757d;
+            --border-color: #dee2e6;
+            --green-light: #d4edda;
+            --blue-light: #d1ecf1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* background: linear-gradient(135deg, #28a745 0%, #0066cc 100%); */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            min-height: 600px;
+        }
+
+        .login-sidebar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: var(--white);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .sidebar-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 30px;
+            filter: brightness(0) invert(1);
+        }
+
+        .sidebar-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .sidebar-features {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .sidebar-features li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .sidebar-features i {
+            margin-right: 10px;
+            color: #90EE90;
+            width: 20px;
+        }
+
+        .login-form-container {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .form-subtitle {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 18px;
+        }
+
+        .role-selection {
+            margin-bottom: 30px;
+        }
+
+        .role-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .role-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .role-radio {
+            display: none;
+        }
+
+        .role-label {
+            display: block;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .role-radio:checked + .role-label {
+            border-color: var(--accent-color);
+            background: var(--accent-color);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+        }
+
+        .role-icon {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .role-text {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--success-color) 0%, var(--accent-color) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #fee;
+            color: var(--danger-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #fcc;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            color: var(--success-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #cfc;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-link {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 14px;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 400px;
+            }
+
+            .login-sidebar {
+                padding: 30px 20px;
+            }
+
+            .login-form-container {
+                padding: 30px 20px;
+            }
+
+            .form-title {
+                font-size: 24px;
+            }
+
+            .role-options {
+                flex-direction: column;
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
 </head>
-<style>
-    /* Reset some default styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Custom styling for the login page */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f3f4f6;
-}
-
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.login-box {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    width: 100%;
-    max-width: 400px;
-}
-
-.logo {
-    display: block;
-    margin: 0 auto;
-    width: 200px;
-}
-
-.heading {
-    color: #333;
-    font-size: 1.5rem;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.login-form {
-    margin-top: 20px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
-}
-
-input[type="text"],
-input[type="text"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.checkbox-label {
-    display: block;
-    margin-top: 10px;
-    font-size: 14px;
-    color: #777;
-}
-
-.forgot-password {
-    margin-top: 10px;
-    text-align: right;
-}
-
-a {
-    color: #4299e1;
-    text-decoration: none;
-}
-
-.login-button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background-color: #4299e1;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.login-button:hover {
-    background-color: #3182ce;
-}
-
-</style>
 <body>
-  
     <div class="login-container">
-        <div class="login-box">
-            <img src="/images/logo.png" alt="Company Logo" class="logo" />
-            <h1 class="heading">Sign in to your account</h1>
-            <form class="login-form" action="/auth" method="post">
+        <!-- Sidebar -->
+        <div class="login-sidebar">
+            <div class="sidebar-content">
+                <img src="/images/smallLogo.png" alt="ATECO Logo" class="sidebar-logo">
+                <h1 class="sidebar-title">Welcome Back</h1>
+                <p class="sidebar-subtitle">
+                    Access your ATECO dashboard to manage welding qualifications, certificates, and operator performance records.
+                </p>
+                <ul class="sidebar-features">
+                    <li><i class="fas fa-shield-alt"></i> Secure Authentication</li>
+                    <li><i class="fas fa-certificate"></i> Certificate Management</li>
+                    <li><i class="fas fa-user-cog"></i> Operator Records</li>
+                    <li><i class="fas fa-chart-bar"></i> Performance Analytics</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="login-form-container">
+            <div class="form-header">
+                <h2 class="form-title">Sign In</h2>
+                <p class="form-subtitle">Enter your credentials to access your account</p>
+            </div>
+
+            <!-- Error/Success Messages -->
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+
+            <form class="login-form" id="loginForm" action="/auth" method="post">
                 <div class="form-group">
-                    <label for="text">User Id</label>
-                    <input type="text" id="id" name="id" placeholder="Enter your Id" required />
+                    <label class="form-label" for="userId">User ID</label>
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input 
+                            type="text" 
+                            id="userId" 
+                            name="id" 
+                            class="form-input" 
+                            placeholder="Enter your User ID" 
+                            required 
+                            autocomplete="username"
+                        />
+                    </div>
                 </div>
+
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="********" required />
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input" 
+                            placeholder="Enter your password" 
+                            required 
+                            autocomplete="current-password"
+                        />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>User Role:</label>
-                    <label class="checkbox-label">
-                        <input type="radio" name="user_role" value="supervisor" /> Supervisor
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="radio" name="user_role" value="inspector" /> Inspector
-                    </label>
+
+                <div class="form-group role-selection">
+                    <label class="form-label">Select Your Role</label>
+                    <div class="role-options">
+                        <div class="role-option">
+                            <input type="radio" id="supervisor" name="user_role" value="supervisor" class="role-radio" required>
+                            <label for="supervisor" class="role-label">
+                                <i class="fas fa-user-tie role-icon"></i>
+                                <span class="role-text">Supervisor</span>
+                            </label>
+                        </div>
+                        <div class="role-option">
+                            <input type="radio" id="inspector" name="user_role" value="inspector" class="role-radio" required>
+                            <label for="inspector" class="role-label">
+                                <i class="fas fa-clipboard-check role-icon"></i>
+                                <span class="role-text">Inspector</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-              
-                <button type="submit" class="login-button">Sign In</button>
+
+                <button type="submit" class="login-button" id="loginButton">
+                    <span class="loading-spinner" id="loadingSpinner"></span>
+                    <span id="buttonText">Sign In</span>
+                </button>
             </form>
+
+            <div class="footer-links">
+                <a href="#" class="footer-link">Forgot Password?</a>
+                <a href="#" class="footer-link">Contact Support</a>
+            </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const loginButton = document.getElementById('loginButton');
+            const buttonText = document.getElementById('buttonText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            // Form validation
+            function validateForm() {
+                const userId = document.getElementById('userId').value.trim();
+                const password = document.getElementById('password').value.trim();
+                const userRole = document.querySelector('input[name="user_role"]:checked');
+
+                if (!userId) {
+                    showError('Please enter your User ID');
+                    return false;
+                }
+
+                if (!password) {
+                    showError('Please enter your password');
+                    return false;
+                }
+
+                if (!userRole) {
+                    showError('Please select your role');
+                    return false;
+                }
+
+                return true;
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+                loginForm.classList.add('shake');
+                setTimeout(() => loginForm.classList.remove('shake'), 500);
+            }
+
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            }
+
+            function setLoading(loading) {
+                if (loading) {
+                    loginButton.disabled = true;
+                    buttonText.textContent = 'Signing In...';
+                    loadingSpinner.style.display = 'inline-block';
+                } else {
+                    loginButton.disabled = false;
+                    buttonText.textContent = 'Sign In';
+                    loadingSpinner.style.display = 'none';
+                }
+            }
+
+            // Handle form submission
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                if (!validateForm()) {
+                    return;
+                }
+
+                setLoading(true);
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+
+                try {
+                    const formData = new FormData(loginForm);
+                    const response = await fetch('/auth', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.redirected) {
+                        showSuccess('Login successful! Redirecting...');
+                        setTimeout(() => {
+                            window.location.href = response.url;
+                        }, 1000);
+                    } else {
+                        const result = await response.text();
+                        if (result.includes('Invalid') || result.includes('error')) {
+                            showError('Invalid credentials. Please try again.');
+                        } else {
+                            window.location.href = response.url;
+                        }
+                    }
+                } catch (error) {
+                    showError('Network error. Please check your connection and try again.');
+                } finally {
+                    setLoading(false);
+                }
+            });
+
+            // Real-time validation
+            const inputs = loginForm.querySelectorAll('input[required]');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value.trim() === '') {
+                        this.style.borderColor = var(--danger-color);
+                    } else {
+                        this.style.borderColor = var(--border-color);
+                    }
+                });
+
+                input.addEventListener('input', function() {
+                    if (this.value.trim() !== '') {
+                        this.style.borderColor = var(--border-color);
+                        errorMessage.style.display = 'none';
+                    }
+                });
+            });
+
+            // Role selection feedback
+            const roleRadios = document.querySelectorAll('.role-radio');
+            roleRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    errorMessage.style.display = 'none';
+                });
+            });
+
+            // Auto-focus on first input
+            document.getElementById('userId').focus();
+        });
+    </script>
 </body>
 </html>
