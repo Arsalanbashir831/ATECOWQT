@@ -86,6 +86,7 @@ const operatorModel = mongoose.Schema({
         results: String,
         reportNumber: String
     },
+    lawName: String,
     
     // Additional fields for CRUD operations
     status: {

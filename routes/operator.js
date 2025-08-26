@@ -10,11 +10,24 @@ async function computeOperatorNo(req, res, next) {
 		console.log('🔢 Computing operator number...');
 		const last = await Operator.findOne().sort({ _id: -1 });
 		console.log('Last operator found:', last ? last.operatorNo : 'None');
-		
-		const count = last ? last.count + 1 : 1;
+
+		// Derive a safe previous count, even if last.count is missing/invalid
+		let prevCount = 0;
+		if (last && Number.isFinite(Number(last.count))) {
+			prevCount = Number(last.count);
+		} else {
+			const total = await Operator.countDocuments();
+			prevCount = Number.isFinite(total) ? total : 0;
+		}
+		const count = prevCount + 1;
 		req.count = count;
-		req.operatorNo = `operator_${count}`;
-		req.operatorId = `W-${count}`;
+		// Always compute operatorNo for internal use (QR/storage)
+		req.operatorNo = req.operatorNo || `operator_${count}`;
+		// Respect manual operatorId if provided; fallback to generated
+		if (!req.body) req.body = {};
+		req.operatorId = req.body.operatorId && req.body.operatorId.trim() !== ''
+			? req.body.operatorId.trim()
+			: `W-${count}`;
 		
 		console.log('Generated operator details:', {
 			count: req.count,
@@ -93,7 +106,7 @@ module.exports = (upload) => {
 	// handle insert
 	router.post(
 		"/insert",
-		computeOperatorNo, // <— sets req.operatorNo, req.count, req.operatorId
+		computeOperatorNo, // <— sets req.operatorNo, req.count, and respects manual operatorId
 		(req, res, next) => {
 			console.log('📁 About to process file upload...');
 			console.log('Operator number for upload:', req.operatorNo);
@@ -149,14 +162,16 @@ module.exports = (upload) => {
 				});
 				console.log('QR code uploaded to Cloudinary:', qrUpload.secure_url);
 
-				// Prepare operator data
+				// Prepare operator data. Keep manual operatorId if supplied.
 				const operatorData = {
-					...req.body,
 					count: req.count,
 					operatorNo: req.operatorNo,
-					operatorId: req.operatorId,
 					profilePic: profileImageUrl,
 					qrLink: qrUpload.secure_url,
+					...req.body,
+					operatorId: req.body.operatorId && req.body.operatorId.trim() !== ''
+						? req.body.operatorId.trim()
+						: req.operatorId,
 				};
 
 				console.log('Operator data to save:', operatorData);

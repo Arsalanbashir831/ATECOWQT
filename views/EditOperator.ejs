@@ -56,9 +56,9 @@
               <label for="operatorName">Operator Name:</label>
               <input type="text" id="operatorName" name="operatorName" value="<%= record.operatorName || '' %>" required>
             </div>
-            <div class="form-group" style="display: none;">
+            <div class="form-group">
               <label for="operatorId">Operator ID/Symbol:</label>
-              <input type="text" id="operatorId" name="operatorId" value="<%= record.operatorId || '' %>" readonly>
+              <input type="text" id="operatorId" name="operatorId" value="<%= record.operatorId || '' %>" required>
             </div>
             <div class="form-group">
               <label for="wpsFollowed">WPS followed:</label>
@@ -283,6 +283,12 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Law Name -->
+      <div class="section">
+        <div class="section-title">We, the undersigned, certify that the statements in this record are correct and that the test coupons were prepared, welded and tested in accordance with the requirements of:</div>
+        <input type="text" name="lawName" value="<%= record.lawName || '' %>" placeholder="Section IX of the ASME BOILER AND PRESSURE VESSEL CODE - 2021" required style="width: 100%;">
       </div>
 
       <!-- Submit Button -->
