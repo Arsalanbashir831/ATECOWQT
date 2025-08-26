@@ -63,7 +63,10 @@ const USERS = {
 router.get('/', function (req, res, next) {
   // Clear any existing session
   req.session.destroy();
-  res.render("authentication");
+  
+  // Handle error parameters
+  const error = req.query.error;
+  res.render("authentication", { error });
 });
 
 // Protected supervisor route
@@ -183,17 +186,27 @@ router.post('/auth', async function (req, res) {
       res.redirect(redirectUrl);
     } else {
       console.log(`Authentication failed: Invalid credentials for ${user_role}`);
-      return res.status(401).json({ 
-        error: 'Invalid credentials',
-        message: 'User ID or Password is incorrect'
-      });
+      // Return JSON response for AJAX requests
+      if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
+        return res.status(401).json({ 
+          error: 'Invalid credentials',
+          message: 'User ID or Password is incorrect. Please check your credentials and try again.'
+        });
+      } else {
+        // For form submissions, redirect back with error
+        return res.redirect('/?error=invalid_credentials');
+      }
     }
   } catch (error) {
     console.error('Authentication error:', error);
-    res.status(500).json({ 
-      error: 'Internal server error',
-      message: 'An error occurred during authentication'
-    });
+    if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
+      res.status(500).json({ 
+        error: 'Internal server error',
+        message: 'An error occurred during authentication'
+      });
+    } else {
+      res.redirect('/?error=server_error');
+    }
   }
 });
 

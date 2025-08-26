@@ -387,8 +387,21 @@
             <!-- Error/Success Messages -->
             <div id="errorMessage" class="error-message"></div>
             <div id="successMessage" class="success-message"></div>
+            
+            <!-- URL Error Messages -->
+            <% if (typeof error !== 'undefined') { %>
+                <div class="error-message" style="display: block;">
+                    <% if (error === 'invalid_credentials') { %>
+                        ❌ Invalid credentials. Please check your User ID and Password.
+                    <% } else if (error === 'server_error') { %>
+                        ❌ Server error. Please try again later.
+                    <% } else { %>
+                        ❌ An error occurred. Please try again.
+                    <% } %>
+                </div>
+            <% } %>
 
-            <form class="login-form" id="loginForm" action="/auth" method="post">
+            <form class="login-form" id="loginForm" action="/auth" method="post" onsubmit="return false;">
                 <div class="form-group">
                     <label class="form-label" for="userId">User ID</label>
                     <div class="input-group">
@@ -469,6 +482,10 @@
                 const password = document.getElementById('password').value.trim();
                 const userRole = document.querySelector('input[name="user_role"]:checked');
 
+                console.log('Form validation - User ID:', userId);
+                console.log('Form validation - Password:', password ? '***' : 'empty');
+                console.log('Form validation - Role:', userRole ? userRole.value : 'not selected');
+
                 if (!userId) {
                     showError('Please enter your User ID');
                     return false;
@@ -526,9 +543,23 @@
                 successMessage.style.display = 'none';
 
                 try {
-                    const formData = new FormData(loginForm);
+                    // Create URL-encoded form data
+                    const formData = new URLSearchParams();
+                    formData.append('id', document.getElementById('userId').value.trim());
+                    formData.append('password', document.getElementById('password').value.trim());
+                    formData.append('user_role', document.querySelector('input[name="user_role"]:checked').value);
+                    
+                    // Debug: Log form data
+                    console.log('Form data being sent:');
+                    console.log('id:', document.getElementById('userId').value.trim());
+                    console.log('password:', '***');
+                    console.log('user_role:', document.querySelector('input[name="user_role"]:checked').value);
+                    
                     const response = await fetch('/auth', {
                         method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
                         body: formData
                     });
 
@@ -538,15 +569,27 @@
                             window.location.href = response.url;
                         }, 1000);
                     } else {
-                        const result = await response.text();
-                        if (result.includes('Invalid') || result.includes('error')) {
-                            showError('Invalid credentials. Please try again.');
-                        } else {
-                            window.location.href = response.url;
+                        // Try to parse JSON response for error details
+                        try {
+                            const result = await response.json();
+                            if (result.error) {
+                                showError(result.message || 'Authentication failed. Please check your credentials.');
+                            }
+                        } catch (parseError) {
+                            // If not JSON, check if it's a redirect or error
+                            const result = await response.text();
+                            if (result.includes('Invalid') || result.includes('error') || response.status === 401) {
+                                showError('❌ Invalid credentials. Please check your User ID and Password.');
+                            } else if (response.status === 500) {
+                                showError('❌ Server error. Please try again later.');
+                            } else {
+                                showError('❌ Authentication failed. Please try again.');
+                            }
                         }
                     }
                 } catch (error) {
-                    showError('Network error. Please check your connection and try again.');
+                    console.error('Login error:', error);
+                    showError('❌ Network error. Please check your connection and try again.');
                 } finally {
                     setLoading(false);
                 }
@@ -557,15 +600,15 @@
             inputs.forEach(input => {
                 input.addEventListener('blur', function() {
                     if (this.value.trim() === '') {
-                        this.style.borderColor = var(--danger-color);
+                        this.style.borderColor = '#dc3545';
                     } else {
-                        this.style.borderColor = var(--border-color);
+                        this.style.borderColor = '#dee2e6';
                     }
                 });
 
                 input.addEventListener('input', function() {
                     if (this.value.trim() !== '') {
-                        this.style.borderColor = var(--border-color);
+                        this.style.borderColor = '#dee2e6';
                         errorMessage.style.display = 'none';
                     }
                 });
