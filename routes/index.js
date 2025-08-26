@@ -21,10 +21,10 @@ router.get('/', function (req, res, next) {
 router.get('/supervisor', async (req, res) => {
   if (req.session.user==='supervisor') {
    
-  const cardData = await Card.find().exec()
-  const reportData = await Report.find().exec()
-  const certificateData = await Certificate.find().exec()
-  const operatorData = await Operator.find().exec()
+  const cardData = await Card.find().sort({ createdAt: -1 }).exec()
+  const reportData = await Report.find().sort({ createdAt: -1 }).exec()
+  const certificateData = await Certificate.find().sort({ createdAt: -1 }).exec()
+  const operatorData = await Operator.find().sort({ createdAt: -1 }).exec()
 
   console.log("---------------- card DATA---------------------")
   console.log(cardData);
@@ -43,7 +43,7 @@ router.get('/supervisor', async (req, res) => {
 
 router.get('/inspector', async (req, res) => {
 if (req.session.user==='inspector') {
-  const reportData = await Report.find().exec()
+  const reportData = await Report.find().sort({ createdAt: -1 }).exec()
   res.render('inspector', { "reportData": reportData });
 }else{
   res.redirect('/')

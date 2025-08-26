@@ -10,7 +10,7 @@ const router = express.Router();
 router.post('/update-all-qr', async (req, res) => {
   try {
     // Update all cards
-    const cards = await Card.find();
+    const cards = await Card.find().sort({ createdAt: -1 });
     for (const card of cards) {
       const viewLink = `${process.env.FRONTEND_URL}/card/view/${card.card_no}`;
       const qrDataUri = await qrcode.toDataURL(viewLink, { width: 200, margin: 1 });
@@ -24,7 +24,7 @@ router.post('/update-all-qr', async (req, res) => {
     }
 
     // Update all certificates
-    const certificates = await Certificate.find();
+    const certificates = await Certificate.find().sort({ createdAt: -1 });
     for (const cert of certificates) {
       const viewUrl = `${process.env.FRONTEND_URL}/certificate/view/${cert.certificateNo}`;
       const qrDataUri = await qrcode.toDataURL(viewUrl, { width: 200, margin: 1 });
