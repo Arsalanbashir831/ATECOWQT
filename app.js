@@ -5,6 +5,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+const session = require("express-session");
 
 // ––– Cloudinary & Multer setupss –––
 const cloudinary = require("cloudinary").v2;
@@ -130,6 +131,20 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Session middleware configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'ateco-super-secret-key-2024',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: 'strict'
+  },
+  name: 'ateco-session'
+}));
 
 // serve static for your frontend assets
 app.use(express.static(path.join(__dirname, "public")));

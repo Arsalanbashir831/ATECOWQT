@@ -401,7 +401,7 @@
                 </div>
             <% } %>
 
-            <form class="login-form" id="loginForm" action="/auth" method="post" onsubmit="return false;">
+            <form class="login-form" id="loginForm" action="/auth" method="post">
                 <div class="form-group">
                     <label class="form-label" for="userId">User ID</label>
                     <div class="input-group">
@@ -458,6 +458,11 @@
                     <span class="loading-spinner" id="loadingSpinner"></span>
                     <span id="buttonText">Sign In</span>
                 </button>
+                
+                <!-- Fallback button for production -->
+                <button type="button" class="fallback-button" id="fallbackButton" style="display: none; margin-top: 10px; padding: 12px; background: #6c757d; color: white; border: none; border-radius: 8px; width: 100%;">
+                    Try Traditional Login
+                </button>
             </form>
 
             <div class="footer-links">
@@ -475,6 +480,7 @@
             const loadingSpinner = document.getElementById('loadingSpinner');
             const errorMessage = document.getElementById('errorMessage');
             const successMessage = document.getElementById('successMessage');
+            const fallbackButton = document.getElementById('fallbackButton');
 
             // Form validation
             function validateForm() {
@@ -542,6 +548,14 @@
                 errorMessage.style.display = 'none';
                 successMessage.style.display = 'none';
 
+                // Add a fallback timeout for production environments
+                const fallbackTimeout = setTimeout(() => {
+                    console.log('AJAX timeout, using fallback form submission');
+                    setLoading(false);
+                    // Submit the form traditionally
+                    loginForm.submit();
+                }, 5000); // 5 second timeout
+
                 try {
                     // Create URL-encoded form data
                     const formData = new URLSearchParams();
@@ -563,20 +577,42 @@
                         body: formData
                     });
 
-                    if (response.redirected) {
+                    console.log('Response status:', response.status);
+                    console.log('Response redirected:', response.redirected);
+                    console.log('Response URL:', response.url);
+                    
+                    // Check for successful redirect (302 status)
+                    if (response.status === 302 || response.redirected) {
                         showSuccess('Login successful! Redirecting...');
+                        // Get the redirect URL from Location header or response.url
+                        const redirectUrl = response.headers.get('Location') || response.url;
+                        console.log('Redirecting to:', redirectUrl);
                         setTimeout(() => {
-                            window.location.href = response.url;
+                            window.location.href = redirectUrl;
                         }, 1000);
+                    } else if (response.status === 200) {
+                        // Check if response contains redirect information
+                        const result = await response.text();
+                        if (result.includes('Found. Redirecting to') || result.includes('/supervisor') || result.includes('/inspector')) {
+                            showSuccess('Login successful! Redirecting...');
+                            // Extract redirect URL from response text
+                            const match = result.match(/Redirecting to (\/\w+)/);
+                            const redirectUrl = match ? match[1] : '/supervisor';
+                            setTimeout(() => {
+                                window.location.href = redirectUrl;
+                            }, 1000);
+                        } else {
+                            showError('❌ Authentication failed. Please try again.');
+                        }
                     } else {
-                        // Try to parse JSON response for error details
+                        // Handle error responses
                         try {
                             const result = await response.json();
                             if (result.error) {
                                 showError(result.message || 'Authentication failed. Please check your credentials.');
                             }
                         } catch (parseError) {
-                            // If not JSON, check if it's a redirect or error
+                            // If not JSON, check for error patterns
                             const result = await response.text();
                             if (result.includes('Invalid') || result.includes('error') || response.status === 401) {
                                 showError('❌ Invalid credentials. Please check your User ID and Password.');
@@ -591,7 +627,18 @@
                     console.error('Login error:', error);
                     showError('❌ Network error. Please check your connection and try again.');
                 } finally {
+                    clearTimeout(fallbackTimeout);
                     setLoading(false);
+                    // Show fallback button if AJAX failed
+                    fallbackButton.style.display = 'block';
+                }
+            });
+
+            // Fallback button handler
+            fallbackButton.addEventListener('click', function() {
+                if (validateForm()) {
+                    console.log('Using traditional form submission');
+                    loginForm.submit();
                 }
             });
 

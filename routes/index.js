@@ -4,23 +4,7 @@ const Report = require('../models/reportModel')
 const Card = require('../models/cardModel')
 const Certificate = require('../models/certificateModel')
 const Operator = require('../models/operatorModel')
-const session = require('express-session')
-
 var router = express.Router();
-
-// Enhanced session configuration
-router.use(session({
-  secret: process.env.SESSION_SECRET || 'ateco-super-secret-key-2024',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'strict'
-  },
-  name: 'ateco-session'
-}));
 
 // Authentication middleware
 const requireAuth = (req, res, next) => {
@@ -231,6 +215,7 @@ router.get('/logout', (req, res) => {
 
 // Session check route (for AJAX requests)
 router.get('/check-session', (req, res) => {
+  console.log('Session check - Session data:', req.session);
   if (req.session.user) {
     res.json({ 
       authenticated: true, 
@@ -240,6 +225,15 @@ router.get('/check-session', (req, res) => {
   } else {
     res.json({ authenticated: false });
   }
+});
+
+// Debug route to check session after login
+router.get('/debug-session', (req, res) => {
+  res.json({
+    session: req.session,
+    sessionID: req.sessionID,
+    cookies: req.headers.cookie
+  });
 });
 
 module.exports = router;
