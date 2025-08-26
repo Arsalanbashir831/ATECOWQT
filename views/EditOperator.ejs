@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Operator Performance Certificate</title>
+  <title>WELDING OPERATOR PERFORMANCE QUALIFICATION TEST RECORD (WOPQ)</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
     .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
@@ -32,8 +32,8 @@
     .test-table input[type="text"] { width: 100%; padding: 5px; border: none; background: transparent; }
     .submit-btn { background-color: #007bff; color: white; padding: 12px 30px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; }
     .submit-btn:hover { background-color: #0056b3; }
-    .cancel-btn { background-color: #6c757d; color: white; padding: 12px 30px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; margin-left: 10px; }
-    .cancel-btn:hover { background-color: #545b62; }
+    .hide-in-print { display: block; }
+    @media print { .hide-in-print { display: none; } body { background: white; } .container { box-shadow: none; padding: 0; } }
     .current-photo { max-width: 150px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; }
   </style>
 </head>
@@ -42,7 +42,7 @@
     <div class="container">
       <!-- Header -->
       <div class="header">
-        <h1>Edit Operator Performance Certificate</h1>
+        <h1>WELDING OPERATOR PERFORMANCE QUALIFICATION TEST RECORD (WOPQ)</h1>
         <hr>
       </div>
 
@@ -56,7 +56,7 @@
               <label for="operatorName">Operator Name:</label>
               <input type="text" id="operatorName" name="operatorName" value="<%= record.operatorName || '' %>" required>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
               <label for="operatorId">Operator ID/Symbol:</label>
               <input type="text" id="operatorId" name="operatorId" value="<%= record.operatorId || '' %>" readonly>
             </div>
@@ -128,9 +128,56 @@
         </div>
       </div>
 
-      <!-- Testing Variables - Machine Welding Equipment -->
+      <!-- Testing Variables and Qualification Limits When Using Automatic Welding Equipment -->
       <div class="section">
         <div class="section-title">Testing Variables and Qualification Limits</div>
+        <div style="font-weight: bold; margin-bottom: 10px;">Testing Variables and Qualification Limits When Using Automatic Welding Equipment</div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Welding Variables</th>
+              <th>Actual Values</th>
+              <th>Range Qualified</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Type of Welding (Automatic)</td>
+              <td><input type="text" name="typeOfWeldingAutomaticActual" value="<%= record.typeOfWeldingAutomaticActual || record.typeOfWeldingAutomatic || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="typeOfWeldingAutomaticRange" value="<%= record.typeOfWeldingAutomaticRange || '' %>" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Welding Process</td>
+              <td><input type="text" name="weldingProcessAutomaticActual" value="<%= record.weldingProcessAutomaticActual || record.weldingProcessAutomatic || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="weldingProcessAutomaticRange" value="<%= record.weldingProcessAutomaticRange || '' %>" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Filler Metal Used (Yes or No) (EBW or LBW)</td>
+              <td><input type="text" name="fillerMetalUsedActual" value="<%= record.fillerMetalUsedActual || record.fillerMetalUsedAutomatic || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="fillerMetalUsedRange" value="<%= record.fillerMetalUsedRange || '' %>" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Type of Laser for LBW (CO2 to YAG, etc.)</td>
+              <td><input type="text" name="typeOfLaserActual" value="<%= record.typeOfLaserActual || record.typeOfLaserLbw || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="typeOfLaserRange" value="<%= record.typeOfLaserRange || '' %>" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Countinous Drive or Inertia Welding (FW)</td>
+              <td><input type="text" name="countinousDriveActual" value="<%= record.countinousDriveActual || record.continuousDriveInertia || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="countinousDriveRange" value="<%= record.countinousDriveRange || '' %>" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Vacuum or Out of Vacuum (EBW)</td>
+              <td><input type="text" name="vacuumOutOfVacuumActual" value="<%= record.vacuumOutOfVacuumActual || record.vacuumOutOfVacuum || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="vacuumOutOfVacuumRange" value="<%= record.vacuumOutOfVacuumRange || '' %>" placeholder="Enter Range Qualified"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Testing Variables and Qualification Limits When Using Manual Welding Equipment -->
+      <div class="section">
         <div style="font-weight: bold; margin-bottom: 10px;">Testing Variables and Qualification Limits When Using Machine Welding Equipment</div>
         
         <table class="data-table">
@@ -144,53 +191,53 @@
           <tbody>
             <tr>
               <td>Type of Welding (Machine)</td>
-              <td><input type="text" name="typeOfWeldingMachine" value="<%= record.typeOfWeldingMachine || 'Machine Welding' %>"></td>
-              <td><input type="text" value="Machine Welding" readonly></td>
+              <td><input type="text" name="typeOfWeldingMachineActual" value="<%= record.typeOfWeldingMachineActual || record.typeOfWeldingMachine || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="typeOfWeldingMachineRange" value="<%= record.typeOfWeldingMachineRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Welding Process</td>
-              <td><input type="text" name="weldingProcessMachine" value="<%= record.weldingProcessMachine || 'GTAW-Pulse' %>"></td>
-              <td><input type="text" value="GTAW-Pulse" readonly></td>
+              <td><input type="text" name="weldingProcessMachineActual" value="<%= record.weldingProcessMachineActual || record.weldingProcessMachine || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="weldingProcessMachineRange" value="<%= record.weldingProcessMachineRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Direct or Remote Visual Control</td>
-              <td><input type="text" name="directRemoteVisualControl" value="<%= record.directRemoteVisualControl || 'Direct' %>"></td>
-              <td><input type="text" value="Direct" readonly></td>
+              <td><input type="text" name="directRemoteVisualControlActual" value="<%= record.directRemoteVisualControlActual || record.directRemoteVisualControl || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="directRemoteVisualControlRange" value="<%= record.directRemoteVisualControlRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Automatic Arc Voltage Control (GTAW)</td>
-              <td><input type="text" name="automaticArcVoltageControl" value="<%= record.automaticArcVoltageControl || 'With' %>"></td>
-              <td><input type="text" value="With" readonly></td>
+              <td><input type="text" name="automaticArcVoltageControlActual" value="<%= record.automaticArcVoltageControlActual || record.automaticArcVoltageControl || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="automaticArcVoltageControlRange" value="<%= record.automaticArcVoltageControlRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Automatic Joint Tracking</td>
-              <td><input type="text" name="automaticJointTracking" value="<%= record.automaticJointTracking || 'None' %>"></td>
-              <td><input type="text" value="None" readonly></td>
+              <td><input type="text" name="automaticJointTrackingActual" value="<%= record.automaticJointTrackingActual || record.automaticJointTracking || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="automaticJointTrackingRange" value="<%= record.automaticJointTrackingRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Position(s)</td>
-              <td><input type="text" name="positionsMachine" value="<%= record.positionsMachine || '2G (Rotated)' %>"></td>
-              <td><input type="text" value="Flat & Horizontal (Rotated)" readonly></td>
+              <td><input type="text" name="positionsMachineActual" value="<%= record.positionsMachineActual || record.positionsMachine || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="positionsMachineRange" value="<%= record.positionsMachineRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Base Material Thickness</td>
-              <td><input type="text" name="baseMaterialThickness" value="<%= record.baseMaterialThickness || '5.5mm' %>"></td>
-              <td><input type="text" value="5.5mm to Unlimited" readonly></td>
+              <td><input type="text" name="baseMaterialThicknessActual" value="<%= record.baseMaterialThicknessActual || record.baseMaterialThickness || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="baseMaterialThicknessRange" value="<%= record.baseMaterialThicknessRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Consumable Insert (GTAW or PAW)</td>
-              <td><input type="text" name="consumableInsert" value="<%= record.consumableInsert || 'None' %>"></td>
-              <td><input type="text" value="None" readonly></td>
+              <td><input type="text" name="consumableInsertActual" value="<%= record.consumableInsertActual || record.consumableInsert || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="consumableInsertRange" value="<%= record.consumableInsertRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Backing (With or Without)</td>
-              <td><input type="text" name="backing" value="<%= record.backing || 'With' %>"></td>
-              <td><input type="text" value="With" readonly></td>
+              <td><input type="text" name="backingActual" value="<%= record.backingActual || record.backing || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="backingRange" value="<%= record.backingRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Single or Multiple Passes Per Side</td>
-              <td><input type="text" name="singleMultiplePasses" value="<%= record.singleMultiplePasses || 'Multiple' %>"></td>
-              <td><input type="text" value="Single / Multiple Passes" readonly></td>
+              <td><input type="text" name="singleMultiplePassesActual" value="<%= record.singleMultiplePassesActual || record.singleMultiplePasses || '' %>" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="singleMultiplePassesRange" value="<%= record.singleMultiplePassesRange || '' %>" placeholder="Enter Range Qualified"></td>
             </tr>
           </tbody>
         </table>
@@ -213,7 +260,7 @@
             <tr>
               <td>Visual Examination</td>
               <td><input type="checkbox" name="visualExamination[performed]" value="true" <%= record.visualExamination && record.visualExamination.performed ? 'checked' : '' %>></td>
-              <td><input type="text" name="visualExamination[results]" value="<%= record.visualExamination && record.visualExamination.results || 'Satisfactory' %>"></td>
+              <td><input type="text" name="visualExamination[results]" value="<%= record.visualExamination && record.visualExamination.results || '' %>"></td>
               <td><input type="text" name="visualExamination[reportNumber]" value="<%= record.visualExamination && record.visualExamination.reportNumber || '' %>"></td>
             </tr>
             <tr>
@@ -231,16 +278,16 @@
             <tr>
               <td>Bend Test</td>
               <td><input type="checkbox" name="bendTest[performed]" value="true" <%= record.bendTest && record.bendTest.performed ? 'checked' : '' %>></td>
-              <td><input type="text" name="bendTest[results]" value="<%= record.bendTest && record.bendTest.results || 'Acceptable' %>"></td>
-              <td><input type="text" name="bendTest[reportNumber]" value="<%= record.bendTest && record.bendTest.reportNumber || 'S910724 Issue 1' %>"></td>
+              <td><input type="text" name="bendTest[results]" value="<%= record.bendTest && record.bendTest.results || '' %>"></td>
+              <td><input type="text" name="bendTest[reportNumber]" value="<%= record.bendTest && record.bendTest.reportNumber || '' %>"></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Submit Buttons -->
-      <div style="text-align: center;">
-        <button type="submit" class="submit-btn">Update Operator Certificate</button>
+      <!-- Submit Button -->
+      <div class="hide-in-print" style="text-align: center;">
+        <button type="submit" class="submit-btn">Update Operator Performance Certificate</button>
         <a href="/operator/view/<%= record.operatorNo %>" class="cancel-btn" style="text-decoration: none;">Cancel</a>
       </div>
     </div>

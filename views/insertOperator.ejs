@@ -123,9 +123,56 @@
         </div>
       </div>
 
-      <!-- Testing Variables - Machine Welding Equipment -->
+      <!-- Testing Variables and Qualification Limits When Using Automatic Welding Equipment -->
       <div class="section">
         <div class="section-title">Testing Variables and Qualification Limits</div>
+        <div style="font-weight: bold; margin-bottom: 10px;">Testing Variables and Qualification Limits When Using Automatic Welding Equipment</div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Welding Variables</th>
+              <th>Actual Values</th>
+              <th>Range Qualified</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Type of Welding (Automatic)</td>
+              <td><input type="text" name="typeOfWeldingAutomaticActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="typeOfWeldingAutomaticRange" value="" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Welding Process</td>
+              <td><input type="text" name="weldingProcessAutomaticActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="weldingProcessAutomaticRange" value="" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Filler Metal Used (Yes or No) (EBW or LBW)</td>
+              <td><input type="text" name="fillerMetalUsedActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="fillerMetalUsedRange" value="" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Type of Laser for LBW (CO2 to YAG, etc.)</td>
+              <td><input type="text" name="typeOfLaserActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="typeOfLaserRange" value="" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Countinous Drive or Inertia Welding (FW)</td>
+              <td><input type="text" name="countinousDriveActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="countinousDriveRange" value="" placeholder="Enter Range Qualified"></td>
+            </tr>
+            <tr>
+              <td>Vacuum or Out of Vacuum (EBW)</td>
+              <td><input type="text" name="vacuumOutOfVacuumActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="vacuumOutOfVacuumRange" value="" placeholder="Enter Range Qualified"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Testing Variables and Qualification Limits When Using Manual Welding Equipment -->
+      <div class="section">
         <div style="font-weight: bold; margin-bottom: 10px;">Testing Variables and Qualification Limits When Using Machine Welding Equipment</div>
         
         <table class="data-table">
@@ -139,53 +186,53 @@
           <tbody>
             <tr>
               <td>Type of Welding (Machine)</td>
-              <td><input type="text" name="typeOfWeldingMachine" value="Machine Welding"></td>
-              <td><input type="text" value="Machine Welding"></td>
+              <td><input type="text" name="typeOfWeldingMachineActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="typeOfWeldingMachineRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Welding Process</td>
-              <td><input type="text" name="weldingProcessMachine" value="GTAW-Pulse"></td>
-              <td><input type="text" value="GTAW-Pulse"></td>
+              <td><input type="text" name="weldingProcessMachineActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="weldingProcessMachineRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Direct or Remote Visual Control</td>
-              <td><input type="text" name="directRemoteVisualControl" value="Direct"></td>
-              <td><input type="text" value="Direct"></td>
+              <td><input type="text" name="directRemoteVisualControlActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="directRemoteVisualControlRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Automatic Arc Voltage Control (GTAW)</td>
-              <td><input type="text" name="automaticArcVoltageControl" value="With"></td>
-              <td><input type="text" value="With"></td>
+              <td><input type="text" name="automaticArcVoltageControlActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="automaticArcVoltageControlRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Automatic Joint Tracking</td>
-              <td><input type="text" name="automaticJointTracking" value="None"></td>
-              <td><input type="text" value="None"></td>
+              <td><input type="text" name="automaticJointTrackingActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="automaticJointTrackingRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Position(s)</td>
-              <td><input type="text" name="positionsMachine" value="2G (Rotated)"></td>
-              <td><input type="text" value="Flat & Horizontal (Rotated)"></td>
+              <td><input type="text" name="positionsMachineActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="positionsMachineRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Base Material Thickness</td>
-              <td><input type="text" name="baseMaterialThickness" value="5.5mm"></td>
-              <td><input type="text" value="5.5mm to Unlimited"></td>
+              <td><input type="text" name="baseMaterialThicknessActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="baseMaterialThicknessRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Consumable Insert (GTAW or PAW)</td>
-              <td><input type="text" name="consumableInsert" value="None"></td>
-              <td><input type="text" value="None"></td>
+              <td><input type="text" name="consumableInsertActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="consumableInsertRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Backing (With or Without)</td>
-              <td><input type="text" name="backing" value="With"></td>
-              <td><input type="text" value="With"></td>
+              <td><input type="text" name="backingActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="backingRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
             <tr>
               <td>Single or Multiple Passes Per Side</td>
-              <td><input type="text" name="singleMultiplePasses" value="Multiple"></td>
-              <td><input type="text" value="Single / Multiple Passes"></td>
+              <td><input type="text" name="singleMultiplePassesActual" value="" placeholder="Enter Actual Value"></td>
+              <td><input type="text" name="singleMultiplePassesRange" value="" placeholder="Enter Range Qualified"></td>
             </tr>
           </tbody>
         </table>
@@ -207,27 +254,27 @@
           <tbody>
             <tr>
               <td>Visual Examination</td>
-              <td><input type="checkbox" name="visualExamination[performed]" value="true"></td>
-              <td><input type="text" name="visualExamination[results]" value="Satisfactory"></td>
-              <td><input type="text" name="visualExamination[reportNumber]"></td>
+              <td><input type="checkbox" name="visualExamination[performed]" value="false" placeholder="Enter Test Performed"></td>
+              <td><input type="text" name="visualExamination[results]" value="" placeholder="Enter Results"></td>
+              <td><input type="text" name="visualExamination[reportNumber]" placeholder="Enter Report Number"></td>
             </tr>
             <tr>
               <td>Liquid Penetrant Examination (PT)</td>
-              <td><input type="checkbox" name="liquidPenetrantExamination[performed]" value="true"></td>
-              <td><input type="text" name="liquidPenetrantExamination[results]"></td>
-              <td><input type="text" name="liquidPenetrantExamination[reportNumber]"></td>
+              <td><input type="checkbox" name="liquidPenetrantExamination[performed]" value="false" placeholder="Enter Test Performed"></td>
+              <td><input type="text" name="liquidPenetrantExamination[results]" placeholder="Enter Results"></td>
+              <td><input type="text" name="liquidPenetrantExamination[reportNumber]" placeholder="Enter Report Number"></td>
             </tr>
             <tr>
               <td>Ultrasonic Testing (UT)</td>
-              <td><input type="checkbox" name="ultrasonicTesting[performed]" value="true"></td>
-              <td><input type="text" name="ultrasonicTesting[results]"></td>
-              <td><input type="text" name="ultrasonicTesting[reportNumber]"></td>
+              <td><input type="checkbox" name="ultrasonicTesting[performed]" value="false" placeholder="Enter Test Performed"></td>
+              <td><input type="text" name="ultrasonicTesting[results]" placeholder="Enter Results"></td>
+              <td><input type="text" name="ultrasonicTesting[reportNumber]" placeholder="Enter Report Number"></td>
             </tr>
             <tr>
               <td>Bend Test</td>
-              <td><input type="checkbox" name="bendTest[performed]" value="true"></td>
-              <td><input type="text" name="bendTest[results]" value="Acceptable"></td>
-              <td><input type="text" name="bendTest[reportNumber]" value="S910724 Issue 1"></td>
+              <td><input type="checkbox" name="bendTest[performed]" value="false" placeholder="Enter Test Performed"></td>
+              <td><input type="text" name="bendTest[results]" placeholder="Enter Results"></td>
+              <td><input type="text" name="bendTest[reportNumber]" placeholder="Enter Report Number"></td>
             </tr>
           </tbody>
         </table>

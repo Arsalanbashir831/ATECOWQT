@@ -28,26 +28,42 @@ const operatorModel = mongoose.Schema({
     fillerSfaSpec: String,
     fillerClassAws: String,
     positions: String,
-    
-    // Testing Variables - Automatic Welding Equipment
-    typeOfWeldingAutomatic: String,
-    weldingProcessAutomatic: String,
-    fillerMetalUsedAutomatic: String,
-    typeOfLaserLbw: String,
-    continuousDriveInertia: String,
-    vacuumOutOfVacuum: String,
-    
-    // Testing Variables - Machine Welding Equipment
-    typeOfWeldingMachine: String,
-    weldingProcessMachine: String,
-    directRemoteVisualControl: String,
-    automaticArcVoltageControl: String,
-    automaticJointTracking: String,
-    positionsMachine: String,
-    baseMaterialThickness: String,
-    consumableInsert: String,
-    backing: String,
-    singleMultiplePasses: String,
+
+    // Automatic Welding (Actual/Range for form parity)
+    typeOfWeldingAutomaticActual: String,
+    typeOfWeldingAutomaticRange: String,
+    weldingProcessAutomaticActual: String,
+    weldingProcessAutomaticRange: String,
+    fillerMetalUsedActual: String,
+    fillerMetalUsedRange: String,
+    typeOfLaserActual: String,
+    typeOfLaserRange: String,
+    countinousDriveActual: String,
+    countinousDriveRange: String,
+    vacuumOutOfVacuumActual: String,
+    vacuumOutOfVacuumRange: String,
+
+    // Machine Welding (Actual/Range for form parity)
+    typeOfWeldingMachineActual: String,
+    typeOfWeldingMachineRange: String,
+    weldingProcessMachineActual: String,
+    weldingProcessMachineRange: String,
+    directRemoteVisualControlActual: String,
+    directRemoteVisualControlRange: String,
+    automaticArcVoltageControlActual: String,
+    automaticArcVoltageControlRange: String,
+    automaticJointTrackingActual: String,
+    automaticJointTrackingRange: String,
+    positionsMachineActual: String,
+    positionsMachineRange: String,
+    baseMaterialThicknessActual: String,
+    baseMaterialThicknessRange: String,
+    consumableInsertActual: String,
+    consumableInsertRange: String,
+    backingActual: String,
+    backingRange: String,
+    singleMultiplePassesActual: String,
+    singleMultiplePassesRange: String,
     
     // Type of Qualification Test
     visualExamination: {
