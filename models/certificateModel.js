@@ -25,6 +25,7 @@ const certificateModel = mongoose.Schema({
     jointType: String,
     date_of_test: String,
     testCouponSize: String,
+    fillerMetalElectrodeClass: String,
     weldType: String,
     year:String,
 
