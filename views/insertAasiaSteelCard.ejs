@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+  <title>Document</title>
+</head>
+
+<body style="width: 216mm; height: 279mm; margin: auto">
+
+  <form action="/aasia-steel-card/insert" method="post" enctype="multipart/form-data">
+  <div class="card">
+    <div class="flex-between">
+      <img  style="width: 150px; height: 100px;" class="logo" src="/images/logo.png" alt="logo" />
+      <div style="text-align: center; color: #14ab55">
+        <p style="text-transform: uppercase">
+          Aasia Steel Company
+        </p>
+        <p style="margin: 8px 0; font-size: 13px">
+          Welder Qualification Card
+        </p>
+        <p style="text-transform: uppercase">Aasia Steel Welder Card</p>
+      </div>
+      <!-- <img style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
+    </div>
+    <div>
+      <label style=" cursor: pointer; background-color: rgb(4, 111, 0); color: white; padding: 5px;" for="files"
+        class="btn">Select Image</label>
+      <input  id="files" style="visibility:hidden;" name="card" type="file" accept="image/jpg" onchange="previewImage(event)">
+
+    </div>
+    <br>
+    <div class="flex">
+      <img  id="preview-selected-image" style="width: 200px; height: 200px;" class="person-img"/>
+      <table id="table-1">
+        <tbody>
+          <tr>
+            <td>Company</td>
+            <td>: <input type ="text" name="company"/> </td>
+          </tr>
+          <tr>
+            <td>Welder Name</td>
+            <td>:<input type="text" name="welder_name"  id=""></td>
+          </tr>
+          <tr>
+            <td>Iqama No</td>
+            <td>:<input type="text" name="iqama_no" id=""></td>
+          </tr>
+          <tr>
+              <td>Welder ID</td>
+              <td>: <input type="text" name="welder_id" id=""></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex-between" style="margin-top: 20px">
+      <div>
+        <input type="text" name="authorized_by" id="">
+        <p style="margin-top: 3px">Authorized by</p>
+      </div>
+      <div>
+        <input type="text" name="welding_inspector" id="">
+        <p style="margin-top: 3px">Welding Inspector</p>
+      </div>
+    </div>
+  </div>
+  <div style="border: 2px black solid; margin-top: 10px">
+    <table id="table-2" style="width: 100%">
+      <tr>
+        <td>Card No</td>
+        <td><input hidden type="text" name="card_no" id=""></td>
+        <td>Welding Process and Type</td>
+        <td><input type="text" name="welding_process_and_type" id=""></td>
+      </tr>
+      <tr>
+        <td>Direct or Remote Visual Control</td>
+        <td><input type="text" name="direct_or_remote_visual_control" id=""></td>
+        <td>Auto Arc Voltage Control</td>
+        <td><input type="text" name="auto_arc_voltage_control" id=""></td>
+      </tr>
+      <tr>
+        <td>Automatic Joint Tracking</td>
+        <td><input type="text" name="automatic_joint_tracking" id=""></td>
+        <td>Positions</td>
+        <td><input type="text" name="positions" id=""></td>
+      </tr>
+      <tr>
+        <td>Base Material Dia and Thickness</td>
+        <td><input type="text" name="base_material_dia_and_thickness" id=""></td>
+        <td>Consumable Inserts</td>
+        <td><input type="text" name="consumable_inserts" id=""></td>
+      </tr>
+      <tr>
+        <td>Backing</td>
+        <td><input type="text" name="backing" id=""></td>
+        <td>Single or Multiple Passes</td>
+        <td><input type="text" name="single_or_multiple_passes" id=""></td>
+      </tr>
+      <tr>
+        <td>Base Metal Spec or P No</td>
+        <td><input type="text" name="base_metal_spec_or_p_no" id=""></td>
+        <td>Filler Metal Spec or Class</td>
+        <td><input type="text" name="filler_metal_spec_or_class" id=""></td>
+      </tr>
+      <tr>
+        <td>Joint or Weld Type</td>
+        <td><input type="text" name="joint_or_weld_type" id=""></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+    <p style="border: 2px black solid; padding: 5px; font-size: 15px">
+      This card certifies the welder's qualification according to Aasia Steel standards and requirements.
+    </p>
+  </div>
+
+  <input type="submit" value="Save"/>
+</form>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      font-weight: 600;
+
+    }
+
+    .card {
+      margin-top: 10px;
+      padding: 10px;
+      border: 4px black solid
+    }
+
+    .flex {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .flex-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      height: 150px;
+      width: 200px
+    }
+
+    .qrcode {
+      height: 150px;
+      width: 150px;
+    }
+
+    .person-img {
+      height: 200px;
+      width: 200px;
+      object-fit: cover
+    }
+
+    #table-1 {
+      border-collapse: separate;
+      border-spacing: 0 20px;
+      /* Adjust the second value for vertical spacing */
+    }
+
+    #table-2 {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    #table-2 td {
+      border: 2px black solid;
+      padding: 5px;
+    }
+
+    td:nth-child(even) {
+      color: #14ab55;
+      /* Apply your styling for even rows */
+    }
+  </style>
+
+</body>
+
+<script>
+  /**
+ * Create an arrow function that will be called when an image is selected.
+ */
+const previewImage = (event) => {
+    /**
+     * Get the selected files.
+     */
+    const imageFiles = event.target.files;
+    /**
+     * Count the number of files selected.
+     */
+    const imageFilesLength = imageFiles.length;
+    /**
+     * If at least one image is selected, then proceed to display the preview.
+     */
+    if (imageFilesLength > 0) {
+        /**
+         * Get the image path.
+         */
+        const imageSrc = URL.createObjectURL(imageFiles[0]);
+        /**
+         * Select the image preview element.
+         */
+        const imagePreviewElement = document.querySelector("#preview-selected-image");
+        /**
+         * Assign the path to the image preview element.
+         */
+        imagePreviewElement.src = imageSrc;
+        /**
+         * Show the element by changing the display value to "block".
+         */
+        imagePreviewElement.style.display = "block";
+    }
+};
+</script>
+
+</html>

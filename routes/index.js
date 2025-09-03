@@ -4,6 +4,7 @@ const Report = require('../models/reportModel')
 const Card = require('../models/cardModel')
 const Certificate = require('../models/certificateModel')
 const Operator = require('../models/operatorModel')
+const AasiaSteelCard = require('../models/aasiaSteelCardModel')
 var router = express.Router();
 
 // Authentication middleware
@@ -76,18 +77,21 @@ router.get('/supervisor', requireAuth, requireRole('supervisor'), async (req, re
     const reportData = await Report.find().sort({ createdAt: -1 }).exec();
     const certificateData = await Certificate.find().sort({ createdAt: -1 }).exec();
     const operatorData = await Operator.find().sort({ createdAt: -1 }).exec();
+    const aasiaSteelCardData = await AasiaSteelCard.find().sort({ createdAt: -1 }).exec();
 
     console.log("Dashboard data loaded successfully");
     console.log(`- Cards: ${cardData.length}`);
     console.log(`- Reports: ${reportData.length}`);
     console.log(`- Certificates: ${certificateData.length}`);
     console.log(`- Operators: ${operatorData.length}`);
+    console.log(`- Aasia Steel Cards: ${aasiaSteelCardData.length}`);
 
     res.render('Supervisor', { 
       cardData, 
       reportData, 
       certificateData, 
       operatorData,
+      aasiaSteelCardData,
       user: {
         name: USERS.supervisor.name,
         role: 'supervisor',

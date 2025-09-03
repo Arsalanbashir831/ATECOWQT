@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>Document</title>
+	</head>
+
+	<body style="width: 216mm; height: 279mm; margin: auto">
+		<div class="card" style="width: 568px">
+			<div class="flex-between">
+				<img
+					style="width: 150px; height: 100px"
+					class="logo"
+					src="/images/logo.png"
+					alt="logo" />
+				<div style="text-align: center; color: #14ab55">
+					<p style="text-transform: uppercase">
+						Aasia Steel Company
+					</p>
+					<p style="margin: 8px 0; font-size: 13px">
+						Welder Qualification Card
+					</p>
+					<p style="text-transform: uppercase">Aasia Steel Welder Card</p>
+				</div>
+				<img src="<%= record.qr    %>" alt="QR Code" class="qrcode" />
+			</div>
+			<div class="flex">
+				<img src="<%= record.image %>" alt="Welder photo" class="person-img" />
+				<table id="table-1">
+					<tbody>
+						<tr>
+							<td>Company :</td>
+							<td><%= record.company %></td>
+						</tr>
+						<tr>
+							<td>Welder Name:</td>
+							<td><%= record.welder_name %></td>
+						</tr>
+						<tr>
+							<td>Iqama/Id No:</td>
+							<td><%= record.iqama_no %></td>
+						</tr>
+						<tr>
+							<td>Welder ID:</td>
+							<td><%= record.welder_id %></td>
+						</tr>
+						<tr>
+							<td>Card No:</td>
+							<td><%= record.card_no %></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="flex-between" style="margin-top: 3px">
+				<div>
+					<p style="color: gray"><%=record.authorized_by %></p>
+					<p style="margin-top: 3px">Authorized by</p>
+				</div>
+				<div>
+					<p style="color: gray"><%= record.welding_inspector %></p>
+					<p style="margin-top: 3px">Welding Inspector</p>
+				</div>
+			</div>
+		</div>
+		<div style="width: 592px; border: 2px black solid; margin-top: 10px">
+			<table id="table-2" style="width: 100%">
+				<tr>
+					<td>Card No</td>
+					<td><%= record.card_no%></td>
+					<td>Welding Process and Type</td>
+					<td><%= record.welding_process_and_type%></td>
+				</tr>
+				<tr>
+					<td>Direct or Remote Visual Control</td>
+					<td><%= record.direct_or_remote_visual_control %></td>
+					<td>Auto Arc Voltage Control</td>
+					<td><%= record.auto_arc_voltage_control%></td>
+				</tr>
+				<tr>
+					<td>Automatic Joint Tracking</td>
+					<td><%=record.automatic_joint_tracking %></td>
+					<td>Positions</td>
+					<td><%= record.positions%></td>
+				</tr>
+				<tr>
+					<td>Base Material Dia and Thickness</td>
+					<td><%=record.base_material_dia_and_thickness%></td>
+					<td>Consumable Inserts</td>
+					<td><%= record.consumable_inserts %></td>
+				</tr>
+				<tr>
+					<td>Backing</td>
+					<td><%= record.backing %></td>
+					<td>Single or Multiple Passes</td>
+					<td><%= record.single_or_multiple_passes %></td>
+				</tr>
+				<tr>
+					<td>Base Metal Spec or P No</td>
+					<td><%= record.base_metal_spec_or_p_no %></td>
+					<td>Filler Metal Spec or Class</td>
+					<td><%= record.filler_metal_spec_or_class %></td>
+				</tr>
+				<tr>
+					<td>Joint or Weld Type</td>
+					<td><%= record.joint_or_weld_type %></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+			<p style="border: 2px black solid; padding: 5px; font-size: 15px">
+				This card certifies the welder's qualification according to Aasia Steel standards and requirements.
+			</p>
+		</div>
+		<br />
+		<a
+			class="hide-in-print"
+			href="/Supervisor"
+			style="
+				text-decoration: none;
+				background-color: green;
+				color: white;
+				padding: 2px;
+			"
+			>Back to Home</a
+		>
+
+		<a
+			class="hide-in-print"
+			onclick="window.print(); return false;"
+			href="/Supervisor"
+			style="
+				text-decoration: none;
+				background-color: red;
+				color: white;
+				padding: 2px;
+			"
+			>Download PDF</a
+		>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				font-family: sans-serif;
+				font-weight: 600;
+			}
+			@media print {
+				.hide-in-print {
+					display: none;
+				}
+			}
+			.card {
+				margin-top: 10px;
+				padding: 10px;
+				border: 4px black solid;
+			}
+
+			.flex {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.flex-between {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			.logo {
+				height: 150px;
+				width: 200px;
+			}
+
+			.qrcode {
+				height: 150px;
+				width: 150px;
+			}
+
+			.person-img {
+				height: 200px;
+				width: 200px;
+				object-fit: cover;
+			}
+
+			#table-1 {
+				border-collapse: separate;
+				border-spacing: 0 20px;
+				/* Adjust the second value for vertical spacing */
+			}
+
+			#table-2 {
+				border-collapse: separate;
+				border-spacing: 0;
+			}
+
+			#table-2 td {
+				border: 2px black solid;
+				padding: 5px;
+			}
+
+			td:nth-child(even) {
+				color: #14ab55;
+				/* Apply your styling for even rows */
+			}
+		</style>
+	</body>
+</html>

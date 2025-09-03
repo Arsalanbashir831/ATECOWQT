@@ -230,6 +230,10 @@
             background: linear-gradient(135deg, var(--danger-color), #c82333);
         }
 
+        .card-icon.aasia-steel {
+            background: linear-gradient(135deg, #6c757d, #495057);
+        }
+
         .card-number {
             font-size: 32px;
             font-weight: 700;
@@ -422,6 +426,12 @@
                 </a>
             </div>
             <div class="nav-item">
+                <a href="#" class="nav-link" data-module="aasia-steel-cards">
+                    <i class="fas fa-industry nav-icon"></i>
+                    Aasia Steel Card
+                </a>
+            </div>
+            <div class="nav-item">
                 <a href="#" class="nav-link" data-module="reports">
                     <i class="fas fa-chart-bar nav-icon"></i>
                     Testing Reports
@@ -499,6 +509,19 @@
 
                     <div class="card">
                         <div class="card-header">
+                            <div class="card-icon aasia-steel">
+                                <i class="fas fa-industry"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-number" id="aasiaSteelCardCount">0</h3>
+                                <p class="card-title">Aasia Steel Cards</p>
+                                <p class="card-subtitle">Steel qualification cards</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
                             <div class="card-icon report">
                                 <i class="fas fa-chart-bar"></i>
                             </div>
@@ -533,6 +556,12 @@
                             <a href="/card/" class="add-btn w-100 text-center">
                                 <i class="fas fa-plus"></i>
                                 Add Welder Card
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="/aasia-steel-card/" class="add-btn w-100 text-center">
+                                <i class="fas fa-plus"></i>
+                                Add Aasia Steel Card
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -783,6 +812,96 @@
                 </div>
             </div>
 
+            <!-- Aasia Steel Cards Module -->
+            <div class="module-page" id="aasia-steel-cards">
+                <div class="table-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Aasia Steel Welder Cards</h2>
+                        <a href="/aasia-steel-card/" class="add-btn">
+                            <i class="fas fa-plus"></i>
+                            Add Aasia Steel Card
+                        </a>
+                    </div>
+                    
+                    <input type="text" class="form-control mb-3" id="aasiaSteelCardSearch" placeholder="Search aasia steel cards...">
+                    
+                    <div class="table-responsive">
+                        <table class="table" id="aasiaSteelCardTable">
+                            <thead>
+                                <tr>
+                                    <th>Index No</th>
+                                    <th>Issued In</th>
+                                    <th>Card No</th>
+                                    <th>Welder ID</th>
+                                    <th>Welder Name</th>
+                                    <th>Company</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="aasiaSteelCardTableBody">
+                                <% if (typeof aasiaSteelCardData !== 'undefined' && aasiaSteelCardData.length > 0) { %>
+                                    <% aasiaSteelCardData.forEach(function(card, index){ %>
+                                        <tr>
+                                            <td><%= index + 1 %></td>
+                                            <td><%= card.createdAt %></td>
+                                            <td><%= card.card_no %></td>
+                                            <td><%= card.welder_id %></td>
+                                            <td><%= card.welder_name %></td>
+                                            <td><%= card.company %></td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <form action="/aasia-steel-card/edit/<%= card.card_no %>" method="GET" style="display: inline;">
+                                                        <button type="submit" class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form action="/aasia-steel-card/view/<%= card.card_no %>" style="display: inline;">
+                                                        <button type="submit" class="btn btn-info btn-sm">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form action="/aasia-steel-card/delete/<%= card.card_no %>" style="display: inline;">
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <div class="empty-state">
+                                                <i class="fas fa-industry"></i>
+                                                <p>No Aasia Steel cards found.</p>
+                                                <a href="/aasia-steel-card/" class="add-btn">Add your first Aasia Steel card</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination-container">
+                        <select class="page-size-selector" id="aasiaSteelCardPageSize">
+                            <option value="10">10 per page</option>
+                            <option value="25">25 per page</option>
+                            <option value="50">50 per page</option>
+                            <option value="100">100 per page</option>
+                        </select>
+                        <div class="pagination-info" id="aasiaSteelCardPaginationInfo">Showing 1-10 of <span id="aasiaSteelCardTotalRows">0</span> entries</div>
+                        <nav>
+                            <ul class="pagination" id="aasiaSteelCardPagination">
+                                <li class="page-item"><a class="page-link" href="#" id="aasiaSteelCardPrev">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="#" id="aasiaSteelCardNext">Next</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
             <!-- Reports Module -->
             <div class="module-page" id="reports">
                 <div class="table-section">
@@ -963,11 +1082,13 @@
             const certificatePagination = new TablePagination('certificate', 10);
             const cardPagination = new TablePagination('card', 10);
             const operatorPagination = new TablePagination('operator', 10);
+            const aasiaSteelCardPagination = new TablePagination('aasiaSteelCard', 10);
 
             // Update dashboard counts
             document.getElementById('certificateCount').textContent = <%= certificateData.length %>;
             document.getElementById('operatorCount').textContent = <%= typeof operatorData !== 'undefined' ? operatorData.length : 0 %>;
             document.getElementById('cardCount').textContent = <%= cardData.length %>;
+            document.getElementById('aasiaSteelCardCount').textContent = <%= typeof aasiaSteelCardData !== 'undefined' ? aasiaSteelCardData.length : 0 %>;
             document.getElementById('reportCount').textContent = <%= reportData.length %>;
 
             // Navigation
@@ -998,6 +1119,7 @@
                             'certificates': 'Welder Qualification Certificates',
                             'operators': 'Operator Performance Certificates',
                             'cards': 'Welder Qualification Cards',
+                            'aasia-steel-cards': 'Aasia Steel Welder Cards',
                             'reports': 'Testing Reports'
                         };
                         pageTitle.textContent = titles[moduleId] || 'Dashboard';
@@ -1010,6 +1132,7 @@
                 'certificate': certificatePagination,
                 'operator': operatorPagination,
                 'card': cardPagination,
+                'aasiaSteelCard': aasiaSteelCardPagination,
                 'report': reportPagination
             };
 
@@ -1027,7 +1150,8 @@
                 'report': reportPagination,
                 'certificate': certificatePagination,
                 'card': cardPagination,
-                'operator': operatorPagination
+                'operator': operatorPagination,
+                'aasiaSteelCard': aasiaSteelCardPagination
             };
 
             Object.keys(paginationButtons).forEach(key => {

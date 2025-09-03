@@ -121,6 +121,72 @@ const operatorStorage = new CloudinaryStorage({
 });
 const uploadOperator = multer({ storage: operatorStorage });
 
+// --- aasia steel card storage+upload ---
+const aasiaSteelCardStorage = new CloudinaryStorage({
+	cloudinary,
+	params: async (req, file) => {
+		try {
+			// For aasia steel card insertion, card_no should be set by computeCardNo middleware
+			// For aasia steel card updates, it comes from the URL parameter
+			const cardNo = req.card_no || req.params?.card_no || 'temp';
+			
+			if (!cardNo || cardNo === 'temp') {
+				console.warn('Aasia Steel Card number not available, using temporary folder');
+			}
+			
+			return {
+				folder: `aasia-steel-cards/${cardNo}`,
+				public_id: `aasia-steel-card-${cardNo}`,
+				format: "jpg",
+				overwrite: true,
+				resource_type: "image",
+			};
+		} catch (error) {
+			console.error('Error in Aasia Steel Card Cloudinary storage params:', error);
+			// Return a fallback configuration instead of throwing
+			return {
+				folder: 'aasia-steel-cards/temp',
+				public_id: `aasia-steel-card-temp-${Date.now()}`,
+				format: "jpg",
+				overwrite: true,
+				resource_type: "image",
+			};
+		}
+	},
+});
+
+// Create a custom upload middleware with error handling for Aasia Steel Cards
+const createAasiaSteelCardUploadMiddleware = () => {
+	const upload = multer({ 
+		storage: aasiaSteelCardStorage,
+		fileFilter: (req, file, cb) => {
+			console.log('Processing Aasia Steel Card file:', file.originalname, 'Type:', file.mimetype);
+			if (file.mimetype.startsWith('image/')) {
+				cb(null, true);
+			} else {
+				cb(new Error('Only image files are allowed'), false);
+			}
+		},
+		limits: {
+			fileSize: 5 * 1024 * 1024 // 5MB limit
+		}
+	});
+
+	// Return a middleware that handles errors
+	return (req, res, next) => {
+		upload.single('card')(req, res, (err) => {
+			if (err) {
+				console.error('Aasia Steel Card upload error:', err);
+				req.fileError = err;
+				// Don't call next(err) here, let the route handle it
+			}
+			next();
+		});
+	};
+};
+
+const uploadAasiaSteelCard = createAasiaSteelCardUploadMiddleware();
+
 // ––– Express app setup –––
 const app = express();
 
@@ -158,6 +224,7 @@ const reportRouter = require("./routes/report");
 const certificateRouter = require("./routes/certificate")(uploadCert);
 const cardRouter = require("./routes/card")(uploadCard);
 const operatorRouter = require("./routes/operator")(uploadOperator);
+const aasiaSteelCardRouter = require("./routes/aasia-steel-card")(uploadAasiaSteelCard);
 const apiRouter = require("./routes/api");
 
 app.use("/", indexRouter);
@@ -166,6 +233,7 @@ app.use("/report", reportRouter);
 app.use("/certificate", certificateRouter);
 app.use("/card", cardRouter);
 app.use("/operator", operatorRouter);
+app.use("/aasia-steel-card", aasiaSteelCardRouter);
 app.use("/api", apiRouter);
 
 // catch 404
