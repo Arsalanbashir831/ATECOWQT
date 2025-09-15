@@ -66,48 +66,75 @@
 		</div>
 		<div style="width: 592px; border: 2px black solid; margin-top: 10px">
 			<table id="table-2" style="width: 100%">
-				<tr>
-					<td>Card No</td>
-					<td><%= record.card_no%></td>
-					<td>Welding Process & Type</td>
-					<td><%= record.welding_process_and_type%></td>
-				</tr>
-				<tr>
-					<td>Direct or Remote Visual Control</td>
-					<td><%= record.direct_or_remote_visual_control %></td>
-					<td>Auto Arc Voltage Control (GTAW)</td>
-					<td><%= record.auto_arc_voltage_control%></td>
-				</tr>
-				<tr>
-					<td>Automatic Joint Tracking</td>
-					<td><%=record.automatic_joint_tracking %></td>
-					<td>Position(s)</td>
-					<td><%= record.positions%></td>
-				</tr>
-				<tr>
-					<td>Base Material Dia & Thickness</td>
-					<td><%=record.base_material_dia_and_thickness%></td>
-					<td>Consumable Inserts (GTAW/PAW)</td>
-					<td><%= record.consumable_inserts %></td>
-				</tr>
-				<tr>
-					<td>Backing (With or Without)</td>
-					<td><%= record.backing %></td>
-					<td>Single or Multiple Passes</td>
-					<td><%= record.single_or_multiple_passes %></td>
-				</tr>
-				<tr>
-					<td>Base Metal Spec / P-No</td>
-					<td><%= record.base_metal_spec_or_p_no %></td>
-					<td>Filler Metal (SFA) Spec. / Class</td>
-					<td><%= record.filler_metal_spec_or_class %></td>
-				</tr>
-				<tr>
-					<td>Joint or Weld Type</td>
-					<td><%= record.joint_or_weld_type %></td>
-					<td></td>
-					<td></td>
-				</tr>
+				<thead>
+					<tr style="background-color: #f8f9fa; font-weight: bold;">
+						<td style="border: 2px black solid; padding: 10px; text-align: center;">Welding Variable</td>
+						<td style="border: 2px black solid; padding: 10px; text-align: center;">Actual Values</td>
+						<td style="border: 2px black solid; padding: 10px; text-align: center;">Range Values</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Welding Process/Type</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.welding_process_type_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.welding_process_type_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Backing</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.backing_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.backing_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Diameter</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.diameter_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.diameter_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Base Metal P-No.</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.base_metal_pno_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.base_metal_pno_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Deposited Thickness</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.deposited_thickness_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.deposited_thickness_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Position & Prog.</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.position_prog_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.position_prog_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Filler Metal Class</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.filler_metal_class_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.filler_metal_class_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Filler Metal F-No.</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.filler_metal_fno_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.filler_metal_fno_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Use of Backing Gas</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.backing_gas_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.backing_gas_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Transfer Mode</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.transfer_mode_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.transfer_mode_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Current Type/Polarity</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.current_type_polarity_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.current_type_polarity_range || '' %></td>
+					</tr>
+					<tr>
+						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Join/Weld Type</td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.join_weld_type_actual || '' %></td>
+						<td style="border: 2px black solid; padding: 8px;"><%= record.join_weld_type_range || '' %></td>
+					</tr>
+				</tbody>
 			</table>
 			<p style="border: 2px black solid; padding: 5px; font-size: 15px">
 				This card certifies the welder's qualification according to Aasia Steel standards and requirements.
