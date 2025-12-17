@@ -10,18 +10,18 @@ async function computeCertNo(req, res, next) {
 		console.log('🔢 Computing certificate number...');
 		const last = await Certificate.findOne().sort({ _id: -1 });
 		console.log('Last certificate found:', last ? last.certificateNo : 'None');
-		
+
 		const count = last ? last.count + 1 : 1;
 		req.count = count;
 		req.certificateNo = `certificate_${count}`;
 		req.welderId = `w-${count}`;
-		
+
 		console.log('Generated certificate details:', {
 			count: req.count,
 			certificateNo: req.certificateNo,
 			welderId: req.welderId
 		});
-		
+
 		next();
 	} catch (error) {
 		console.error('Error in computeCertNo:', error);
@@ -56,21 +56,21 @@ module.exports = (upload) => {
 			console.log('Test upload - File:', req.file);
 			console.log('Test upload - Body:', req.body);
 			console.log('Test upload - File error:', req.fileError);
-			
+
 			if (req.fileError) {
 				return res.status(400).json({
 					error: 'Upload failed',
 					message: req.fileError.message
 				});
 			}
-			
+
 			if (!req.file) {
 				return res.status(400).json({
 					error: 'No file uploaded',
 					message: 'Please select a file to upload'
 				});
 			}
-			
+
 			res.json({
 				success: true,
 				file: {
@@ -134,7 +134,7 @@ module.exports = (upload) => {
 				// generate QR code in-memory:
 				const viewUrl = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/certificate/view/${req.certificateNo}`;
 				console.log('View URL for QR:', viewUrl);
-				
+
 				const qrDataUri = await qrcode.toDataURL(viewUrl, {
 					margin: 1,
 					width: 200,
@@ -149,9 +149,24 @@ module.exports = (upload) => {
 				});
 				console.log('QR code uploaded to Cloudinary:', qrUpload.secure_url);
 
+				// Process dynamic attributes
+				let attributes = [];
+				if (req.body.attrKeys) {
+					const keys = Array.isArray(req.body.attrKeys) ? req.body.attrKeys : [req.body.attrKeys];
+					const values = Array.isArray(req.body.attrValues) ? req.body.attrValues : [req.body.attrValues];
+					const ranges = Array.isArray(req.body.attrRanges) ? req.body.attrRanges : [req.body.attrRanges];
+
+					attributes = keys.map((key, index) => ({
+						key: key,
+						value: values[index] || '',
+						range: ranges[index] || ''
+					})).filter(attr => attr.key && attr.key.trim() !== '');
+				}
+
 				// Prepare certificate data
 				const certificateData = {
 					...req.body,
+					attributes,
 					count: req.count,
 					certificateNo: req.certificateNo,
 					welderId: req.welderId,
@@ -193,16 +208,16 @@ module.exports = (upload) => {
 		"/edit/:certificateNo",
 		setCertNoFromParam,
 		async (req, res, next) => {
-		  try {
-			const certNo = req.params.certificateNo;
-			const record = await Certificate.findOne({ certificateNo: certNo });
-			if (!record) return res.status(404).send("Certificate not found");
-			res.render("EditCertificate", { record });
-		  } catch (err) {
-			next(err);
-		  }
+			try {
+				const certNo = req.params.certificateNo;
+				const record = await Certificate.findOne({ certificateNo: certNo });
+				if (!record) return res.status(404).send("Certificate not found");
+				res.render("EditCertificate", { record });
+			} catch (err) {
+				next(err);
+			}
 		}
-	  );
+	);
 	// UPDATE (apply changes)
 	router.post(
 		"/update/:certificateNo",
@@ -224,7 +239,21 @@ module.exports = (upload) => {
 					throw new Error(`File upload error: ${req.fileError.message}`);
 				}
 
-				const updates = { ...req.body, certificateNo: certNo };
+				// Process dynamic attributes
+				let attributes = [];
+				if (req.body.attrKeys) {
+					const keys = Array.isArray(req.body.attrKeys) ? req.body.attrKeys : [req.body.attrKeys];
+					const values = Array.isArray(req.body.attrValues) ? req.body.attrValues : [req.body.attrValues];
+					const ranges = Array.isArray(req.body.attrRanges) ? req.body.attrRanges : [req.body.attrRanges];
+
+					attributes = keys.map((key, index) => ({
+						key: key,
+						value: values[index] || '',
+						range: ranges[index] || ''
+					})).filter(attr => attr.key && attr.key.trim() !== '');
+				}
+
+				const updates = { ...req.body, attributes, certificateNo: certNo };
 
 				// 1) New profile? storage will overwrite the old asset with the same public_id:
 				if (req.file) {

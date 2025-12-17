@@ -91,9 +91,10 @@
         <td style="border: 1px solid black; font-weight: bold; padding: 4px; font-size: 12px;">Welder Id No</td>
         <td style="border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" name="welderId"
             value="<%= record.welderId %>" id=""></td>
-          <td style="border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Date of<span style="color:white;">-</span>Test</td>
-          <td style="border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text"
-              value="<%=record.weldDate %>" name="weldDate" id=""></td>  
+        <td style="border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Date of<span
+            style="color:white;">-</span>Test</td>
+        <td style="border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text"
+            value="<%=record.weldDate %>" name="weldDate" id=""></td>
         <tr>
 
           <td style="border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Base Metal Specification
@@ -107,7 +108,8 @@
         <tr>
         </tr>
         <tr>
-          <td style="border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Date of<span style="color:white;">-</span>Weld</td>
+          <td style="border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Date of<span
+              style="color:white;">-</span>Weld</td>
           <td style="border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text"
               value="<%=record.date_of_test %>" name="date_of_test" id=""></td>
           <td style="border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Weld Type</td>
@@ -284,6 +286,62 @@
           <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
               value="<%=record.currentTypePolarityRange %>" type="text" name="currentTypePolarityRange" id=""></td>
         </tr>
+        <% if (record.attributes && record.attributes.length> 0) { %>
+          <% record.attributes.forEach(function(attr) { %>
+            <tr>
+              <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                <input type="text" value="<%= attr.key %>" name="attrKeys">
+              </td>
+              <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                <input type="text" value="<%= attr.value %>" name="attrValues">
+              </td>
+              <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                <input type="text" value="<%= attr.range %>" name="attrRanges">
+              </td>
+            </tr>
+            <% }); %>
+              <% } %>
+
+                <% if (record.attr1key) { %>
+                  <tr>
+                    <td
+                      style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                      <input type="text" value="<%= record.attr1key %>" name="attr1key">
+                    </td>
+                    <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                      <input type="text" value="<%= record.attr1value %>" name="attr1value">
+                    </td>
+                    <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                      <input type="text" value="<%= record.attr1range %>" name="attr1range">
+                    </td>
+                  </tr>
+                  <% } %>
+
+                    <% if (record.attr2key) { %>
+                      <tr>
+                        <td
+                          style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                          <input type="text" value="<%= record.attr2key %>" name="attr2key">
+                        </td>
+                        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                          <input type="text" value="<%= record.attr2value %>" name="attr2value">
+                        </td>
+                        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                          colspan="2">
+                          <input type="text" value="<%= record.attr2range %>" name="attr2range">
+                        </td>
+                      </tr>
+                      <% } %>
+
+                        <tr>
+                          <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px;">
+                            Add More Attributes
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px;" colspan="3">
+                            <input type="button" value="Add New Attribute" id="btn-add-attr" onclick="change()">
+                          </td>
+                        </tr>
+
       </tbody>
       <table border style="width: 100%;">
         <thead>
@@ -436,37 +494,24 @@
 </body>
 
 <script>
-  let count = 0;
-  function change(params) {
-    count++;
-    if (count > 2) {
-      return;
-    }
+  function change() {
+    const btn = document.getElementById("btn-add-attr");
+    const buttonRow = btn.closest("tr");
 
-    let table = document.getElementById("tab");
-    table.innerHTML += ` <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold;">
-          <input  type="text" value="<%=record.attr1key%>" name="attr1key"> 
+    const newRow = `<tr>
+        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+          <input type="text" placeholder="Attribute Name" name="attrKeys"> 
         </td>
-        <td style="text-align: left; border: 1px solid black;"> <input  value="<%=record.attr1value %>" type="text" name="attr1value" id=""></td>
-        <td style="text-align: left; border: 1px solid black;"> <input value="<%=record.attr1range %>"  placeholder="Enter The Ranged" type="text" name="attr1range" id=""></td>
-      </tr>
-
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold;">
-          <input  type="text" value="<%=record.attr2key%>" name="attr2key"> 
+        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"> 
+          <input type="text" placeholder="Value" name="attrValues">
         </td>
-        <td style="text-align: left; border: 1px solid black;"> <input  value="<%=record.attr2value %>" type="text" name="attr2value" id=""></td>
-        
+        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"> 
+          <input type="text" placeholder="Range" name="attrRanges">
+        </td>
+      </tr>`;
 
-        <td style="text-align: left; border: 1px solid black;"> <input value="<%=record.attr2range %>"  placeholder="Enter The Ranged" type="text" name="attr2range" id=""></td>
-      </tr>
-
-      <tr>`
-
+    buttonRow.insertAdjacentHTML('beforebegin', newRow);
   }
-
-  change(1);
 </script>
 
 

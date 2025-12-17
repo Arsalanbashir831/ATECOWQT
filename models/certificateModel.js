@@ -101,7 +101,13 @@ const certificateModel = mongoose.Schema({
 
     attr2key: String,
     attr2value: String,
-    attr2range: String
+    attr2range: String,
+
+    attributes: [{
+        key: String,
+        value: String,
+        range: String
+    }]
 
     
 })
