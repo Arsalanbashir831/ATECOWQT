@@ -74,8 +74,7 @@ module.exports = (upload) => {
                     }
                 }
 
-				// DEBUG: Check if 'tableData' is in the schema paths
-                console.log('🔍 SCHEMA PATHS:', Object.keys(AasiaSteelCard.schema.paths).filter(p => p.includes('table')));
+
 
 				const card = await AasiaSteelCard.create({
 					...cardData, 
@@ -96,7 +95,7 @@ module.exports = (upload) => {
 	// EDIT
 	router.get("/edit/:card_no", async (req, res) => {
 		let card_no = req.params.card_no;
-		const record = await AasiaSteelCard.findOne({ card_no: card_no }).lean();
+		const record = await AasiaSteelCard.findOne({ card_no: card_no }).exec();
 		console.log(record);
 		if (record) {
 			res.render("editAasiaSteelCard", { record: record });
