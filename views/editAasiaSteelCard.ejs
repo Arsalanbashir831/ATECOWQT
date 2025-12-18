@@ -1,310 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<!-- <link rel="stylesheet" href="style.css" /> -->
-		<title>Document</title>
-	</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <title>Document</title>
+  </head>
 
-	<body style="width: 216mm; height: 279mm; margin: auto">
-		<form
-			action="/aasia-steel-card/update/<%= record.card_no %>"
-			method="POST"
-			enctype="multipart/form-data">
-			<div class="card">
-				<div class="flex-between">
-					<img
-						style="width: 150px; height: 100px"
-						class="logo"
-						src="/images/logo.png"
-						alt="logo" />
-					<div style="text-align: center; color: #14ab55">
-						<p style="text-transform: uppercase">
-							Aasia Steel Company
-						</p>
-						<p style="margin: 8px 0; font-size: 13px">
-							Welder Qualification Card
-						</p>
-						<p style="text-transform: uppercase">Aasia Steel Welder Card</p>
-					</div>
-					<!-- <img  style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
-				</div>
-				<div>
-					<label
-						style="
-							cursor: pointer;
-							background-color: rgb(4, 111, 0);
-							color: white;
-							padding: 5px;
-						"
-						for="files"
-						class="btn"
-						>Select Image</label
-					>
-					<input
-						id="files"
-						value="/<%= record.card_no %>/<%= record.image %>"
-						style="visibility: hidden"
-						name="card"
-						type="file"
-						accept="image/jpg"
-						onchange="previewImage(event)" />
-				</div>
-				<br />
-				<div class="flex">
-					<img
-						src="<%= record.image %>"
-						alt="Welder photo"
-						class="person-img" />
-					<table id="table-1">
-						<tbody>
-							<tr>
-								<td>Company</td>
-								<td>
-									:
-									<input
-										type="text"
-										name="company"
-										value="<%=record.company %>" />
-								</td>
-							</tr>
-							<tr>
-								<td>Welder Name</td>
-								<td>
-									:<input
-										type="text"
-										name="welder_name"
-										value="<%=record.welder_name %>"
-										id="" />
-								</td>
-							</tr>
-							<tr>
-								<td>Iqama/Id No:</td>
-								<td>
-									:<input
-										type="text"
-										name="iqama_no"
-										value="<%=record.iqama_no  %>"
-										id="" />
-								</td>
-							</tr>
-							<tr>
-								<td>Welder ID</td>
-								<td>
-									:<input 
-										type="text"
-										name="welder_id"
-										value="<%=record.welder_id %>"
-										id="" />
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="flex-between" style="margin-top: 20px">
-					<div>
-						<input
-							type="text"
-							value="<%=record.authorized_by %>"
-							name="authorized_by"
-							id="" />
-						<p style="margin-top: 3px">Authorized by</p>
-					</div>
-					<div>
-						<input
-							type="text"
-							value="<%=record.welding_inspector %>"
-							name="welding_inspector"
-							id="" />
-						<p style="margin-top: 3px">Welding Inspector</p>
-					</div>
-				</div>
-			</div>
-			<div style="border: 2px black solid; margin-top: 10px">
-				<table id="table-2" style="width: 100%">
-					<thead>
-						<tr style="background-color: #f8f9fa; font-weight: bold;">
-							<td style="border: 2px black solid; padding: 10px; text-align: center;">Welding Variable</td>
-							<td style="border: 2px black solid; padding: 10px; text-align: center;">Actual Values</td>
-							<td style="border: 2px black solid; padding: 10px; text-align: center;">Range Values</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Welding Process/Type</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="welding_process_type_actual" value="<%=record.welding_process_type_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="welding_process_type_range" value="<%=record.welding_process_type_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Backing</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="backing_actual" value="<%=record.backing_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="backing_range" value="<%=record.backing_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Diameter</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="diameter_actual" value="<%=record.diameter_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="diameter_range" value="<%=record.diameter_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Base Metal P-No.</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="base_metal_pno_actual" value="<%=record.base_metal_pno_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="base_metal_pno_range" value="<%=record.base_metal_pno_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Deposited Thickness</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="deposited_thickness_actual" value="<%=record.deposited_thickness_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="deposited_thickness_range" value="<%=record.deposited_thickness_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Position & Prog.</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="position_prog_actual" value="<%=record.position_prog_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="position_prog_range" value="<%=record.position_prog_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Filler Metal Class</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="filler_metal_class_actual" value="<%=record.filler_metal_class_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="filler_metal_class_range" value="<%=record.filler_metal_class_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Filler Metal F-No.</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="filler_metal_fno_actual" value="<%=record.filler_metal_fno_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="filler_metal_fno_range" value="<%=record.filler_metal_fno_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Use of Backing Gas</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="backing_gas_actual" value="<%=record.backing_gas_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="backing_gas_range" value="<%=record.backing_gas_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Transfer Mode</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="transfer_mode_actual" value="<%=record.transfer_mode_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="transfer_mode_range" value="<%=record.transfer_mode_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Current Type/Polarity</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="current_type_polarity_actual" value="<%=record.current_type_polarity_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="current_type_polarity_range" value="<%=record.current_type_polarity_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-						<tr>
-							<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Join/Weld Type</td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="join_weld_type_actual" value="<%=record.join_weld_type_actual || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-							<td style="border: 2px black solid; padding: 2px;"><input type="text" name="join_weld_type_range" value="<%=record.join_weld_type_range || '' %>" style="width: 100%; border: none; padding: 8px; box-sizing: border-box;"></td>
-						</tr>
-					</tbody>
-				</table>
-				<p style="border: 2px black solid; padding: 5px; font-size: 15px">
-					This card certifies the welder's qualification according to Aasia Steel standards and requirements.
-				</p>
-			</div>
+  <body style="width: 216mm; height: 279mm; margin: auto">
+    <form
+      action="/aasia-steel-card/update/<%= record.card_no %>"
+      method="POST"
+      enctype="multipart/form-data">
+      <div class="card">
+        <div class="flex-between">
+          <img
+            style="width: 150px; height: 100px"
+            class="logo"
+            src="/images/logo.png"
+            alt="logo" />
+          <div style="text-align: center; color: #14ab55">
+            <p style="text-transform: uppercase">Aasia Steel Company</p>
+            <p style="margin: 8px 0; font-size: 13px">
+              Welder Qualification Card
+            </p>
+            <p style="text-transform: uppercase">Aasia Steel Welder Card</p>
+          </div>
+          <!-- <img  style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
+        </div>
+        <div>
+          <label
+            style="
+              cursor: pointer;
+              background-color: rgb(4, 111, 0);
+              color: white;
+              padding: 5px;
+            "
+            for="files"
+            class="btn"
+            >Select Image</label
+          >
+          <input
+            id="files"
+            value="/<%= record.card_no %>/<%= record.image %>"
+            style="visibility: hidden"
+            name="card"
+            type="file"
+            accept="image/jpg"
+            onchange="previewImage(event)" />
+        </div>
+        <br />
+        <div class="flex">
+          <img
+            src="<%= record.image %>"
+            alt="Welder photo"
+            class="person-img" />
+          <table id="table-1">
+            <tbody>
+              <tr>
+                <td>Company</td>
+                <td>
+                  :
+                  <input
+                    type="text"
+                    name="company"
+                    value="<%=record.company %>" />
+                </td>
+              </tr>
+              <tr>
+                <td>Welder Name</td>
+                <td>
+                  :<input
+                    type="text"
+                    name="welder_name"
+                    value="<%=record.welder_name %>"
+                    id="" />
+                </td>
+              </tr>
+              <tr>
+                <td>Iqama/Id No:</td>
+                <td>
+                  :<input
+                    type="text"
+                    name="iqama_no"
+                    value="<%=record.iqama_no  %>"
+                    id="" />
+                </td>
+              </tr>
+              <tr>
+                <td>Welder ID</td>
+                <td>
+                  :<input
+                    type="text"
+                    name="welder_id"
+                    value="<%=record.welder_id %>"
+                    id="" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flex-between" style="margin-top: 20px">
+          <div>
+            <input
+              type="text"
+              value="<%=record.authorized_by %>"
+              name="authorized_by"
+              id="" />
+            <p style="margin-top: 3px">Authorized by</p>
+          </div>
+          <div>
+            <input
+              type="text"
+              value="<%=record.welding_inspector %>"
+              name="welding_inspector"
+              id="" />
+            <p style="margin-top: 3px">Welding Inspector</p>
+          </div>
+        </div>
+      </div>
+      <div style="border: 2px black solid; margin-top: 10px;">
+        <!-- Hidden input to store JSON data -->
+        <input type="hidden" name="tableData" id="tableDataInput">
+        
+        <!-- Global Click Listener to close menus -->
+        <div id="click-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:90;" onclick="hideMenus()"></div>
 
-			<input type="submit" value="Update" />
-		</form>
+        <div style="overflow-x: auto; padding-bottom: 50px;">
+            <table id="dynamicTable" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+              <thead>
+                <tr id="tableHeaders" style="background-color: #f8f9fa; font-weight: bold;">
+                  <!-- Headers will be injected here -->
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Rows will be injected here -->
+              </tbody>
+            </table>
+        </div>
+        
+        <p style="border: 2px black solid; padding: 5px; font-size: 15px; margin-top: 0; border-top: none;">
+          This card certifies the welder's qualification according to Aasia Steel standards and requirements.
+        </p>
+      </div>
 
-		<style>
-			* {
-				margin: 0;
-				padding: 0;
-				font-family: sans-serif;
-				font-weight: 600;
-			}
+      <input type="submit" value="Update" />
+    </form>
 
-			.card {
-				margin-top: 10px;
-				padding: 10px;
-				border: 4px black solid;
-			}
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        font-weight: 600;
+      }
 
-			.flex {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
+      .card {
+        margin-top: 10px;
+        padding: 10px;
+        border: 4px black solid;
+      }
 
-			.flex-between {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-			}
+      .flex {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-			.logo {
-				height: 150px;
-				width: 200px;
-			}
+      .flex-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
 
-			.qrcode {
-				height: 150px;
-				width: 150px;
-			}
+      .logo {
+        height: 150px;
+        width: 200px;
+      }
 
-			.person-img {
-				height: 200px;
-				width: 200px;
-				object-fit: cover;
-			}
+      .qrcode {
+        height: 150px;
+        width: 150px;
+      }
 
-			#table-1 {
-				border-collapse: separate;
-				border-spacing: 0 20px;
-				/* Adjust the second value for vertical spacing */
-			}
+      .person-img {
+        height: 200px;
+        width: 200px;
+        object-fit: cover;
+      }
 
-			#table-2 {
-				border-collapse: separate;
-				border-spacing: 0;
-			}
+      #table-1 {
+        border-collapse: separate;
+        border-spacing: 0 20px;
+        /* Adjust the second value for vertical spacing */
+      }
 
-			#table-2 td {
-				border: 2px black solid;
-				padding: 5px;
-			}
+      /* Dynamic Table Styles */
+    #dynamicTable {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+    }
 
-			td:nth-child(even) {
-				color: #14ab55;
-				/* Apply your styling for even rows */
-			}
-		</style>
-	</body>
+    #dynamicTable td, #dynamicTable th {
+      border: 2px black solid;
+      padding: 0;
+      position: relative;
+    }
 
-	<script>
-		/**
-		 * Create an arrow function that will be called when an image is selected.
-		 */
-		const previewImage = (event) => {
-			/**
-			 * Get the selected files.
-			 */
-			const imageFiles = event.target.files;
-			/**
-			 * Count the number of files selected.
-			 */
-			const imageFilesLength = imageFiles.length;
-			/**
-			 * If at least one image is selected, then proceed to display the preview.
-			 */
-			if (imageFilesLength > 0) {
-				/**
-				 * Get the image path.
-				 */
-				const imageSrc = URL.createObjectURL(imageFiles[0]);
-				/**
-				 * Select the image preview element.
-				 */
-				const imagePreviewElement = document.querySelector(
-					"#preview-selected-image"
-				);
-				/**
-				 * Assign the path to the image preview element.
-				 */
-				imagePreviewElement.src = imageSrc;
-				/**
-				 * Show the element by changing the display value to "block".
-				 */
-				imagePreviewElement.style.display = "block";
+    #dynamicTable input {
+       width: 100%;
+       border: none;
+       padding: 8px;
+       box-sizing: border-box;
+       font-family: inherit;
+       font-weight: inherit;
+    }
+    
+    #dynamicTable th input {
+        text-align: center;
+        font-weight: bold;
+        background: #f8f9fa;
+    }
+    
+    /* Context Menu Styles */
+    .control-btn {
+        background: #14ab55;
+        color: white;
+        border: none;
+        width: 16px;
+        height: 16px;
+        font-size: 14px;
+        line-height: 14px;
+        cursor: pointer;
+        border-radius: 50%;
+        display: none; /* Hidden by default */
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        z-index: 10;
+    }
+    
+    /* Position for Column Headers */
+    .header-cell .control-btn {
+        top: 50%;
+        right: 5px; 
+        left: auto;
+        transform: translateY(-50%);
+        margin: 0;
+    }
 
-				const files = document.querySelector("#files");
-				files.value = imageSrc;
-			}
-		};
-	</script>
+    /* Position for Row Cells (First Column) */
+    .data-cell-first .control-btn {
+        top: 50%;
+        right: 5px;
+        left: auto;
+        bottom: auto;
+        transform: translateY(-50%);
+        margin: 0;
+    }
+
+    /* Show on hover */
+    .header-cell:hover .control-btn, 
+    .data-cell-first:hover .control-btn {
+        display: flex;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        background: white;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 100;
+        min-width: 150px;
+        border-radius: 4px;
+        text-align: left;
+    }
+    
+    .dropdown-menu button {
+        display: block;
+        width: 100%;
+        padding: 5px 10px;
+        border: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    
+    .dropdown-menu button:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .dropdown-menu button.delete-opt {
+        color: #dc3545;
+    }
+
+    @media print {
+        .control-btn, .dropdown-menu {
+            display: none !important;
+        }
+    }
+    </style>
+  </body>
+
+    <!-- Server-side logic to prepare initial data -->
+    <% 
+       let initialTableData = null;
+       if (record.tableData && (record.tableData.headers || record.tableData.rows)) {
+           initialTableData = record.tableData;
+       } else {
+           // Migration: Populate from legacy fields
+           const legacyRows = [
+            ["Welding Process/Type", record.welding_process_type_actual || '', record.welding_process_type_range || ''],
+            ["Backing", record.backing_actual || '', record.backing_range || ''],
+            ["Diameter", record.diameter_actual || '', record.diameter_range || ''],
+            ["Base Metal P-No.", record.base_metal_pno_actual || '', record.base_metal_pno_range || ''],
+            ["Deposited Thickness", record.deposited_thickness_actual || '', record.deposited_thickness_range || ''],
+            ["Position & Prog.", record.position_prog_actual || '', record.position_prog_range || ''],
+            ["Filler Metal Class", record.filler_metal_class_actual || '', record.filler_metal_class_range || ''],
+            ["Filler Metal F-No.", record.filler_metal_fno_actual || '', record.filler_metal_fno_range || ''],
+            ["Use of Backing Gas", record.backing_gas_actual || '', record.backing_gas_range || ''],
+            ["Transfer Mode", record.transfer_mode_actual || '', record.transfer_mode_range || ''],
+            ["Current Type/Polarity", record.current_type_polarity_actual || '', record.current_type_polarity_range || ''],
+            ["Join/Weld Type", record.join_weld_type_actual || '', record.join_weld_type_range || '']
+           ];
+           initialTableData = {
+               headers: ["Welding Variable", "Actual Values", "Range Values"],
+               rows: legacyRows
+           };
+       }
+    %>
+    <!-- Output data as JSON for client-side use -->
+    <script id="initial-table-data" type="application/json">
+        <%- JSON.stringify(initialTableData) %>
+    </script>
+    
+    <script>
+    /**
+     * Create an arrow function that will be called when an image is selected.
+     */
+    const previewImage = (event) => {
+      const imageFiles = event.target.files;
+      const imageFilesLength = imageFiles.length;
+      if (imageFilesLength > 0) {
+        const imageSrc = URL.createObjectURL(imageFiles[0]);
+        const imagePreviewElement = document.querySelector("#preview-selected-image");
+        imagePreviewElement.src = imageSrc;
+        imagePreviewElement.style.display = "block";
+        const files = document.querySelector("#files");
+        files.value = imageSrc;
+      }
+    };
+    
+// --- Dynamic Table Logic ---
+
+// Parse table data from hidden JSON script
+let tableData = null;
+let headers = [];
+let rows = [];
+
+try {
+    const rawData = document.getElementById('initial-table-data').textContent;
+    tableData = JSON.parse(rawData);
+    if (tableData) {
+        headers = tableData.headers || [];
+        rows = tableData.rows || [];
+    }
+} catch (e) {
+    console.error("Error parsing initial table data", e);
+}
+
+function renderTable() {
+    const thead = document.getElementById('tableHeaders');
+    const tbody = document.getElementById('tableBody');
+    const hiddenInput = document.getElementById('tableDataInput');
+
+    // Update hidden input for form submission
+    hiddenInput.value = JSON.stringify({ headers, rows });
+
+    // Render Headers
+    thead.innerHTML = '';
+    headers.forEach((header, index) => {
+        const th = document.createElement('td'); 
+        th.className = 'header-cell';
+        th.style.border = '2px black solid';
+        th.style.padding = '2px';
+        th.style.textAlign = 'center';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = header;
+        input.onchange = (e) => updateHeader(index, e.target.value);
+        input.style.fontWeight = 'bold';
+        input.style.textAlign = 'center';
+        input.style.background = '#f8f9fa';
+        th.appendChild(input);
+        
+        // Context Menu for Column
+        const menuBtn = document.createElement('div');
+        menuBtn.className = 'control-btn';
+        menuBtn.innerHTML = '+';
+        menuBtn.onclick = (e) => showColumnMenu(index, e);
+        th.appendChild(menuBtn);
+
+        const menu = document.createElement('div');
+        menu.id = `col-menu-${index}`;
+        menu.className = 'dropdown-menu';
+        menu.innerHTML = `
+            <button onclick="addColumnAt(${index}, 0)">Add Column Before</button>
+            <button onclick="addColumnAt(${index}, 1)">Add Column After</button>
+            ${headers.length > 1 ? `<button class="delete-opt" onclick="deleteColumn(${index})">Delete Column</button>` : ''}
+        `;
+        th.appendChild(menu);
+
+        thead.appendChild(th);
+    });
+
+    // Render Rows
+    tbody.innerHTML = '';
+    rows.forEach((row, rowIndex) => {
+        const tr = document.createElement('tr');
+        
+        row.forEach((cellData, colIndex) => {
+            const td = document.createElement('td');
+            td.className = 'data-cell';
+            if (colIndex === 0) td.classList.add('data-cell-first');
+
+            td.style.border = '2px black solid';
+            td.style.padding = '2px';
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = cellData;
+            input.onchange = (e) => updateCell(rowIndex, colIndex, e.target.value);
+            
+            if (colIndex === 0) input.style.fontWeight = 'bold';
+            if (colIndex === 1) input.style.color = '#14ab55';
+
+            td.appendChild(input);
+            
+            // Context Menu for Row (Only in first column)
+            if (colIndex === 0) {
+                const menuBtn = document.createElement('div');
+                menuBtn.className = 'control-btn';
+                menuBtn.innerHTML = '+';
+                menuBtn.onclick = (e) => showRowMenu(rowIndex, e);
+                td.appendChild(menuBtn);
+
+                const menu = document.createElement('div');
+                menu.id = `row-menu-${rowIndex}`;
+                menu.className = 'dropdown-menu';
+                menu.innerHTML = `
+                    <button onclick="addRowAt(${rowIndex}, 0)">Add Row Before</button>
+                    <button onclick="addRowAt(${rowIndex}, 1)">Add Row After</button>
+                    ${rows.length > 1 ? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>` : ''}
+                `;
+                td.appendChild(menu);
+            }
+
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+}
+
+function showColumnMenu(index, event) {
+    event.stopPropagation();
+    hideMenus();
+    const menu = document.getElementById(`col-menu-${index}`);
+    menu.style.display = 'block';
+    
+    // Position menu: aligned to right edge, below header
+    menu.style.top = '100%'; 
+    menu.style.right = '0';
+    menu.style.left = 'auto'; 
+
+    document.getElementById('click-overlay').style.display = 'block';
+}
+
+function showRowMenu(index, event) {
+    event.stopPropagation();
+    hideMenus();
+    const menu = document.getElementById(`row-menu-${index}`);
+    menu.style.display = 'block';
+    
+    // Position menu: aligned to right edge, below cell content
+    menu.style.top = '100%';
+    menu.style.right = '0';
+    menu.style.left = 'auto'; 
+    menu.style.zIndex = '101'; 
+
+    document.getElementById('click-overlay').style.display = 'block';
+}
+
+function hideMenus() {
+    document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
+    document.getElementById('click-overlay').style.display = 'none';
+}
+
+function addRowAt(index, offset) {
+    const newRow = new Array(headers.length).fill("");
+    const insertIndex = index + offset;
+    rows.splice(insertIndex, 0, newRow);
+    renderTable();
+}
+
+function addColumnAt(index, offset) {
+    const insertIndex = index + offset;
+    headers.splice(insertIndex, 0, "New Column");
+    rows.forEach(row => row.splice(insertIndex, 0, ""));
+    renderTable();
+}
+
+function deleteRow(index) {
+    if(confirm('Delete this row?')) {
+        rows.splice(index, 1);
+        renderTable();
+    }
+}
+
+function deleteColumn(index) {
+    if(confirm('Delete this column?')) {
+        headers.splice(index, 1);
+        rows.forEach(row => row.splice(index, 1));
+        renderTable();
+    }
+}
+
+function updateHeader(index, value) {
+    headers[index] = value;
+    document.getElementById('tableDataInput').value = JSON.stringify({ headers, rows });
+}
+
+function updateCell(rowIndex, colIndex, value) {
+    rows[rowIndex][colIndex] = value;
+    document.getElementById('tableDataInput').value = JSON.stringify({ headers, rows });
+}
+
+// Initial render
+document.addEventListener('DOMContentLoaded', renderTable);
+
+
+  </script>
 </html>

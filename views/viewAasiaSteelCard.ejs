@@ -65,6 +65,28 @@
 			</div>
 		</div>
 		<div style="width: 592px; border: 2px black solid; margin-top: 10px">
+			<% if (record.tableData && Array.isArray(record.tableData.headers) && Array.isArray(record.tableData.rows)) { %>
+				<table id="dynamicTable" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+					<thead>
+						<tr style="background-color: #f8f9fa; font-weight: bold;">
+							<% record.tableData.headers.forEach(function(header) { %>
+								<td style="border: 2px black solid; padding: 10px; text-align: center;"><%= header %></td>
+							<% }); %>
+						</tr>
+					</thead>
+					<tbody>
+						<% record.tableData.rows.forEach(function(row) { %>
+							<tr>
+								<% if (Array.isArray(row)) { %>
+									<% row.forEach(function(cell, index) { %>
+										<td class="<%= index === 0 ? 'fw-bold' : '' %>" style="border: 2px black solid; padding: 8px;"><%= cell %></td>
+									<% }); %>
+								<% } %>
+							</tr>
+						<% }); %>
+					</tbody>
+				</table>
+			<% } else { %>
 			<table id="table-2" style="width: 100%">
 				<thead>
 					<tr style="background-color: #f8f9fa; font-weight: bold;">
@@ -136,6 +158,7 @@
 					</tr>
 				</tbody>
 			</table>
+			<% } %>
 			<p style="border: 2px black solid; padding: 5px; font-size: 15px">
 				This card certifies the welder's qualification according to Aasia Steel standards and requirements.
 			</p>
@@ -231,6 +254,10 @@
 				color: #14ab55;
 				/* Apply your styling for even rows */
 			}
+            
+            .fw-bold {
+                font-weight: bold;
+            }
 		</style>
 	</body>
 </html>
