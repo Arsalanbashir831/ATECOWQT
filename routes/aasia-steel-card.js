@@ -74,8 +74,12 @@ module.exports = (upload) => {
                     }
                 }
 
+				// DEBUG: Check if 'tableData' is in the schema paths
+                console.log('🔍 SCHEMA PATHS:', Object.keys(AasiaSteelCard.schema.paths).filter(p => p.includes('table')));
+
 				const card = await AasiaSteelCard.create({
-					...cardData, // welder_id comes from payload
+					...cardData, 
+                    tableData: cardData.tableData, // Explicitly assign tableData 
 					count: req.count,
 					card_no: req.card_no,
 					image: imageUrl,
@@ -92,7 +96,7 @@ module.exports = (upload) => {
 	// EDIT
 	router.get("/edit/:card_no", async (req, res) => {
 		let card_no = req.params.card_no;
-		const record = await AasiaSteelCard.findOne({ card_no: card_no }).exec();
+		const record = await AasiaSteelCard.findOne({ card_no: card_no }).lean();
 		console.log(record);
 		if (record) {
 			res.render("editAasiaSteelCard", { record: record });
@@ -157,7 +161,16 @@ module.exports = (upload) => {
                     }
                 }
 
-				await AasiaSteelCard.findOneAndUpdate({ card_no: cn }, updates, { new: true });
+				// Explicitly ensure tableData is in the updates object
+                if (updates.tableData) {
+                   // Ensure it is marked as modified if it was an object that we mutated (though here we replaced it)
+                }
+
+				await AasiaSteelCard.findOneAndUpdate(
+                    { card_no: cn }, 
+                    { $set: updates }, // Use $set to be safer
+                    { new: true }
+                );
 				res.redirect(`/aasia-steel-card/view/${cn}`);
 			} catch (err) {
 				next(err);

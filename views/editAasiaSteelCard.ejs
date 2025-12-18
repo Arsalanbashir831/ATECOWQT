@@ -12,6 +12,7 @@
       action="/aasia-steel-card/update/<%= record.card_no %>"
       method="POST"
       enctype="multipart/form-data">
+      <input type="hidden" name="tableData" id="tableDataInput">
       <div class="card">
         <div class="flex-between">
           <img
@@ -120,8 +121,6 @@
         </div>
       </div>
       <div style="border: 2px black solid; margin-top: 10px;">
-        <!-- Hidden input to store JSON data -->
-        <input type="hidden" name="tableData" id="tableDataInput">
         
         <!-- Global Click Listener to close menus -->
         <div id="click-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:90;" onclick="hideMenus()"></div>
@@ -308,10 +307,29 @@
     <!-- Server-side logic to prepare initial data -->
     <% 
        let initialTableData = null;
-       if (record.tableData && (record.tableData.headers || record.tableData.rows)) {
-           initialTableData = record.tableData;
-       } else {
-           // Migration: Populate from legacy fields
+       
+       // Handle tableData - it might be stored as string or object
+       if (record.tableData) {
+           let tableDataObj = null;
+           
+           if (typeof record.tableData === 'string') {
+               try {
+                   tableDataObj = JSON.parse(record.tableData);
+               } catch (e) {
+                   console.error('Error parsing tableData:', e);
+               }
+           } else if (typeof record.tableData === 'object') {
+               tableDataObj = record.tableData;
+           }
+           
+           // Check if we have valid parsed data
+           if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) {
+               initialTableData = tableDataObj;
+           }
+       }
+       
+       // If no valid tableData, migrate from legacy fields
+       if (!initialTableData) {
            const legacyRows = [
             ["Welding Process/Type", record.welding_process_type_actual || '', record.welding_process_type_range || ''],
             ["Backing", record.backing_actual || '', record.backing_range || ''],

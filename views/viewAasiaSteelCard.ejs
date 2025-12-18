@@ -58,6 +58,11 @@
 					<p style="color: gray"><%=record.authorized_by %></p>
 					<p style="margin-top: 3px">Authorized by</p>
 				</div>
+                <div style="background: #ffeeba; padding: 10px; border: 1px solid #ffeeba; margin-bottom: 10px; font-family: monospace; font-size: 12px;">
+                    <strong>DEBUG INFO:</strong><br>
+                    Type: <%= typeof record.tableData %><br>
+                    Value: <%= JSON.stringify(record.tableData) %>
+                </div>
 				<div>
 					<p style="color: gray"><%= record.welding_inspector %></p>
 					<p style="margin-top: 3px">Welding Inspector</p>
@@ -65,17 +70,35 @@
 			</div>
 		</div>
 		<div style="width: 592px; border: 2px black solid; margin-top: 10px">
-			<% if (record.tableData && Array.isArray(record.tableData.headers) && Array.isArray(record.tableData.rows)) { %>
+			<% 
+			   // Handle tableData - it might be stored as string or object
+			   let tableDataObj = null;
+			   
+			   if (record.tableData) {
+			       if (typeof record.tableData === 'string') {
+			           try {
+			               tableDataObj = JSON.parse(record.tableData);
+			           } catch (e) {
+			               console.error('Error parsing tableData:', e);
+			           }
+			       } else if (typeof record.tableData === 'object') {
+			           tableDataObj = record.tableData;
+			       }
+			   }
+			   
+			   // Check if we have valid parsed data
+			   if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) { 
+			%>
 				<table id="dynamicTable" style="width: 100%; border-collapse: separate; border-spacing: 0;">
 					<thead>
 						<tr style="background-color: #f8f9fa; font-weight: bold;">
-							<% record.tableData.headers.forEach(function(header) { %>
+							<% tableDataObj.headers.forEach(function(header) { %>
 								<td style="border: 2px black solid; padding: 10px; text-align: center;"><%= header %></td>
 							<% }); %>
 						</tr>
 					</thead>
 					<tbody>
-						<% record.tableData.rows.forEach(function(row) { %>
+						<% tableDataObj.rows.forEach(function(row) { %>
 							<tr>
 								<% if (Array.isArray(row)) { %>
 									<% row.forEach(function(cell, index) { %>

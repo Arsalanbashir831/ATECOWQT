@@ -54,8 +54,8 @@ const aasiaSteelCardSchema = mongoose.Schema({
   join_weld_type_range: String,
   image: String,
   qr: String,
-  tableData: mongoose.Schema.Types.Mixed, // Stores { headers: [], rows: [] }
-});
+  tableData: mongoose.Schema.Types.Mixed,
+}, { minimize: false });
 
 const AasiaSteelCard = mongoose.model("AasiaSteelCard", aasiaSteelCardSchema);
 module.exports = AasiaSteelCard;
