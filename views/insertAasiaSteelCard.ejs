@@ -356,7 +356,7 @@ function renderTable() {
             input.onchange = (e) => updateCell(rowIndex, colIndex, e.target.value);
             
             if (colIndex === 0) input.style.fontWeight = 'bold';
-            if (colIndex === 1) input.style.color = '#14ab55';
+            // Removed green color logic as requested
 
             td.appendChild(input);
             
@@ -391,7 +391,8 @@ function showColumnMenu(index, event) {
     const menu = document.getElementById(`col-menu-${index}`);
     menu.style.display = 'block';
     
-    // Position menu: aligned to right edge, below header
+    // Position menu: aligned to right edge, below header. 
+    // Ensuring it opens on the right side of the cell.
     menu.style.top = '100%'; 
     menu.style.right = '0';
     menu.style.left = 'auto'; 

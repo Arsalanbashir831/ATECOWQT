@@ -437,7 +437,7 @@ function renderTable() {
             input.onchange = (e) => updateCell(rowIndex, colIndex, e.target.value);
             
             if (colIndex === 0) input.style.fontWeight = 'bold';
-            if (colIndex === 1) input.style.color = '#14ab55';
+            // Removed green color logic
 
             td.appendChild(input);
             
