@@ -4,7 +4,7 @@ const operatorModel = mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: function(date) {
+        get: function (date) {
             return date.toLocaleDateString('en-US');
         }
     },
@@ -12,7 +12,7 @@ const operatorModel = mongoose.Schema({
     operatorNo: String,
     profilePic: String,
     qrLink: String,
-    
+
     // Operator Data & Test Description
     operatorName: String,
     operatorId: String,
@@ -64,7 +64,7 @@ const operatorModel = mongoose.Schema({
     backingRange: String,
     singleMultiplePassesActual: String,
     singleMultiplePassesRange: String,
-    
+
     // Type of Qualification Test
     visualExamination: {
         performed: Boolean,
@@ -86,8 +86,17 @@ const operatorModel = mongoose.Schema({
         results: String,
         reportNumber: String
     },
+    radiographicExamination: {
+        performed: Boolean,
+        results: String,
+        reportNumber: String
+    },
+    clientName: String,
+    witnessedBy: String,
+    supervisorName: String,
     lawName: String,
-    
+
+
     // Additional fields for CRUD operations
     status: {
         type: String,
