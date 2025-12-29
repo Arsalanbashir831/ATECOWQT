@@ -4,199 +4,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WELDING OPERATOR PERFORMANCE QUALIFICATION TEST RECORD (WOPQ)</title>
+  <title>Edit Operator PERFORMANCE QUALIFICATION TEST RECORD</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f5f5f5;
+      margin: 20px;
+      line-height: 1.4;
+      background-color: #f4f4f4;
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
+    .form-container {
       background: white;
-      padding: 20px;
+      padding: 30px;
+      border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 1000px;
+      margin: auto;
     }
 
-    .header {
+    h1 {
       text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .header h1 {
-      font-size: 24px;
-      font-weight: bold;
-      margin: 0;
       color: #333;
-    }
-
-    .header hr {
-      border: none;
-      border-top: 2px solid #333;
-      margin: 10px 0;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #333;
+      padding-bottom: 10px;
     }
 
     .section {
-      margin-bottom: 30px;
+      margin-bottom: 25px;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 5px;
     }
 
     .section-title {
-      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 15px;
-      color: #333;
-      border-bottom: 2px solid #333;
-      padding-bottom: 5px;
+      background: #eee;
+      padding: 8px;
+      margin: -15px -15px 15px -15px;
+      border-bottom: 1px solid #ddd;
+      text-transform: uppercase;
     }
 
     .form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
     }
 
     .form-group {
-      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
     }
 
-    .form-group label {
-      display: block;
+    label {
       font-weight: bold;
       margin-bottom: 5px;
-      color: #555;
     }
 
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
+    input[type="text"],
+    input[type="date"],
+    input[type="file"],
+    select {
       padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-
-    .form-group textarea {
-      height: 60px;
-      resize: vertical;
-    }
-
-    .photo-section {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .photo-upload {
-      border: 2px dashed #ccc;
-      padding: 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: border-color 0.3s;
-    }
-
-    .photo-upload:hover {
-      border-color: #007bff;
-    }
-
-    .photo-preview {
-      max-width: 150px;
-      max-height: 150px;
-      margin-top: 10px;
-      border: 1px solid #ddd;
+      border: 1px solid #ccc;
       border-radius: 4px;
     }
 
+    .test-table,
     .data-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-
-    .data-table th,
-    .data-table td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-
-    .data-table th {
-      background-color: #f8f9fa;
-      font-weight: bold;
-    }
-
-    .data-table input {
-      width: 100%;
-      padding: 5px;
-      border: none;
-      background: transparent;
-    }
-
-    .test-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
+      margin-top: 10px;
     }
 
     .test-table th,
-    .test-table td {
+    .test-table td,
+    .data-table th,
+    .data-table td {
       border: 1px solid #ddd;
       padding: 8px;
-      text-align: center;
+      text-align: left;
     }
 
-    .test-table th {
-      background-color: #f8f9fa;
-      font-weight: bold;
-    }
-
-    .test-table input[type="checkbox"] {
-      width: auto;
-    }
-
-    .test-table input[type="text"] {
-      width: 100%;
-      padding: 5px;
-      border: none;
-      background: transparent;
+    .test-table th,
+    .data-table th {
+      background: #f9f9f9;
     }
 
     .submit-btn {
-      background-color: #007bff;
+      background-color: #28a745;
       color: white;
-      padding: 12px 30px;
+      padding: 12px 25px;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
       cursor: pointer;
       font-size: 16px;
-      margin-top: 20px;
+      font-weight: bold;
+      display: block;
+      margin: 20px auto;
     }
 
     .submit-btn:hover {
-      background-color: #0056b3;
+      background-color: #218838;
     }
 
-    .hide-in-print {
-      display: block;
+    .cancel-btn {
+      background-color: #6c757d;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      display: inline-block;
+      margin: 20px 10px;
+      text-decoration: none;
     }
 
-    @media print {
-      .hide-in-print {
-        display: none;
-      }
+    .cancel-btn:hover {
+      background-color: #5a6268;
+    }
 
-      body {
-        background: white;
-      }
+    .photo-preview {
+      width: 150px;
+      height: 150px;
+      border: 2px dashed #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      overflow: hidden;
+    }
 
-      .container {
-        box-shadow: none;
-        padding: 0;
-      }
+    .photo-preview img {
+      max-width: 100%;
+      max-height: 100%;
     }
 
     .current-photo {
@@ -206,115 +151,92 @@
       border-radius: 4px;
       margin-bottom: 10px;
     }
+
+    .button-group {
+      text-align: center;
+    }
+
+    @media print {
+      .hide-in-print {
+        display: none;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <form action="/operator/update/<%= record.operatorNo %>" method="post" enctype="multipart/form-data">
-    <div class="container">
-      <!-- Header -->
-      <div class="header">
-        <h1>WELDING OPERATOR PERFORMANCE QUALIFICATION TEST RECORD (WOPQ)</h1>
-        <hr>
-      </div>
+  <div class="form-container">
+    <h1>Edit Operator PERFORMANCE QUALIFICATION TEST RECORD</h1>
 
-      <!-- Operator Data & Test Description Section -->
+    <form action="/operator/update/<%= record.operatorNo %>" method="POST" enctype="multipart/form-data">
       <div class="section">
-        <div class="section-title">Welding Operator Data & Test Description</div>
-
+        <div class="section-title">Operator Identification</div>
         <div class="form-grid">
-          <div>
-            <div class="form-group">
-              <label for="clientName">Client Name:</label>
-              <input type="text" id="clientName" name="clientName" value="<%= record.clientName || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="operatorName">Operator Name:</label>
-              <input type="text" id="operatorName" name="operatorName" value="<%= record.operatorName || '' %>"
-                required>
-            </div>
-            <div class="form-group">
-              <label for="operatorId">Operator ID/Symbol:</label>
-              <input type="text" id="operatorId" name="operatorId" value="<%= record.operatorId || '' %>" required>
-            </div>
-            <div class="form-group">
-              <label for="wpsFollowed">WPS followed:</label>
-              <input type="text" id="wpsFollowed" name="wpsFollowed" value="<%= record.wpsFollowed || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="jointWeldType">Joint/Weld Type:</label>
-              <input type="text" id="jointWeldType" name="jointWeldType" value="<%= record.jointWeldType || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="baseMetalSpec">Base Metal Spec.:</label>
-              <input type="text" id="baseMetalSpec" name="baseMetalSpec" value="<%= record.baseMetalSpec || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="testCouponSize">Test Coupon Size:</label>
-              <textarea id="testCouponSize" name="testCouponSize"><%= record.testCouponSize || '' %></textarea>
-            </div>
+          <div class="form-group">
+            <label for="clientName">Client Name:</label>
+            <input type="text" id="clientName" name="clientName" value="<%= record.clientName || '' %>"
+              placeholder="Enter Client Name">
           </div>
-
-          <div>
-            <div class="form-group">
-              <label for="certificateNo">Certificate No.:</label>
-              <input type="text" id="certificateNo" name="certificateNo" value="<%= record.certificateNo || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="iqamaPassport">Iqama/Passport:</label>
-              <input type="text" id="iqamaPassport" name="iqamaPassport" value="<%= record.iqamaPassport || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="dateOfIssue">Date of Issue:</label>
-              <input type="date" id="dateOfIssue" name="dateOfIssue" value="<%= record.dateOfIssue || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="dateOfWelding">Date of Welding:</label>
-              <input type="date" id="dateOfWelding" name="dateOfWelding" value="<%= record.dateOfWelding || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="baseMetalPNo">Base Metal P-No.:</label>
-              <input type="text" id="baseMetalPNo" name="baseMetalPNo" value="<%= record.baseMetalPNo || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="fillerSfaSpec">Filler (SFA) Spec.:</label>
-              <input type="text" id="fillerSfaSpec" name="fillerSfaSpec" value="<%= record.fillerSfaSpec || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="fillerClassAws">Filler Class.(AWS):</label>
-              <input type="text" id="fillerClassAws" name="fillerClassAws" value="<%= record.fillerClassAws || '' %>">
-            </div>
-            <div class="form-group">
-              <label for="positions">Position(s):</label>
-              <input type="text" id="positions" name="positions" value="<%= record.positions || '' %>">
-            </div>
+          <div class="form-group">
+            <label for="operatorName">Operator Name:</label>
+            <input type="text" id="operatorName" name="operatorName" value="<%= record.operatorName || '' %>" required>
           </div>
-        </div>
-
-        <!-- Photo Upload -->
-        <div class="photo-section">
-          <% if (record.profilePic) { %>
-            <div>Current Photo:</div>
-            <img src="<%= record.profilePic %>" alt="Current Photo" class="current-photo">
-            <% } %>
-              <label for="profile" class="photo-upload">
-                <div>📷 Click to upload new operator photo (optional)</div>
-                <input type="file" id="profile" name="profile" accept="image/*" style="display: none;">
-              </label>
-              <img id="photoPreview" class="photo-preview" style="display: none;">
+          <div class="form-group">
+            <label for="operatorId">Clock No / Identification No:</label>
+            <input type="text" id="operatorId" name="operatorId" value="<%= record.operatorId || '' %>">
+          </div>
+          <div class="form-group">
+            <label for="iqamaPassport">Iqama / Passport No:</label>
+            <input type="text" id="iqamaPassport" name="iqamaPassport" value="<%= record.iqamaPassport || '' %>">
+          </div>
+          <div class="form-group">
+            <label>Current Profile Photo:</label>
+            <% if (record.profilePic) { %>
+              <img src="<%= record.profilePic %>" alt="Current Photo" class="current-photo">
+              <% } %>
+                <label for="profile">Upload New Photo (Optional):</label>
+                <input type="file" id="profile" name="profile" accept="image/*">
+                <div class="photo-preview">
+                  <img id="photoPreview" alt="Photo Preview" style="display: none;">
+                  <span id="previewPlaceholder">Preview</span>
+                </div>
+          </div>
         </div>
       </div>
 
-      <!-- Testing Variables and Qualification Limits When Using Automatic Welding Equipment -->
       <div class="section">
-        <div class="section-title">Testing Variables and Qualification Limits</div>
+        <div class="section-title">Test Coupon Description</div>
+        <div class="form-grid">
+          <div class="form-group"><label>WPS Followed:</label><input type="text" name="wpsFollowed"
+              value="<%= record.wpsFollowed || '' %>"></div>
+          <div class="form-group"><label>Joint Weld Type:</label><input type="text" name="jointWeldType"
+              value="<%= record.jointWeldType || '' %>"></div>
+          <div class="form-group"><label>Base Metal Specification:</label><input type="text" name="baseMetalSpec"
+              value="<%= record.baseMetalSpec || '' %>"></div>
+          <div class="form-group"><label>Base Metal P-Number:</label><input type="text" name="baseMetalPNo"
+              value="<%= record.baseMetalPNo || '' %>"></div>
+          <div class="form-group"><label>Test Coupon Size:</label><input type="text" name="testCouponSize"
+              value="<%= record.testCouponSize || '' %>"></div>
+          <div class="form-group"><label>Filler SFA Spec:</label><input type="text" name="fillerSfaSpec"
+              value="<%= record.fillerSfaSpec || '' %>"></div>
+          <div class="form-group"><label>Filler Class AWS:</label><input type="text" name="fillerClassAws"
+              value="<%= record.fillerClassAws || '' %>"></div>
+          <div class="form-group"><label>Positions:</label><input type="text" name="positions"
+              value="<%= record.positions || '' %>"></div>
+          <div class="form-group"><label>Date of Welding:</label><input type="date" name="dateOfWelding"
+              value="<%= record.dateOfWelding || '' %>"></div>
+          <div class="form-group"><label>Date of Issue:</label><input type="date" name="dateOfIssue"
+              value="<%= record.dateOfIssue || '' %>"></div>
+        </div>
+      </div>
+
+      <div class="section">
         <div style="font-weight: bold; margin-bottom: 10px;">Testing Variables and Qualification Limits When Using
           Automatic Welding Equipment</div>
-
         <table class="data-table">
           <thead>
             <tr>
-              <th>Welding Variables</th>
+              <th>Welding variables</th>
               <th>Actual Values</th>
               <th>Range Qualified</th>
             </tr>
@@ -323,216 +245,93 @@
             <tr>
               <td>Type of Welding (Automatic)</td>
               <td><input type="text" name="typeOfWeldingAutomaticActual"
-                  value="<%= record.typeOfWeldingAutomaticActual || record.typeOfWeldingAutomatic || '' %>"
-                  placeholder="Enter Actual Value"></td>
+                  value="<%= record.typeOfWeldingAutomaticActual || '' %>"></td>
               <td><input type="text" name="typeOfWeldingAutomaticRange"
-                  value="<%= record.typeOfWeldingAutomaticRange || '' %>" placeholder="Enter Range Qualified"></td>
+                  value="<%= record.typeOfWeldingAutomaticRange || '' %>"></td>
             </tr>
             <tr>
               <td>Welding Process</td>
               <td><input type="text" name="weldingProcessAutomaticActual"
-                  value="<%= record.weldingProcessAutomaticActual || record.weldingProcessAutomatic || '' %>"
-                  placeholder="Enter Actual Value"></td>
+                  value="<%= record.weldingProcessAutomaticActual || '' %>"></td>
               <td><input type="text" name="weldingProcessAutomaticRange"
-                  value="<%= record.weldingProcessAutomaticRange || '' %>" placeholder="Enter Range Qualified"></td>
+                  value="<%= record.weldingProcessAutomaticRange || '' %>"></td>
             </tr>
             <tr>
-              <td>Filler Metal Used (Yes or No) (EBW or LBW)</td>
-              <td><input type="text" name="fillerMetalUsedActual"
-                  value="<%= record.fillerMetalUsedActual || record.fillerMetalUsedAutomatic || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="fillerMetalUsedRange" value="<%= record.fillerMetalUsedRange || '' %>"
-                  placeholder="Enter Range Qualified"></td>
+              <td>Filler Metal Used (GTAW/PAW)</td>
+              <td><input type="text" name="fillerMetalUsedActual" value="<%= record.fillerMetalUsedActual || '' %>">
+              </td>
+              <td><input type="text" name="fillerMetalUsedRange" value="<%= record.fillerMetalUsedRange || '' %>"></td>
             </tr>
             <tr>
-              <td>Type of Laser for LBW (CO2 to YAG, etc.)</td>
-              <td><input type="text" name="typeOfLaserActual"
-                  value="<%= record.typeOfLaserActual || record.typeOfLaserLbw || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="typeOfLaserRange" value="<%= record.typeOfLaserRange || '' %>"
-                  placeholder="Enter Range Qualified"></td>
+              <td>Type of laser (LBW)</td>
+              <td><input type="text" name="typeOfLaserActual" value="<%= record.typeOfLaserActual || '' %>"></td>
+              <td><input type="text" name="typeOfLaserRange" value="<%= record.typeOfLaserRange || '' %>"></td>
             </tr>
             <tr>
-              <td>Countinous Drive or Inertia Welding (FW)</td>
-              <td><input type="text" name="countinousDriveActual"
-                  value="<%= record.countinousDriveActual || record.continuousDriveInertia || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="countinousDriveRange" value="<%= record.countinousDriveRange || '' %>"
-                  placeholder="Enter Range Qualified"></td>
+              <td>Countinous Drive or Inertia (FW)</td>
+              <td><input type="text" name="countinousDriveActual" value="<%= record.countinousDriveActual || '' %>">
+              </td>
+              <td><input type="text" name="countinousDriveRange" value="<%= record.countinousDriveRange || '' %>"></td>
             </tr>
             <tr>
               <td>Vacuum or Out of Vacuum (EBW)</td>
-              <td><input type="text" name="vacuumOutOfVacuumActual"
-                  value="<%= record.vacuumOutOfVacuumActual || record.vacuumOutOfVacuum || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="vacuumOutOfVacuumRange" value="<%= record.vacuumOutOfVacuumRange || '' %>"
-                  placeholder="Enter Range Qualified"></td>
+              <td><input type="text" name="vacuumOutOfVacuumActual" value="<%= record.vacuumOutOfVacuumActual || '' %>">
+              </td>
+              <td><input type="text" name="vacuumOutOfVacuumRange" value="<%= record.vacuumOutOfVacuumRange || '' %>">
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Testing Variables and Qualification Limits When Using Manual Welding Equipment -->
       <div class="section">
         <div style="font-weight: bold; margin-bottom: 10px;">Testing Variables and Qualification Limits When Using
           Machine Welding Equipment</div>
-
-        <table class="data-table">
+        <table class="data-table" id="machineVariablesTable">
           <thead>
             <tr>
               <th>Welding Variables</th>
               <th>Actual Values</th>
               <th>Range Qualified</th>
+              <th class="hide-in-print">Action</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Type of Welding (Machine)</td>
-              <td><input type="text" name="typeOfWeldingMachineActual"
-                  value="<%= record.typeOfWeldingMachineActual || record.typeOfWeldingMachine || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="typeOfWeldingMachineRange"
-                  value="<%= record.typeOfWeldingMachineRange || '' %>" placeholder="Enter Range Qualified"></td>
-            </tr>
-            <tr>
-              <td>Welding Process</td>
-              <td><input type="text" name="weldingProcessMachineActual"
-                  value="<%= record.weldingProcessMachineActual || record.weldingProcessMachine || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="weldingProcessMachineRange"
-                  value="<%= record.weldingProcessMachineRange || '' %>" placeholder="Enter Range Qualified"></td>
-            </tr>
-            <tr>
-              <td>Direct or Remote Visual Control</td>
-              <td><input type="text" name="directRemoteVisualControlActual"
-                  value="<%= record.directRemoteVisualControlActual || record.directRemoteVisualControl || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="directRemoteVisualControlRange"
-                  value="<%= record.directRemoteVisualControlRange || '' %>" placeholder="Enter Range Qualified"></td>
-            </tr>
-            <tr>
-              <td>Automatic Arc Voltage Control (GTAW)</td>
-              <td><input type="text" name="automaticArcVoltageControlActual"
-                  value="<%= record.automaticArcVoltageControlActual || record.automaticArcVoltageControl || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="automaticArcVoltageControlRange"
-                  value="<%= record.automaticArcVoltageControlRange || '' %>" placeholder="Enter Range Qualified"></td>
-            </tr>
-            <tr>
-              <td>Automatic Joint Tracking</td>
-              <td><input type="text" name="automaticJointTrackingActual"
-                  value="<%= record.automaticJointTrackingActual || record.automaticJointTracking || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="automaticJointTrackingRange"
-                  value="<%= record.automaticJointTrackingRange || '' %>" placeholder="Enter Range Qualified"></td>
-            </tr>
-            <tr>
-              <td>Position(s)</td>
-              <td><input type="text" name="positionsMachineActual"
-                  value="<%= record.positionsMachineActual || record.positionsMachine || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="positionsMachineRange" value="<%= record.positionsMachineRange || '' %>"
-                  placeholder="Enter Range Qualified"></td>
-            </tr>
-            <tr>
-              <td>Base Material Thickness</td>
-              <td><input type="text" name="baseMaterialThicknessActual"
-                  value="<%= record.baseMaterialThicknessActual || record.baseMaterialThickness || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="baseMaterialThicknessRange"
-                  value="<%= record.baseMaterialThicknessRange || '' %>" placeholder="Enter Range Qualified"></td>
-            </tr>
-            <tr>
-              <td>Consumable Insert (GTAW or PAW)</td>
-              <td><input type="text" name="consumableInsertActual"
-                  value="<%= record.consumableInsertActual || record.consumableInsert || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="consumableInsertRange" value="<%= record.consumableInsertRange || '' %>"
-                  placeholder="Enter Range Qualified"></td>
-            </tr>
-            <tr>
-              <td>Backing (With or Without)</td>
-              <td><input type="text" name="backingActual" value="<%= record.backingActual || record.backing || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="backingRange" value="<%= record.backingRange || '' %>"
-                  placeholder="Enter Range Qualified"></td>
-            </tr>
-            <tr>
-              <td>Single or Multiple Passes Per Side</td>
-              <td><input type="text" name="singleMultiplePassesActual"
-                  value="<%= record.singleMultiplePassesActual || record.singleMultiplePasses || '' %>"
-                  placeholder="Enter Actual Value"></td>
-              <td><input type="text" name="singleMultiplePassesRange"
-                  value="<%= record.singleMultiplePassesRange || '' %>" placeholder="Enter Range Qualified"></td>
-            </tr>
-          </tbody>
+          <tbody id="machineVariablesBody"></tbody>
         </table>
+        <div class="hide-in-print"><button type="button" onclick="addMachineRow()"
+            style="background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">+
+            Add Variable Row</button></div>
       </div>
 
-      <!-- Type of Qualification Test -->
       <div class="section">
         <div class="section-title">Type of Qualification Test</div>
-
         <table class="test-table">
           <thead>
             <tr>
-              <th>Type of Qualification Test</th>
-              <th>Test Performed</th>
+              <th>Type of Test</th>
+              <th>Performed</th>
               <th>Results</th>
               <th>Report Number</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Visual Examination</td>
-              <td><input type="checkbox" name="visualExamination[performed]" value="true" <%=record.visualExamination &&
-                  record.visualExamination.performed ? 'checked' : '' %>></td>
-              <td><input type="text" name="visualExamination[results]"
-                  value="<%= record.visualExamination && record.visualExamination.results || '' %>"></td>
-              <td><input type="text" name="visualExamination[reportNumber]"
-                  value="<%= record.visualExamination && record.visualExamination.reportNumber || '' %>"></td>
-            </tr>
-            <tr>
-              <td>Liquid Penetrant Examination (PT)</td>
-              <td><input type="checkbox" name="liquidPenetrantExamination[performed]" value="true"
-                  <%=record.liquidPenetrantExamination && record.liquidPenetrantExamination.performed ? 'checked' : ''
-                  %>></td>
-              <td><input type="text" name="liquidPenetrantExamination[results]"
-                  value="<%= record.liquidPenetrantExamination && record.liquidPenetrantExamination.results || '' %>">
-              </td>
-              <td><input type="text" name="liquidPenetrantExamination[reportNumber]"
-                  value="<%= record.liquidPenetrantExamination && record.liquidPenetrantExamination.reportNumber || '' %>">
-              </td>
-            </tr>
-            <tr>
-              <td>Ultrasonic Testing (UT)</td>
-              <td><input type="checkbox" name="ultrasonicTesting[performed]" value="true" <%=record.ultrasonicTesting &&
-                  record.ultrasonicTesting.performed ? 'checked' : '' %>></td>
-              <td><input type="text" name="ultrasonicTesting[results]"
-                  value="<%= record.ultrasonicTesting && record.ultrasonicTesting.results || '' %>"></td>
-              <td><input type="text" name="ultrasonicTesting[reportNumber]"
-                  value="<%= record.ultrasonicTesting && record.ultrasonicTesting.reportNumber || '' %>"></td>
-            </tr>
-            <tr>
-              <td>Bend Test</td>
-              <td><input type="checkbox" name="bendTest[performed]" value="true" <%=record.bendTest &&
-                  record.bendTest.performed ? 'checked' : '' %>></td>
-              <td><input type="text" name="bendTest[results]"
-                  value="<%= record.bendTest && record.bendTest.results || '' %>"></td>
-              <td><input type="text" name="bendTest[reportNumber]"
-                  value="<%= record.bendTest && record.bendTest.reportNumber || '' %>"></td>
-            </tr>
-            <tr>
-              <td>Radiographic Examination (RT)</td>
-              <td><input type="checkbox" name="radiographicExamination[performed]" value="true"
-                  <%=record.radiographicExamination && record.radiographicExamination.performed ? 'checked' : '' %>>
-              </td>
-              <td><input type="text" name="radiographicExamination[results]"
-                  value="<%= record.radiographicExamination && record.radiographicExamination.results || '' %>"></td>
-              <td><input type="text" name="radiographicExamination[reportNumber]"
-                  value="<%= record.radiographicExamination && record.radiographicExamination.reportNumber || '' %>">
-              </td>
-            </tr>
+            <% const tests=['visualExamination', 'liquidPenetrantExamination' , 'ultrasonicTesting' , 'bendTest'
+              , 'radiographicExamination' ]; %>
+              <% const labels=['Visual Inspection', 'Liquid Penetrant (PT)' , 'Ultrasonic Testing (UT)' , 'Bend Test'
+                , 'Radiographic (RT)' ]; %>
+                <% tests.forEach((test, i)=> { %>
+                  <tr>
+                    <td>
+                      <%= labels[i] %>
+                    </td>
+                    <td><input type="checkbox" name="<%= test %>[performed]" value="true" <%=record[test] &&
+                        record[test].performed ? 'checked' : '' %>></td>
+                    <td><input type="text" name="<%= test %>[results]"
+                        value="<%= record[test] && record[test].results || '' %>"></td>
+                    <td><input type="text" name="<%= test %>[reportNumber]"
+                        value="<%= record[test] && record[test].reportNumber || '' %>"></td>
+                  </tr>
+                  <% }); %>
           </tbody>
         </table>
       </div>
@@ -540,46 +339,128 @@
       <div class="section">
         <div class="section-title">Certification & Signatures</div>
         <div class="form-grid">
-          <div class="form-group">
-            <label for="witnessedBy">Testing Witnessed / Welder Inspector:</label>
-            <input type="text" id="witnessedBy" name="witnessedBy" value="<%= record.witnessedBy || '' %>"
-              placeholder="Enter Name">
-          </div>
-          <div class="form-group">
-            <label for="supervisorName">Test Supervisor / Technical Manager:</label>
-            <input type="text" id="supervisorName" name="supervisorName" value="<%= record.supervisorName || '' %>"
-              placeholder="Enter Name">
-          </div>
+          <div class="form-group"><label>Testing Witnessed / Inspector:</label><input type="text" name="witnessedBy"
+              value="<%= record.witnessedBy || '' %>"></div>
+          <div class="form-group"><label>Supervisor / Manager:</label><input type="text" name="supervisorName"
+              value="<%= record.supervisorName || '' %>"></div>
         </div>
-        <div class="section-title">We, the undersigned, certify that the statements in this record are correct and that
-          the test coupons were prepared, welded and tested in accordance with the requirements of:</div>
-        <input type="text" name="lawName" value="<%= record.lawName || '' %>"
-          placeholder="Section IX of the ASME BOILER AND PRESSURE VESSEL CODE - 2021" required style="width: 100%;">
+        <div style="margin-top:10px;"><label>Certified in accordance with:</label><input type="text" name="lawName"
+            value="<%= record.lawName || '' %>" required style="width: 100%;"></div>
       </div>
 
-
-      <!-- Submit Button -->
-      <div class="hide-in-print" style="text-align: center;">
-        <button type="submit" class="submit-btn">Update Operator Performance Certificate</button>
-        <a href="/operator/view/<%= record.operatorNo %>" class="cancel-btn" style="text-decoration: none;">Cancel</a>
+      <div class="button-group hide-in-print">
+        <button type="submit" class="submit-btn">Update Certificate</button>
+        <a href="/operator/view/<%= record.operatorNo %>" class="cancel-btn">Cancel</a>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
+
+  <div id="serverData" style="display: none;"
+    data-machine-variables="<%= JSON.stringify(record.machineVariables || []).replace(/" /g, '&quot;' ) %>"
+    data-legacy-type-actual="<%= (record.typeOfWeldingMachineActual || record.typeOfWeldingMachine || ''
+      ).replace(/"/g, '&quot;' ) %>"
+      data-legacy-type-range="<%= (record.typeOfWeldingMachineRange || '' ).replace(/"/g, '&quot;' ) %>"
+        data-legacy-proc-actual="<%= (record.weldingProcessMachineActual || record.weldingProcessMachine || ''
+          ).replace(/"/g, '&quot;' ) %>"
+          data-legacy-proc-range="<%= (record.weldingProcessMachineRange || '' ).replace(/"/g, '&quot;' ) %>"
+            data-legacy-vis-actual="<%= (record.directRemoteVisualControlActual || record.directRemoteVisualControl
+              || '' ).replace(/"/g, '&quot;' ) %>"
+              data-legacy-vis-range="<%= (record.directRemoteVisualControlRange || '' ).replace(/"/g, '&quot;' ) %>"
+                data-legacy-arc-actual="<%= (record.automaticArcVoltageControlActual ||
+                  record.automaticArcVoltageControl || '' ).replace(/"/g, '&quot;' ) %>"
+                  data-legacy-arc-range="<%= (record.automaticArcVoltageControlRange || '' ).replace(/"/g, '&quot;' ) %>
+                    "
+                    data-legacy-joint-actual="<%= (record.automaticJointTrackingActual || record.automaticJointTracking
+                      || '' ).replace(/"/g, '&quot;' ) %>"
+                      data-legacy-joint-range="<%= (record.automaticJointTrackingRange || '' ).replace(/"/g, '&quot;' )
+                        %>"
+                        data-legacy-pos-actual="<%= (record.positionsMachineActual || record.positionsMachine || ''
+                          ).replace(/"/g, '&quot;' ) %>"
+                          data-legacy-pos-range="<%= (record.positionsMachineRange || '' ).replace(/"/g, '&quot;' ) %>"
+                            data-legacy-thick-actual="<%= (record.baseMaterialThicknessActual ||
+                              record.baseMaterialThickness || '' ).replace(/"/g, '&quot;' ) %>"
+                              data-legacy-thick-range="<%= (record.baseMaterialThicknessRange || ''
+                                ).replace(/"/g, '&quot;' ) %>"
+                                data-legacy-insert-actual="<%= (record.consumableInsertActual || record.consumableInsert
+                                  || '' ).replace(/"/g, '&quot;' ) %>"
+                                  data-legacy-insert-range="<%= (record.consumableInsertRange || ''
+                                    ).replace(/"/g, '&quot;' ) %>"
+                                    data-legacy-backing-actual="<%= (record.backingActual || record.backing || ''
+                                      ).replace(/"/g, '&quot;' ) %>"
+                                      data-legacy-backing-range="<%= (record.backingRange || '' ).replace(/"/g, '&quot;'
+                                        ) %>"
+                                        data-legacy-passes-actual="<%= (record.singleMultiplePassesActual ||
+                                          record.singleMultiplePasses || '' ).replace(/"/g, '&quot;' ) %>"
+                                          data-legacy-passes-range="<%= (record.singleMultiplePassesRange || ''
+                                            ).replace(/"/g, '&quot;' ) %>">
+  </div>
 
   <script>
-    // Photo preview functionality
     document.getElementById('profile').addEventListener('change', function (e) {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function (e) {
           const preview = document.getElementById('photoPreview');
+          const placeholder = document.getElementById('previewPlaceholder');
           preview.src = e.target.result;
           preview.style.display = 'block';
+          placeholder.style.display = 'none';
         };
         reader.readAsDataURL(file);
       }
     });
+
+    const machineVariablesBody = document.getElementById('machineVariablesBody');
+    function escapeHtml(str) { return !str ? '' : String(str).replace(/"/g, '&quot;'); }
+
+    function addMachineRow(label, actual, range) {
+      const rowCount = machineVariablesBody.rows.length;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><input type="text" name="machineVariables[${rowCount}][label]" value="${escapeHtml(label || '')}"></td>
+        <td><input type="text" name="machineVariables[${rowCount}][actualValue]" value="${escapeHtml(actual || '')}"></td>
+        <td><input type="text" name="machineVariables[${rowCount}][rangeQualified]" value="${escapeHtml(range || '')}"></td>
+        <td class="hide-in-print"><button type="button" onclick="this.closest('tr').remove(); reindexRows()" style="background:#dc3545; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Remove</button></td>
+      `;
+      machineVariablesBody.appendChild(row);
+      reindexRows();
+    }
+
+    function reindexRows() {
+      Array.from(machineVariablesBody.rows).forEach((row, index) => {
+        row.querySelectorAll('input').forEach(input => {
+          input.name = input.name.replace(/\[\d+\]/, '[' + index + ']');
+        });
+      });
+    }
+
+    (function () {
+      const init = () => {
+        const el = document.getElementById('serverData');
+        if (!el) return;
+        let data = [];
+        try { data = JSON.parse(el.getAttribute('data-machine-variables') || '[]'); } catch (e) { }
+
+        if (data.length > 0) {
+          data.forEach(v => addMachineRow(v.label, v.actualValue, v.rangeQualified));
+        } else {
+          const g = (k) => el.getAttribute('data-legacy-' + k) || '';
+          addMachineRow('Type of Welding (Machine)', g('type-actual'), g('type-range'));
+          addMachineRow('Welding Process', g('proc-actual'), g('proc-range'));
+          addMachineRow('Direct or Remote Visual Control', g('vis-actual'), g('vis-range'));
+          addMachineRow('Automatic Arc Voltage Control (GTAW)', g('arc-actual'), g('arc-range'));
+          addMachineRow('Automatic Joint Tracking', g('joint-actual'), g('joint-range'));
+          addMachineRow('Position(s)', g('pos-actual'), g('pos-range'));
+          addMachineRow('Base Material Thickness', g('thick-actual'), g('thick-range'));
+          addMachineRow('Consumable Insert (GTAW or PAW)', g('insert-actual'), g('insert-range'));
+          addMachineRow('Backing (With or Without)', g('backing-actual'), g('backing-range'));
+          addMachineRow('Single or Multiple Passes Per Side', g('passes-actual'), g('passes-range'));
+        }
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+      else init();
+    })();
   </script>
 </body>
 

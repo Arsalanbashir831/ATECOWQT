@@ -228,110 +228,127 @@
       </tr>
     </thead>
     <tbody style="text-align: center">
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Type of
-          Welding (Machine)</td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.typeOfWeldingMachineActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.typeOfWeldingMachineRange || 'N/A' %>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
-          Welding Process
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.weldingProcessMachineActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.weldingProcessMachineRange || 'N/A' %>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Direct
-          or Remote Visual Control</td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.directRemoteVisualControlActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.directRemoteVisualControlRange || 'N/A' %>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
-          Automatic Arc Voltage Control (GTAW)
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.automaticArcVoltageControlActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.automaticArcVoltageControlRange || 'N/A' %>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
-          Automatic Joint Tracking</td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.automaticJointTrackingActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.automaticJointTrackingRange || 'N/A' %>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
-          Position(s)</td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.positionsMachineActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.positionsMachineRange || 'N/A' %>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Base
-          Material Thickness</td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.baseMaterialThicknessActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.baseMaterialThicknessRange || 'N/A' %>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
-          Consumable Insert (GTAW or PAW)
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.consumableInsertActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.consumableInsertRange || 'N/A' %>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">Backing
-          (With or Without)</td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.backingActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.backingRange || 'N/A' %>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
-          Single or Multiple Passes Per Side
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.singleMultiplePassesActual || 'N/A' %>
-        </td>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-          <%= record.singleMultiplePassesRange || 'N/A' %>
-        </td>
-      </tr>
+      <% if (record.machineVariables && record.machineVariables.length> 0) { %>
+        <% record.machineVariables.forEach(v=> { %>
+          <tr>
+            <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+              <%= v.label %>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%= v.actualValue || 'N/A' %>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+              <%= v.rangeQualified || 'N/A' %>
+            </td>
+          </tr>
+          <% }); %>
+            <% } else { %>
+              <!-- Fallback to legacy fields -->
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Type of Welding (Machine)</td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.typeOfWeldingMachineActual || record.typeOfWeldingMachine || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.typeOfWeldingMachineRange || 'N/A' %>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Welding Process
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.weldingProcessMachineActual || record.weldingProcessMachine || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.weldingProcessMachineRange || 'N/A' %>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Direct or Remote Visual Control</td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.directRemoteVisualControlActual || record.directRemoteVisualControl || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.directRemoteVisualControlRange || 'N/A' %>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Automatic Arc Voltage Control (GTAW)
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.automaticArcVoltageControlActual || record.automaticArcVoltageControl || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.automaticArcVoltageControlRange || 'N/A' %>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Automatic Joint Tracking</td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.automaticJointTrackingActual || record.automaticJointTracking || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.automaticJointTrackingRange || 'N/A' %>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Position(s)</td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.positionsMachineActual || record.positionsMachine || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.positionsMachineRange || 'N/A' %>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Base Material Thickness</td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.baseMaterialThicknessActual || record.baseMaterialThickness || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.baseMaterialThicknessRange || 'N/A' %>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Consumable Insert (GTAW or PAW)
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.consumableInsertActual || record.consumableInsert || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.consumableInsertRange || 'N/A' %>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Backing (With or Without)</td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.backingActual || record.backing || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.backingRange || 'N/A' %>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left; border: 1px solid black;font-weight: bold; padding: 4px; font-size: 12px;">
+                  Single or Multiple Passes Per Side
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <%= record.singleMultiplePassesActual || record.singleMultiplePasses || 'N/A' %>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <%= record.singleMultiplePassesRange || 'N/A' %>
+                </td>
+              </tr>
+              <% } %>
     </tbody>
 
     <table border style="width: 100%;">
@@ -417,7 +434,7 @@
           <td>
             <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
               <h6 style="margin: 0; line-height: 1;">
-                <%= (record.visualExamination && record.visualExamination.results) || '' %>
+                <%= (record.visualExamination && record.visualExamination.reportNumber) || '' %>
               </h6>
             </div>
             <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
