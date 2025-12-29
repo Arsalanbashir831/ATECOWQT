@@ -65,6 +65,13 @@ const operatorModel = mongoose.Schema({
     singleMultiplePassesActual: String,
     singleMultiplePassesRange: String,
 
+    // Dynamic Machine Variables
+    machineVariables: [{
+        label: String,
+        actualValue: String,
+        rangeQualified: String
+    }],
+
     // Type of Qualification Test
     visualExamination: {
         performed: Boolean,
