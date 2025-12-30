@@ -12,21 +12,26 @@
       action="/aasia-steel-card/update/<%= record.card_no %>"
       method="POST"
       enctype="multipart/form-data">
-      <input type="hidden" name="tableData" id="tableDataInput">
+      <input type="hidden" name="tableData" id="tableDataInput" />
       <div class="card">
-        <div class="flex-between">
+        <div>
           <img
-            style="width: 150px; height: 100px"
+            style="width: 250px; height: 130px"
             class="logo"
             src="/images/logo.png"
             alt="logo" />
-          <div style="text-align: center; color: #14ab55">
+          <img
+            style="width: 250px; height: 120px"
+            class="logo"
+            src="/images/ArabianTestingLogo.jpeg"
+            alt="logo" />
+          <!-- <div style="text-align: center; color: #14ab55">
             <p style="text-transform: uppercase">Aasia Steel Company</p>
             <p style="margin: 8px 0; font-size: 13px">
               Welder Qualification Card
             </p>
             <p style="text-transform: uppercase">Aasia Steel Welder Card</p>
-          </div>
+          </div> -->
           <!-- <img  style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
         </div>
         <div>
@@ -120,26 +125,48 @@
           </div>
         </div>
       </div>
-      <div style="border: 2px black solid; margin-top: 10px;">
-        
+      <div style="border: 2px black solid; margin-top: 10px">
         <!-- Global Click Listener to close menus -->
-        <div id="click-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:90;" onclick="hideMenus()"></div>
+        <div
+          id="click-overlay"
+          style="
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 90;
+          "
+          onclick="hideMenus()"></div>
 
-        <div style="overflow-x: auto; padding-bottom: 50px;">
-            <table id="dynamicTable" style="width: 100%; border-collapse: separate; border-spacing: 0;">
-              <thead>
-                <tr id="tableHeaders" style="background-color: #f8f9fa; font-weight: bold;">
-                  <!-- Headers will be injected here -->
-                </tr>
-              </thead>
-              <tbody id="tableBody">
-                <!-- Rows will be injected here -->
-              </tbody>
-            </table>
+        <div style="overflow-x: auto; padding-bottom: 50px">
+          <table
+            id="dynamicTable"
+            style="width: 100%; border-collapse: separate; border-spacing: 0">
+            <thead>
+              <tr
+                id="tableHeaders"
+                style="background-color: #f8f9fa; font-weight: bold">
+                <!-- Headers will be injected here -->
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- Rows will be injected here -->
+            </tbody>
+          </table>
         </div>
-        
-        <p style="border: 2px black solid; padding: 5px; font-size: 15px; margin-top: 0; border-top: none;">
-          This card certifies the welder's qualification according to Aasia Steel standards and requirements.
+
+        <p
+          style="
+            border: 2px black solid;
+            padding: 5px;
+            font-size: 15px;
+            margin-top: 0;
+            border-top: none;
+          ">
+          This card certifies the welder's qualification according to Aasia
+          Steel standards and requirements.
         </p>
       </div>
 
@@ -195,35 +222,36 @@
       }
 
       /* Dynamic Table Styles */
-    #dynamicTable {
-      border-collapse: separate;
-      border-spacing: 0;
-      width: 100%;
-    }
+      #dynamicTable {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+      }
 
-    #dynamicTable td, #dynamicTable th {
-      border: 2px black solid;
-      padding: 0;
-      position: relative;
-    }
+      #dynamicTable td,
+      #dynamicTable th {
+        border: 2px black solid;
+        padding: 0;
+        position: relative;
+      }
 
-    #dynamicTable input {
-       width: 100%;
-       border: none;
-       padding: 8px;
-       box-sizing: border-box;
-       font-family: inherit;
-       font-weight: inherit;
-    }
-    
-    #dynamicTable th input {
+      #dynamicTable input {
+        width: 100%;
+        border: none;
+        padding: 8px;
+        box-sizing: border-box;
+        font-family: inherit;
+        font-weight: inherit;
+      }
+
+      #dynamicTable th input {
         text-align: center;
         font-weight: bold;
         background: #f8f9fa;
-    }
-    
-    /* Context Menu Styles */
-    .control-btn {
+      }
+
+      /* Context Menu Styles */
+      .control-btn {
         background: #14ab55;
         color: white;
         border: none;
@@ -238,46 +266,46 @@
         justify-content: center;
         position: absolute;
         z-index: 10;
-    }
-    
-    /* Position for Column Headers */
-    .header-cell .control-btn {
+      }
+
+      /* Position for Column Headers */
+      .header-cell .control-btn {
         top: 50%;
-        right: 5px; 
+        right: 5px;
         left: auto;
         transform: translateY(-50%);
         margin: 0;
-    }
+      }
 
-    /* Position for Row Cells (First Column) */
-    .data-cell-first .control-btn {
+      /* Position for Row Cells (First Column) */
+      .data-cell-first .control-btn {
         top: 50%;
         right: 5px;
         left: auto;
         bottom: auto;
         transform: translateY(-50%);
         margin: 0;
-    }
+      }
 
-    /* Show on hover */
-    .header-cell:hover .control-btn, 
-    .data-cell-first:hover .control-btn {
+      /* Show on hover */
+      .header-cell:hover .control-btn,
+      .data-cell-first:hover .control-btn {
         display: flex;
-    }
+      }
 
-    .dropdown-menu {
+      .dropdown-menu {
         display: none;
         position: absolute;
         background: white;
         border: 1px solid #ccc;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         z-index: 100;
         min-width: 150px;
         border-radius: 4px;
         text-align: left;
-    }
-    
-    .dropdown-menu button {
+      }
+
+      .dropdown-menu button {
         display: block;
         width: 100%;
         padding: 5px 10px;
@@ -286,76 +314,72 @@
         text-align: left;
         cursor: pointer;
         font-size: 12px;
-    }
-    
-    .dropdown-menu button:hover {
-        background-color: #f0f0f0;
-    }
-    
-    .dropdown-menu button.delete-opt {
-        color: #dc3545;
-    }
+      }
 
-    @media print {
-        .control-btn, .dropdown-menu {
-            display: none !important;
+      .dropdown-menu button:hover {
+        background-color: #f0f0f0;
+      }
+
+      .dropdown-menu button.delete-opt {
+        color: #dc3545;
+      }
+
+      @media print {
+        .control-btn,
+        .dropdown-menu {
+          display: none !important;
         }
-    }
+      }
     </style>
   </body>
 
-    <!-- Server-side logic to prepare initial data -->
-    <% 
-       let initialTableData = null;
-       
-       // Handle tableData - it might be stored as string or object
-       if (record.tableData) {
-           let tableDataObj = null;
-           
-           if (typeof record.tableData === 'string') {
-               try {
-                   tableDataObj = JSON.parse(record.tableData);
-               } catch (e) {
-                   console.error('Error parsing tableData:', e);
-               }
-           } else if (typeof record.tableData === 'object') {
-               tableDataObj = record.tableData;
-           }
-           
-           // Check if we have valid parsed data
-           if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) {
-               initialTableData = tableDataObj;
-           }
-       }
-       
-       // If no valid tableData, migrate from legacy fields
-       if (!initialTableData) {
-           const legacyRows = [
-            ["Welding Process/Type", record.welding_process_type_actual || '', record.welding_process_type_range || ''],
-            ["Backing", record.backing_actual || '', record.backing_range || ''],
-            ["Diameter", record.diameter_actual || '', record.diameter_range || ''],
-            ["Base Metal P-No.", record.base_metal_pno_actual || '', record.base_metal_pno_range || ''],
-            ["Deposited Thickness", record.deposited_thickness_actual || '', record.deposited_thickness_range || ''],
-            ["Position & Prog.", record.position_prog_actual || '', record.position_prog_range || ''],
-            ["Filler Metal Class", record.filler_metal_class_actual || '', record.filler_metal_class_range || ''],
-            ["Filler Metal F-No.", record.filler_metal_fno_actual || '', record.filler_metal_fno_range || ''],
-            ["Use of Backing Gas", record.backing_gas_actual || '', record.backing_gas_range || ''],
-            ["Transfer Mode", record.transfer_mode_actual || '', record.transfer_mode_range || ''],
-            ["Current Type/Polarity", record.current_type_polarity_actual || '', record.current_type_polarity_range || ''],
-            ["Join/Weld Type", record.join_weld_type_actual || '', record.join_weld_type_range || '']
-           ];
-           initialTableData = {
-               headers: ["Welding Variable", "Actual Values", "Range Values"],
-               rows: legacyRows
-           };
-       }
-    %>
-    <!-- Output data as JSON for client-side use -->
-    <script id="initial-table-data" type="application/json">
-        <%- JSON.stringify(initialTableData) %>
-    </script>
-    
-    <script>
+  <!-- Server-side logic to prepare initial data -->
+  <% 
+  let initialTableData = null; 
+  // Handle tableData - it might be stored as string or object 
+  if (record.tableData) { 
+      let tableDataObj = null; 
+      if (typeof record.tableData === 'string') { 
+          try { 
+              tableDataObj = JSON.parse(record.tableData); 
+          } catch (e) { 
+              console.error('Error parsing tableData:', e); 
+          } 
+      } else if (typeof record.tableData === 'object') { 
+          tableDataObj = record.tableData; 
+      } 
+      
+      // Check if we have valid parsed data 
+      if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) { 
+          initialTableData = tableDataObj; 
+      } 
+  } 
+  
+  // If no valid tableData, migrate from legacy fields 
+  if (!initialTableData) { 
+      const legacyRows = [ 
+          ["Welding Process/Type", record.welding_process_type_actual || '', record.welding_process_type_range || ''], 
+          ["Backing", record.backing_actual || '', record.backing_range || ''], 
+          ["Diameter", record.diameter_actual || '', record.diameter_range || ''], 
+          ["Base Metal P-No.", record.base_metal_pno_actual || '', record.base_metal_pno_range || ''], 
+          ["Deposited Thickness", record.deposited_thickness_actual || '', record.deposited_thickness_range || ''], 
+          ["Position & Prog.", record.position_prog_actual || '', record.position_prog_range || ''], 
+          ["Filler Metal Class", record.filler_metal_class_actual || '', record.filler_metal_class_range || ''], 
+          ["Filler Metal F-No.", record.filler_metal_fno_actual || '', record.filler_metal_fno_range || ''], 
+          ["Use of Backing Gas", record.backing_gas_actual || '', record.backing_gas_range || ''], 
+          ["Transfer Mode", record.transfer_mode_actual || '', record.transfer_mode_range || ''], 
+          ["Current Type/Polarity", record.current_type_polarity_actual || '', record.current_type_polarity_range || ''], 
+          ["Join/Weld Type", record.join_weld_type_actual || '', record.join_weld_type_range || ''] 
+      ]; 
+      initialTableData = { headers: ["Welding Variable", "Actual Values", "Range Values"], rows: legacyRows }; 
+  } 
+  %>
+  <!-- Output data as JSON for client-side use -->
+  <script id="initial-table-data" type="application/json">
+    <%- JSON.stringify(initialTableData) %>
+  </script>
+
+  <script>
     /**
      * Create an arrow function that will be called when an image is selected.
      */
@@ -364,202 +388,219 @@
       const imageFilesLength = imageFiles.length;
       if (imageFilesLength > 0) {
         const imageSrc = URL.createObjectURL(imageFiles[0]);
-        const imagePreviewElement = document.querySelector("#preview-selected-image");
+        const imagePreviewElement = document.querySelector(
+          "#preview-selected-image"
+        );
         imagePreviewElement.src = imageSrc;
         imagePreviewElement.style.display = "block";
         const files = document.querySelector("#files");
         files.value = imageSrc;
       }
     };
-    
-// --- Dynamic Table Logic ---
 
-// Parse table data from hidden JSON script
-let tableData = null;
-let headers = [];
-let rows = [];
+    // --- Dynamic Table Logic ---
 
-try {
-    const rawData = document.getElementById('initial-table-data').textContent;
-    tableData = JSON.parse(rawData);
-    if (tableData) {
+    // Parse table data from hidden JSON script
+    let tableData = null;
+    let headers = [];
+    let rows = [];
+
+    try {
+      const rawData = document.getElementById("initial-table-data").textContent;
+      tableData = JSON.parse(rawData);
+      if (tableData) {
         headers = tableData.headers || [];
         rows = tableData.rows || [];
+      }
+    } catch (e) {
+      console.error("Error parsing initial table data", e);
     }
-} catch (e) {
-    console.error("Error parsing initial table data", e);
-}
 
-function renderTable() {
-    const thead = document.getElementById('tableHeaders');
-    const tbody = document.getElementById('tableBody');
-    const hiddenInput = document.getElementById('tableDataInput');
+    function renderTable() {
+      const thead = document.getElementById("tableHeaders");
+      const tbody = document.getElementById("tableBody");
+      const hiddenInput = document.getElementById("tableDataInput");
 
-    // Update hidden input for form submission
-    hiddenInput.value = JSON.stringify({ headers, rows });
+      // Update hidden input for form submission
+      hiddenInput.value = JSON.stringify({ headers, rows });
 
-    // Render Headers
-    thead.innerHTML = '';
-    headers.forEach((header, index) => {
-        const th = document.createElement('td'); 
-        th.className = 'header-cell';
-        th.style.border = '2px black solid';
-        th.style.padding = '2px';
-        th.style.textAlign = 'center';
-        
-        const input = document.createElement('input');
-        input.type = 'text';
+      // Render Headers
+      thead.innerHTML = "";
+      headers.forEach((header, index) => {
+        const th = document.createElement("td");
+        th.className = "header-cell";
+        th.style.border = "2px black solid";
+        th.style.padding = "2px";
+        th.style.textAlign = "center";
+
+        const input = document.createElement("input");
+        input.type = "text";
         input.value = header;
         input.onchange = (e) => updateHeader(index, e.target.value);
-        input.style.fontWeight = 'bold';
-        input.style.textAlign = 'center';
-        input.style.background = '#f8f9fa';
+        input.style.fontWeight = "bold";
+        input.style.textAlign = "center";
+        input.style.background = "#f8f9fa";
         th.appendChild(input);
-        
+
         // Context Menu for Column
-        const menuBtn = document.createElement('div');
-        menuBtn.className = 'control-btn';
-        menuBtn.innerHTML = '+';
+        const menuBtn = document.createElement("div");
+        menuBtn.className = "control-btn";
+        menuBtn.innerHTML = "+";
         menuBtn.onclick = (e) => showColumnMenu(index, e);
         th.appendChild(menuBtn);
 
-        const menu = document.createElement('div');
+        const menu = document.createElement("div");
         menu.id = `col-menu-${index}`;
-        menu.className = 'dropdown-menu';
+        menu.className = "dropdown-menu";
         menu.innerHTML = `
             <button onclick="addColumnAt(${index}, 0)">Add Column Before</button>
             <button onclick="addColumnAt(${index}, 1)">Add Column After</button>
-            ${headers.length > 1 ? `<button class="delete-opt" onclick="deleteColumn(${index})">Delete Column</button>` : ''}
+            ${
+              headers.length > 1
+                ? `<button class="delete-opt" onclick="deleteColumn(${index})">Delete Column</button>`
+                : ""
+            }
         `;
         th.appendChild(menu);
 
         thead.appendChild(th);
-    });
+      });
 
-    // Render Rows
-    tbody.innerHTML = '';
-    rows.forEach((row, rowIndex) => {
-        const tr = document.createElement('tr');
-        
+      // Render Rows
+      tbody.innerHTML = "";
+      rows.forEach((row, rowIndex) => {
+        const tr = document.createElement("tr");
+
         row.forEach((cellData, colIndex) => {
-            const td = document.createElement('td');
-            td.className = 'data-cell';
-            if (colIndex === 0) td.classList.add('data-cell-first');
+          const td = document.createElement("td");
+          td.className = "data-cell";
+          if (colIndex === 0) td.classList.add("data-cell-first");
 
-            td.style.border = '2px black solid';
-            td.style.padding = '2px';
-            
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = cellData;
-            input.onchange = (e) => updateCell(rowIndex, colIndex, e.target.value);
-            
-            if (colIndex === 0) input.style.fontWeight = 'bold';
-            // Removed green color logic
+          td.style.border = "2px black solid";
+          td.style.padding = "2px";
 
-            td.appendChild(input);
-            
-            // Context Menu for Row (Only in first column)
-            if (colIndex === 0) {
-                const menuBtn = document.createElement('div');
-                menuBtn.className = 'control-btn';
-                menuBtn.innerHTML = '+';
-                menuBtn.onclick = (e) => showRowMenu(rowIndex, e);
-                td.appendChild(menuBtn);
+          const input = document.createElement("input");
+          input.type = "text";
+          input.value = cellData;
+          input.onchange = (e) =>
+            updateCell(rowIndex, colIndex, e.target.value);
 
-                const menu = document.createElement('div');
-                menu.id = `row-menu-${rowIndex}`;
-                menu.className = 'dropdown-menu';
-                menu.innerHTML = `
+          if (colIndex === 0) input.style.fontWeight = "bold";
+          // Removed green color logic
+
+          td.appendChild(input);
+
+          // Context Menu for Row (Only in first column)
+          if (colIndex === 0) {
+            const menuBtn = document.createElement("div");
+            menuBtn.className = "control-btn";
+            menuBtn.innerHTML = "+";
+            menuBtn.onclick = (e) => showRowMenu(rowIndex, e);
+            td.appendChild(menuBtn);
+
+            const menu = document.createElement("div");
+            menu.id = `row-menu-${rowIndex}`;
+            menu.className = "dropdown-menu";
+            menu.innerHTML = `
                     <button onclick="addRowAt(${rowIndex}, 0)">Add Row Before</button>
                     <button onclick="addRowAt(${rowIndex}, 1)">Add Row After</button>
-                    ${rows.length > 1 ? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>` : ''}
+                    ${
+                      rows.length > 1
+                        ? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>`
+                        : ""
+                    }
                 `;
-                td.appendChild(menu);
-            }
+            td.appendChild(menu);
+          }
 
-            tr.appendChild(td);
+          tr.appendChild(td);
         });
         tbody.appendChild(tr);
-    });
-}
+      });
+    }
 
-function showColumnMenu(index, event) {
-    event.stopPropagation();
-    hideMenus();
-    const menu = document.getElementById(`col-menu-${index}`);
-    menu.style.display = 'block';
-    
-    // Position menu: aligned to right edge, below header
-    menu.style.top = '100%'; 
-    menu.style.right = '0';
-    menu.style.left = 'auto'; 
+    function showColumnMenu(index, event) {
+      event.stopPropagation();
+      hideMenus();
+      const menu = document.getElementById(`col-menu-${index}`);
+      menu.style.display = "block";
 
-    document.getElementById('click-overlay').style.display = 'block';
-}
+      // Position menu: aligned to right edge, below header
+      menu.style.top = "100%";
+      menu.style.right = "0";
+      menu.style.left = "auto";
 
-function showRowMenu(index, event) {
-    event.stopPropagation();
-    hideMenus();
-    const menu = document.getElementById(`row-menu-${index}`);
-    menu.style.display = 'block';
-    
-    // Position menu: aligned to right edge, below cell content
-    menu.style.top = '100%';
-    menu.style.right = '0';
-    menu.style.left = 'auto'; 
-    menu.style.zIndex = '101'; 
+      document.getElementById("click-overlay").style.display = "block";
+    }
 
-    document.getElementById('click-overlay').style.display = 'block';
-}
+    function showRowMenu(index, event) {
+      event.stopPropagation();
+      hideMenus();
+      const menu = document.getElementById(`row-menu-${index}`);
+      menu.style.display = "block";
 
-function hideMenus() {
-    document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
-    document.getElementById('click-overlay').style.display = 'none';
-}
+      // Position menu: aligned to right edge, below cell content
+      menu.style.top = "100%";
+      menu.style.right = "0";
+      menu.style.left = "auto";
+      menu.style.zIndex = "101";
 
-function addRowAt(index, offset) {
-    const newRow = new Array(headers.length).fill("");
-    const insertIndex = index + offset;
-    rows.splice(insertIndex, 0, newRow);
-    renderTable();
-}
+      document.getElementById("click-overlay").style.display = "block";
+    }
 
-function addColumnAt(index, offset) {
-    const insertIndex = index + offset;
-    headers.splice(insertIndex, 0, "New Column");
-    rows.forEach(row => row.splice(insertIndex, 0, ""));
-    renderTable();
-}
+    function hideMenus() {
+      document
+        .querySelectorAll(".dropdown-menu")
+        .forEach((el) => (el.style.display = "none"));
+      document.getElementById("click-overlay").style.display = "none";
+    }
 
-function deleteRow(index) {
-    if(confirm('Delete this row?')) {
+    function addRowAt(index, offset) {
+      const newRow = new Array(headers.length).fill("");
+      const insertIndex = index + offset;
+      rows.splice(insertIndex, 0, newRow);
+      renderTable();
+    }
+
+    function addColumnAt(index, offset) {
+      const insertIndex = index + offset;
+      headers.splice(insertIndex, 0, "New Column");
+      rows.forEach((row) => row.splice(insertIndex, 0, ""));
+      renderTable();
+    }
+
+    function deleteRow(index) {
+      if (confirm("Delete this row?")) {
         rows.splice(index, 1);
         renderTable();
+      }
     }
-}
 
-function deleteColumn(index) {
-    if(confirm('Delete this column?')) {
+    function deleteColumn(index) {
+      if (confirm("Delete this column?")) {
         headers.splice(index, 1);
-        rows.forEach(row => row.splice(index, 1));
+        rows.forEach((row) => row.splice(index, 1));
         renderTable();
+      }
     }
-}
 
-function updateHeader(index, value) {
-    headers[index] = value;
-    document.getElementById('tableDataInput').value = JSON.stringify({ headers, rows });
-}
+    function updateHeader(index, value) {
+      headers[index] = value;
+      document.getElementById("tableDataInput").value = JSON.stringify({
+        headers,
+        rows,
+      });
+    }
 
-function updateCell(rowIndex, colIndex, value) {
-    rows[rowIndex][colIndex] = value;
-    document.getElementById('tableDataInput').value = JSON.stringify({ headers, rows });
-}
+    function updateCell(rowIndex, colIndex, value) {
+      rows[rowIndex][colIndex] = value;
+      document.getElementById("tableDataInput").value = JSON.stringify({
+        headers,
+        rows,
+      });
+    }
 
-// Initial render
-document.addEventListener('DOMContentLoaded', renderTable);
-
-
+    // Initial render
+    document.addEventListener("DOMContentLoaded", renderTable);
   </script>
 </html>

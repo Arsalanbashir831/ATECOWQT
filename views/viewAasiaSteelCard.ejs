@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<title>Document</title>
-	</head>
+    <title>Document</title>
+  </head>
 
-	<body style="width: 216mm; height: 279mm; margin: auto">
-		<div class="card" style="width: 568px">
-			<div class="flex-between">
-				<img
-					style="width: 150px; height: 100px"
-					class="logo"
-					src="/images/logo.png"
-					alt="logo" />
-				<div style="text-align: center; color: #14ab55">
+  <body style="width: 216mm; height: 279mm; margin: auto">
+    <div class="card" style="width: 568px">
+      <div>
+        <img
+          style="width: 250px; height: 130px"
+          class="logo"
+          src="/images/logo.png"
+          alt="logo" />
+        <img
+          style="width: 250px; height: 120px"
+          class="logo"
+          src="/images/ArabianTestingLogo.jpeg"
+          alt="logo" />
+        <!-- <div style="text-align: center; color: #14ab55">
 					<p style="text-transform: uppercase">
 						Aasia Steel Company
 					</p>
@@ -23,260 +28,377 @@
 						Welder Qualification Card
 					</p>
 					<p style="text-transform: uppercase">Aasia Steel Welder Card</p>
-				</div>
-				<img src="<%= record.qr    %>" alt="QR Code" class="qrcode" />
-			</div>
-			<div class="flex">
-				<img src="<%= record.image %>" alt="Welder photo" class="person-img" />
-				<table id="table-1">
-					<tbody>
-						<tr>
-							<td>Company :</td>
-							<td><%= record.company %></td>
-						</tr>
-						<tr>
-							<td>Welder Name:</td>
-							<td><%= record.welder_name %></td>
-						</tr>
-						<tr>
-							<td>Iqama/Id No:</td>
-							<td><%= record.iqama_no %></td>
-						</tr>
-						<tr>
-							<td>Welder ID:</td>
-							<td><%= record.welder_id %></td>
-						</tr>
-						<tr>
-							<td>Card No:</td>
-							<td><%= record.card_no %></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="flex-between" style="margin-top: 3px">
-				<div>
-					<p style="color: gray"><%=record.authorized_by %></p>
-					<p style="margin-top: 3px">Authorized by</p>
-				</div>
+				</div> -->
+        <img src="<%= record.qr    %>" alt="QR Code" class="qrcode" />
+      </div>
+      <div class="flex">
+        <img src="<%= record.image %>" alt="Welder photo" class="person-img" />
+        <table id="table-1">
+          <tbody>
+            <tr>
+              <td>Company :</td>
+              <td><%= record.company %></td>
+            </tr>
+            <tr>
+              <td>Welder Name:</td>
+              <td><%= record.welder_name %></td>
+            </tr>
+            <tr>
+              <td>Iqama/Id No:</td>
+              <td><%= record.iqama_no %></td>
+            </tr>
+            <tr>
+              <td>Welder ID:</td>
+              <td><%= record.welder_id %></td>
+            </tr>
+            <tr>
+              <td>Card No:</td>
+              <td><%= record.card_no %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex-between" style="margin-top: 3px">
+        <div>
+          <p style="color: gray"><%=record.authorized_by %></p>
+          <p style="margin-top: 3px">Authorized by</p>
+        </div>
 
-				<div>
-					<p style="color: gray"><%= record.welding_inspector %></p>
-					<p style="margin-top: 3px">Welding Inspector</p>
-				</div>
-			</div>
-		</div>
-		<div style="width: 592px; border: 2px black solid; margin-top: 10px">
-			<% 
-			   // Handle tableData - it might be stored as string or object
-			   let tableDataObj = null;
-			   
-			   if (record.tableData) {
-			       if (typeof record.tableData === 'string') {
-			           try {
-			               tableDataObj = JSON.parse(record.tableData);
-			           } catch (e) {
-			               console.error('Error parsing tableData:', e);
-			           }
-			       } else if (typeof record.tableData === 'object') {
-			           tableDataObj = record.tableData;
-			       }
-			   }
-			   
-			   // Check if we have valid parsed data
-			   if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) { 
-			%>
-				<table id="dynamicTable" style="width: 100%; border-collapse: separate; border-spacing: 0;">
-					<thead>
-						<tr style="background-color: #f8f9fa; font-weight: bold;">
-							<% tableDataObj.headers.forEach(function(header) { %>
-								<td style="border: 2px black solid; padding: 10px; text-align: center;"><%= header %></td>
-							<% }); %>
-						</tr>
-					</thead>
-					<tbody>
-						<% tableDataObj.rows.forEach(function(row) { %>
-							<tr>
-								<% if (Array.isArray(row)) { %>
-									<% row.forEach(function(cell, index) { %>
-										<td class="<%= index === 0 ? 'fw-bold' : '' %>" style="border: 2px black solid; padding: 8px;"><%= cell %></td>
-									<% }); %>
-								<% } %>
-							</tr>
-						<% }); %>
-					</tbody>
-				</table>
-			<% } else { %>
-			<table id="table-2" style="width: 100%">
-				<thead>
-					<tr style="background-color: #f8f9fa; font-weight: bold;">
-						<td style="border: 2px black solid; padding: 10px; text-align: center;">Welding Variable</td>
-						<td style="border: 2px black solid; padding: 10px; text-align: center;">Actual Values</td>
-						<td style="border: 2px black solid; padding: 10px; text-align: center;">Range Values</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Welding Process/Type</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.welding_process_type_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.welding_process_type_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Backing</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.backing_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.backing_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Diameter</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.diameter_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.diameter_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Base Metal P-No.</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.base_metal_pno_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.base_metal_pno_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Deposited Thickness</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.deposited_thickness_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.deposited_thickness_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Position & Prog.</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.position_prog_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.position_prog_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Filler Metal Class</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.filler_metal_class_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.filler_metal_class_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Filler Metal F-No.</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.filler_metal_fno_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.filler_metal_fno_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Use of Backing Gas</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.backing_gas_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.backing_gas_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Transfer Mode</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.transfer_mode_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.transfer_mode_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Current Type/Polarity</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.current_type_polarity_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.current_type_polarity_range || '' %></td>
-					</tr>
-					<tr>
-						<td style="border: 2px black solid; padding: 8px; font-weight: bold;">Join/Weld Type</td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.join_weld_type_actual || '' %></td>
-						<td style="border: 2px black solid; padding: 8px;"><%= record.join_weld_type_range || '' %></td>
-					</tr>
-				</tbody>
-			</table>
-			<% } %>
-			<p style="border: 2px black solid; padding: 5px; font-size: 15px">
-				This card certifies the welder's qualification according to Aasia Steel standards and requirements.
-			</p>
-		</div>
-		<br />
-		<a
-			class="hide-in-print"
-			href="/Supervisor"
-			style="
-				text-decoration: none;
-				background-color: green;
-				color: white;
-				padding: 2px;
-			"
-			>Back to Home</a
-		>
+        <div>
+          <p style="color: gray"><%= record.welding_inspector %></p>
+          <p style="margin-top: 3px">Welding Inspector</p>
+        </div>
+      </div>
+    </div>
+    <div style="width: 592px; border: 2px black solid; margin-top: 10px">
+       <%
+      // Handle tableData - it might be stored as string or object
+      let tableDataObj = null;
+      if (record.tableData) {
+          if (typeof record.tableData === 'string') {
+              try {
+                  tableDataObj = JSON.parse(record.tableData);
+              } catch (e) {
+                  console.error('Error parsing tableData:', e);
+              }
+          } else if (typeof record.tableData === 'object') {
+              tableDataObj = record.tableData;
+          }
+      }
 
-		<a
-			class="hide-in-print"
-			onclick="window.print(); return false;"
-			href="/Supervisor"
-			style="
-				text-decoration: none;
-				background-color: red;
-				color: white;
-				padding: 2px;
-			"
-			>Download PDF</a
-		>
-		<style>
-			* {
-				margin: 0;
-				padding: 0;
-				font-family: sans-serif;
-				font-weight: 600;
-			}
-			@media print {
-				.hide-in-print {
-					display: none;
-				}
-			}
-			.card {
-				margin-top: 10px;
-				padding: 10px;
-				border: 4px black solid;
-			}
+      // Check if we have valid parsed data
+      if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) {
+      %>
+      <table
+        id="dynamicTable"
+        style="width: 100%; border-collapse: separate; border-spacing: 0">
+        <thead>
+          <tr style="background-color: #f8f9fa; font-weight: bold">
+            <% tableDataObj.headers.forEach(function(header) { %>
+            <td
+              style="
+                border: 2px black solid;
+                padding: 10px;
+                text-align: center;
+              ">
+              <%= header %>
+            </td>
+            <% }); %>
+          </tr>
+        </thead>
+        <tbody>
+          <% tableDataObj.rows.forEach(function(row) { %>
+          <tr>
+            <% if (Array.isArray(row)) { %> <% row.forEach(function(cell, index)
+            { %>
+            <td
+              class="<%= index === 0 ? 'fw-bold' : '' %>"
+              style="border: 2px black solid; padding: 8px">
+              <%= cell %>
+            </td>
+            <% }); %> <% } %>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <% } else { %>
+      <table id="table-2" style="width: 100%">
+        <thead>
+          <tr style="background-color: #f8f9fa; font-weight: bold">
+            <td
+              style="
+                border: 2px black solid;
+                padding: 10px;
+                text-align: center;
+              ">
+              Welding Variable
+            </td>
+            <td
+              style="
+                border: 2px black solid;
+                padding: 10px;
+                text-align: center;
+              ">
+              Actual Values
+            </td>
+            <td
+              style="
+                border: 2px black solid;
+                padding: 10px;
+                text-align: center;
+              ">
+              Range Values
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Welding Process/Type
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.welding_process_type_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.welding_process_type_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Backing
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.backing_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.backing_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Diameter
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.diameter_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.diameter_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Base Metal P-No.
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.base_metal_pno_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.base_metal_pno_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Deposited Thickness
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.deposited_thickness_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.deposited_thickness_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Position & Prog.
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.position_prog_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.position_prog_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Filler Metal Class
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.filler_metal_class_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.filler_metal_class_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Filler Metal F-No.
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.filler_metal_fno_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.filler_metal_fno_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Use of Backing Gas
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.backing_gas_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.backing_gas_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Transfer Mode
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.transfer_mode_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.transfer_mode_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Current Type/Polarity
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.current_type_polarity_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.current_type_polarity_range || '' %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="border: 2px black solid; padding: 8px; font-weight: bold">
+              Join/Weld Type
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.join_weld_type_actual || '' %>
+            </td>
+            <td style="border: 2px black solid; padding: 8px">
+              <%= record.join_weld_type_range || '' %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <% } %>
+      <p style="border: 2px black solid; padding: 5px; font-size: 15px">
+        This card certifies the welder's qualification according to Aasia Steel
+        standards and requirements.
+      </p>
+    </div>
+    <br />
+    <a
+      class="hide-in-print"
+      href="/Supervisor"
+      style="
+        text-decoration: none;
+        background-color: green;
+        color: white;
+        padding: 2px;
+      "
+      >Back to Home</a
+    >
 
-			.flex {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
+    <a
+      class="hide-in-print"
+      onclick="window.print(); return false;"
+      href="/Supervisor"
+      style="
+        text-decoration: none;
+        background-color: red;
+        color: white;
+        padding: 2px;
+      "
+      >Download PDF</a
+    >
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        font-weight: 600;
+      }
+      @media print {
+        .hide-in-print {
+          display: none;
+        }
+      }
+      .card {
+        margin-top: 10px;
+        padding: 10px;
+        border: 4px black solid;
+      }
 
-			.flex-between {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-			}
+      .flex {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-			.logo {
-				height: 150px;
-				width: 200px;
-			}
+      .flex-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
 
-			.qrcode {
-				height: 150px;
-				width: 150px;
-			}
+      .logo {
+        height: 150px;
+        width: 200px;
+      }
 
-			.person-img {
-				height: 200px;
-				width: 200px;
-				object-fit: cover;
-			}
+      .qrcode {
+        height: 150px;
+        width: 150px;
+      }
 
-			#table-1 {
-				border-collapse: separate;
-				border-spacing: 0 20px;
-				/* Adjust the second value for vertical spacing */
-			}
+      .person-img {
+        height: 200px;
+        width: 200px;
+        object-fit: cover;
+      }
 
-			#table-2 {
-				border-collapse: separate;
-				border-spacing: 0;
-			}
+      #table-1 {
+        border-collapse: separate;
+        border-spacing: 0 20px;
+        /* Adjust the second value for vertical spacing */
+      }
 
-			#table-2 td {
-				border: 2px black solid;
-				padding: 5px;
-			}
+      #table-2 {
+        border-collapse: separate;
+        border-spacing: 0;
+      }
 
-			/* Removed green text rule */
-			td:nth-child(even) {
-				color: black;
-			}
-            
-            .fw-bold {
-                font-weight: bold;
-            }
-		</style>
-	</body>
+      #table-2 td {
+        border: 2px black solid;
+        padding: 5px;
+      }
+
+      /* Removed green text rule */
+      td:nth-child(even) {
+        color: black;
+      }
+
+      .fw-bold {
+        font-weight: bold;
+      }
+    </style>
+  </body>
 </html>
