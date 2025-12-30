@@ -7,9 +7,9 @@
     <title>Document</title>
   </head>
 
-  <body style="width: 216mm; height: 279mm; margin: auto">
-    <div class="card" style="width: 568px">
-      <div>
+  <body style="width: 185mm; height: 279mm; margin: auto">
+    <div class="card">
+      <div class="flex flex-between">
         <img
           style="width: 250px; height: 130px"
           class="logo"
@@ -29,7 +29,9 @@
 					</p>
 					<p style="text-transform: uppercase">Aasia Steel Welder Card</p>
 				</div> -->
-        <img src="<%= record.qr    %>" alt="QR Code" class="qrcode" />
+				
+					<img src="<%= record.qr    %>" alt="QR Code" class="qrcode" />
+				
       </div>
       <div class="flex">
         <img src="<%= record.image %>" alt="Welder photo" class="person-img" />
@@ -70,7 +72,7 @@
         </div>
       </div>
     </div>
-    <div style="width: 592px; border: 2px black solid; margin-top: 10px">
+    <div style="width: 100%; border: 2px black solid; margin-top: 10px">
        <%
       // Handle tableData - it might be stored as string or object
       let tableDataObj = null;
