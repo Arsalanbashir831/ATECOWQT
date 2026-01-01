@@ -48,8 +48,18 @@ module.exports = (upload) => {
 				});
 
 				// 3) create the Card with real URLs
+				let cardData = { ...req.body };
+				if (cardData.tableData && typeof cardData.tableData === 'string') {
+					try {
+						cardData.tableData = JSON.parse(cardData.tableData);
+					} catch (e) {
+						console.error('Failed to parse tableData', e);
+					}
+				}
+
 				const card = await Card.create({
-					...req.body, // welder_id comes from payload
+					...cardData,
+					tableData: cardData.tableData,
 					count: req.count,
 					card_no: req.card_no,
 					image: imageUrl,
@@ -113,6 +123,14 @@ module.exports = (upload) => {
 				// preserve count only, welder_id comes from payload
 				const existing = await Card.findOne({ card_no: cn });
 				updates.count = existing.count;
+
+				if (updates.tableData && typeof updates.tableData === 'string') {
+					try {
+						updates.tableData = JSON.parse(updates.tableData);
+					} catch (e) {
+						console.error('Failed to parse tableData', e);
+					}
+				}
 
 				await Card.findOneAndUpdate({ card_no: cn }, updates, { new: true });
 				res.redirect(`/card/view/${cn}`);
