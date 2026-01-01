@@ -52,6 +52,10 @@ module.exports = (upload) => {
 				if (cardData.tableData && typeof cardData.tableData === 'string') {
 					try {
 						cardData.tableData = JSON.parse(cardData.tableData);
+            // Inject the generated Card No into the table (Row 0, Col 1)
+            if (cardData.tableData.rows && cardData.tableData.rows.length > 0) {
+                 cardData.tableData.rows[0][1] = req.card_no;
+            }
 					} catch (e) {
 						console.error('Failed to parse tableData', e);
 					}
@@ -127,6 +131,10 @@ module.exports = (upload) => {
 				if (updates.tableData && typeof updates.tableData === 'string') {
 					try {
 						updates.tableData = JSON.parse(updates.tableData);
+            // Inject the Card No into the table (Row 0, Col 1) to ensure consistency
+            if (updates.tableData.rows && updates.tableData.rows.length > 0) {
+                 updates.tableData.rows[0][1] = cn;
+            }
 					} catch (e) {
 						console.error('Failed to parse tableData', e);
 					}
