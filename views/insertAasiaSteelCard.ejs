@@ -1,180 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- <link rel="stylesheet" href="style.css" /> -->
-  <title>Document</title>
-</head>
+  <body style="width: 216mm; height: 279mm; margin: auto">
+    <form
+      action="/aasia-steel-card/insert"
+      method="post"
+      enctype="multipart/form-data">
+      <!-- Hidden input to store JSON data - Placed at top for reliable Multer parsing -->
+      <input type="hidden" name="tableData" id="tableDataInput" />
 
-<body style="width: 216mm; height: 279mm; margin: auto">
-
-  <form action="/aasia-steel-card/insert" method="post" enctype="multipart/form-data">
-    <!-- Hidden input to store JSON data - Placed at top for reliable Multer parsing -->
-    <input type="hidden" name="tableData" id="tableDataInput">
-    
-  <div class="card">
-    <div class="flex-between">
-      <img  style="width: 150px; height: 100px;" class="logo" src="/images/logo.png" alt="logo" />
-      <div style="text-align: center; color: #14ab55">
-        <p style="text-transform: uppercase">
+      <div class="card">
+        <div>
+          <img
+            style="width: 250px; height: 130px"
+            class="logo"
+            src="/images/logo.png"
+            alt="logo" />
+          <img
+            style="width: 250px; height: 120px"
+            class="logo"
+            src="/images/ArabianTestingLogo.jpeg"
+            alt="logo" />
+          <div style="text-align: center; color: #14ab55">
+            <!-- <p style="text-transform: uppercase">
           Aasia Steel Company
         </p>
         <p style="margin: 8px 0; font-size: 13px">
           Welder Qualification Card
         </p>
-        <p style="text-transform: uppercase">Aasia Steel Welder Card</p>
+        <p style="text-transform: uppercase">Aasia Steel Welder Card</p> -->
+          </div>
+          <!-- <img style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
+        </div>
+        <div>
+          <label
+            style="
+              cursor: pointer;
+              background-color: rgb(4, 111, 0);
+              color: white;
+              padding: 5px;
+            "
+            for="files"
+            class="btn"
+            >Select Image</label
+          >
+          <input
+            id="files"
+            style="visibility: hidden"
+            name="card"
+            type="file"
+            accept="image/jpg"
+            onchange="previewImage(event)" />
+        </div>
+        <br />
+        <div class="flex">
+          <img
+            id="preview-selected-image"
+            style="width: 200px; height: 200px"
+            class="person-img" />
+          <table id="table-1">
+            <tbody>
+              <tr>
+                <td>Company</td>
+                <td>: <input type="text" name="company" /></td>
+              </tr>
+              <tr>
+                <td>Welder Name</td>
+                <td>:<input type="text" name="welder_name" id="" /></td>
+              </tr>
+              <tr>
+                <td>Iqama No</td>
+                <td>:<input type="text" name="iqama_no" id="" /></td>
+              </tr>
+              <tr>
+                <td>Welder ID</td>
+                <td>: <input type="text" name="welder_id" id="" /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flex-between" style="margin-top: 20px">
+          <div>
+            <input type="text" name="authorized_by" id="" />
+            <p style="margin-top: 3px">Authorized by</p>
+          </div>
+          <div>
+            <input type="text" name="welding_inspector" id="" />
+            <p style="margin-top: 3px">Welding Inspector</p>
+          </div>
+        </div>
       </div>
-      <!-- <img style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
-    </div>
-    <div>
-      <label style=" cursor: pointer; background-color: rgb(4, 111, 0); color: white; padding: 5px;" for="files"
-        class="btn">Select Image</label>
-      <input  id="files" style="visibility:hidden;" name="card" type="file" accept="image/jpg" onchange="previewImage(event)">
+      <div style="border: 2px black solid; margin-top: 10px">
+        <!-- Global Click Listener to close menus -->
+        <div
+          id="click-overlay"
+          style="
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 90;
+          "
+          onclick="hideMenus()"></div>
 
-    </div>
-    <br>
-    <div class="flex">
-      <img  id="preview-selected-image" style="width: 200px; height: 200px;" class="person-img"/>
-      <table id="table-1">
-        <tbody>
-          <tr>
-            <td>Company</td>
-            <td>: <input type ="text" name="company"/> </td>
-          </tr>
-          <tr>
-            <td>Welder Name</td>
-            <td>:<input type="text" name="welder_name"  id=""></td>
-          </tr>
-          <tr>
-            <td>Iqama No</td>
-            <td>:<input type="text" name="iqama_no" id=""></td>
-          </tr>
-          <tr>
-              <td>Welder ID</td>
-              <td>: <input type="text" name="welder_id" id=""></td>
-            </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="flex-between" style="margin-top: 20px">
-      <div>
-        <input type="text" name="authorized_by" id="">
-        <p style="margin-top: 3px">Authorized by</p>
+        <div style="overflow-x: auto; padding-bottom: 50px">
+          <!-- Padding for bottom menus -->
+          <table
+            id="dynamicTable"
+            style="width: 100%; border-collapse: separate; border-spacing: 0">
+            <thead>
+              <tr
+                id="tableHeaders"
+                style="background-color: #f8f9fa; font-weight: bold">
+                <!-- Headers will be injected here -->
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- Rows will be injected here -->
+            </tbody>
+          </table>
+        </div>
+
+        <p
+          style="
+            border: 2px black solid;
+            padding: 5px;
+            font-size: 15px;
+            margin-top: 0;
+            border-top: none;
+          ">
+          This card certifies the welder's qualification according to Aasia
+          Steel standards and requirements.
+        </p>
       </div>
-      <div>
-        <input type="text" name="welding_inspector" id="">
-        <p style="margin-top: 3px">Welding Inspector</p>
-      </div>
-    </div>
-  </div>
-    <div style="border: 2px black solid; margin-top: 10px;">
-    
-    <!-- Global Click Listener to close menus -->
-    <div id="click-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:90;" onclick="hideMenus()"></div>
 
-    <div style="overflow-x: auto; padding-bottom: 50px;"> <!-- Padding for bottom menus -->
-        <table id="dynamicTable" style="width: 100%; border-collapse: separate; border-spacing: 0;">
-          <thead>
-            <tr id="tableHeaders" style="background-color: #f8f9fa; font-weight: bold;">
-              <!-- Headers will be injected here -->
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            <!-- Rows will be injected here -->
-          </tbody>
-        </table>
-    </div>
-    
-    <p style="border: 2px black solid; padding: 5px; font-size: 15px; margin-top: 0; border-top: none;">
-      This card certifies the welder's qualification according to Aasia Steel standards and requirements.
-    </p>
-  </div>
+      <input type="submit" value="Save" />
+    </form>
 
-  <input type="submit" value="Save"/>
-</form>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        font-weight: 600;
+      }
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      font-weight: 600;
+      .card {
+        margin-top: 10px;
+        padding: 10px;
+        border: 4px black solid;
+        background: white;
+      }
 
-    }
+      .flex {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-    .card {
-      margin-top: 10px;
-      padding: 10px;
-      border: 4px black solid;
-      background: white;
-    }
+      .flex-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
 
-    .flex {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+      .logo {
+        height: 150px;
+        width: 200px;
+      }
 
-    .flex-between {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+      .qrcode {
+        height: 150px;
+        width: 150px;
+      }
 
-    .logo {
-      height: 150px;
-      width: 200px
-    }
+      .person-img {
+        height: 200px;
+        width: 200px;
+        object-fit: cover;
+      }
 
-    .qrcode {
-      height: 150px;
-      width: 150px;
-    }
+      #table-1 {
+        border-collapse: separate;
+        border-spacing: 0 20px;
+        /* Adjust the second value for vertical spacing */
+      }
 
-    .person-img {
-      height: 200px;
-      width: 200px;
-      object-fit: cover
-    }
+      /* Dynamic Table Styles */
+      #dynamicTable {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+      }
 
-    #table-1 {
-      border-collapse: separate;
-      border-spacing: 0 20px;
-      /* Adjust the second value for vertical spacing */
-    }
+      #dynamicTable td,
+      #dynamicTable th {
+        border: 2px black solid;
+        padding: 0;
+        position: relative;
+      }
 
-    /* Dynamic Table Styles */
-    #dynamicTable {
-      border-collapse: separate;
-      border-spacing: 0;
-      width: 100%;
-    }
+      #dynamicTable input {
+        width: 100%;
+        border: none;
+        padding: 8px;
+        box-sizing: border-box;
+        font-family: inherit;
+        font-weight: inherit;
+      }
 
-    #dynamicTable td, #dynamicTable th {
-      border: 2px black solid;
-      padding: 0;
-      position: relative; 
-    }
-
-    #dynamicTable input {
-       width: 100%;
-       border: none;
-       padding: 8px;
-       box-sizing: border-box;
-       font-family: inherit;
-       font-weight: inherit;
-    }
-    
-    #dynamicTable th input {
+      #dynamicTable th input {
         text-align: center;
         font-weight: bold;
         background: #f8f9fa;
-    }
+      }
 
-    /* Context Menu Styles */
-    .control-btn {
+      /* Context Menu Styles */
+      .control-btn {
         background: #14ab55;
         color: white;
         border: none;
@@ -189,46 +239,46 @@
         justify-content: center;
         position: absolute;
         z-index: 10;
-    }
-    
-    /* Position for Column Headers */
-    .header-cell .control-btn {
+      }
+
+      /* Position for Column Headers */
+      .header-cell .control-btn {
         top: 50%;
-        right: 5px; 
+        right: 5px;
         left: auto;
         transform: translateY(-50%);
         margin: 0;
-    }
+      }
 
-    /* Position for Row Cells (First Column) */
-    .data-cell-first .control-btn {
+      /* Position for Row Cells (First Column) */
+      .data-cell-first .control-btn {
         top: 50%;
         right: 5px;
         left: auto;
         bottom: auto;
         transform: translateY(-50%);
         margin: 0;
-    }
+      }
 
-    /* Show on hover */
-    .header-cell:hover .control-btn, 
-    .data-cell-first:hover .control-btn {
+      /* Show on hover */
+      .header-cell:hover .control-btn,
+      .data-cell-first:hover .control-btn {
         display: flex;
-    }
+      }
 
-    .dropdown-menu {
+      .dropdown-menu {
         display: none;
         position: absolute;
         background: white;
         border: 1px solid #ccc;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         z-index: 100;
         min-width: 150px;
         border-radius: 4px;
         text-align: left;
-    }
-    
-    .dropdown-menu button {
+      }
+
+      .dropdown-menu button {
         display: block;
         width: 100%;
         padding: 5px 10px;
@@ -237,233 +287,250 @@
         text-align: left;
         cursor: pointer;
         font-size: 12px;
-    }
-    
-    .dropdown-menu button:hover {
+      }
+
+      .dropdown-menu button:hover {
         background-color: #f0f0f0;
-    }
-    
-    .dropdown-menu button.delete-opt {
+      }
+
+      .dropdown-menu button.delete-opt {
         color: #dc3545;
-    }
-    @media print {
-        .control-btn, .dropdown-menu {
-            display: none !important;
+      }
+      @media print {
+        .control-btn,
+        .dropdown-menu {
+          display: none !important;
         }
-    }
-  </style>
+      }
+    </style>
+  </body>
 
-</body>
-
-<script>
-  /**
- * Create an arrow function that will be called when an image is selected.
- */
-/**
- * Create an arrow function that will be called when an image is selected.
- */
-const previewImage = (event) => {
-    const imageFiles = event.target.files;
-    const imageFilesLength = imageFiles.length;
-    if (imageFilesLength > 0) {
+  <script>
+    /**
+     * Create an arrow function that will be called when an image is selected.
+     */
+    /**
+     * Create an arrow function that will be called when an image is selected.
+     */
+    const previewImage = (event) => {
+      const imageFiles = event.target.files;
+      const imageFilesLength = imageFiles.length;
+      if (imageFilesLength > 0) {
         const imageSrc = URL.createObjectURL(imageFiles[0]);
-        const imagePreviewElement = document.querySelector("#preview-selected-image");
+        const imagePreviewElement = document.querySelector(
+          "#preview-selected-image"
+        );
         imagePreviewElement.src = imageSrc;
         imagePreviewElement.style.display = "block";
-    }
-};
+      }
+    };
 
-// --- Dynamic Table Logic ---
+    // --- Dynamic Table Logic ---
 
-// Default initial state
-let headers = ["Welding Variable", "Actual Values", "Range Values"];
-let rows = [
-    ["Welding Process/Type", "", ""],
-    ["Backing", "", ""],
-    ["Diameter", "", ""],
-    ["Base Metal P-No.", "", ""],
-    ["Deposited Thickness", "", ""],
-    ["Position & Prog.", "", ""],
-    ["Filler Metal Class", "", ""],
-    ["Filler Metal F-No.", "", ""],
-    ["Use of Backing Gas", "", ""],
-    ["Transfer Mode", "", ""],
-    ["Current Type/Polarity", "", ""],
-    ["Join/Weld Type", "", ""]
-];
+    // Default initial state
+    let headers = ["Welding Variable", "Actual Values", "Range Values"];
+    let rows = [
+      ["Welding Process/Type", "", ""],
+      ["Backing", "", ""],
+      ["Diameter", "", ""],
+      ["Base Metal P-No.", "", ""],
+      ["Deposited Thickness", "", ""],
+      ["Position & Prog.", "", ""],
+      ["Filler Metal Class", "", ""],
+      ["Filler Metal F-No.", "", ""],
+      ["Use of Backing Gas", "", ""],
+      ["Transfer Mode", "", ""],
+      ["Current Type/Polarity", "", ""],
+      ["Join/Weld Type", "", ""],
+    ];
 
-function renderTable() {
-    const thead = document.getElementById('tableHeaders');
-    const tbody = document.getElementById('tableBody');
-    const hiddenInput = document.getElementById('tableDataInput');
+    function renderTable() {
+      const thead = document.getElementById("tableHeaders");
+      const tbody = document.getElementById("tableBody");
+      const hiddenInput = document.getElementById("tableDataInput");
 
-    // Update hidden input for form submission
-    hiddenInput.value = JSON.stringify({ headers, rows });
+      // Update hidden input for form submission
+      hiddenInput.value = JSON.stringify({ headers, rows });
 
-    // Render Headers
-    thead.innerHTML = '';
-    headers.forEach((header, index) => {
-        const th = document.createElement('td'); 
-        th.className = 'header-cell';
-        th.style.border = '2px black solid';
-        th.style.padding = '2px';
-        th.style.textAlign = 'center';
-        
-        const input = document.createElement('input');
-        input.type = 'text';
+      // Render Headers
+      thead.innerHTML = "";
+      headers.forEach((header, index) => {
+        const th = document.createElement("td");
+        th.className = "header-cell";
+        th.style.border = "2px black solid";
+        th.style.padding = "2px";
+        th.style.textAlign = "center";
+
+        const input = document.createElement("input");
+        input.type = "text";
         input.value = header;
         input.onchange = (e) => updateHeader(index, e.target.value);
-        input.style.fontWeight = 'bold';
-        input.style.textAlign = 'center';
-        input.style.background = '#f8f9fa';
+        input.style.fontWeight = "bold";
+        input.style.textAlign = "center";
+        input.style.background = "#f8f9fa";
         th.appendChild(input);
-        
+
         // Context Menu for Column
-        const menuBtn = document.createElement('div');
-        menuBtn.className = 'control-btn';
-        menuBtn.innerHTML = '+';
+        const menuBtn = document.createElement("div");
+        menuBtn.className = "control-btn";
+        menuBtn.innerHTML = "+";
         menuBtn.onclick = (e) => showColumnMenu(index, e);
         th.appendChild(menuBtn);
 
-        const menu = document.createElement('div');
+        const menu = document.createElement("div");
         menu.id = `col-menu-${index}`;
-        menu.className = 'dropdown-menu';
+        menu.className = "dropdown-menu";
         menu.innerHTML = `
             <button onclick="addColumnAt(${index}, 0)">Add Column Before</button>
             <button onclick="addColumnAt(${index}, 1)">Add Column After</button>
-            ${headers.length > 1 ? `<button class="delete-opt" onclick="deleteColumn(${index})">Delete Column</button>` : ''}
+            ${
+              headers.length > 1
+                ? `<button class="delete-opt" onclick="deleteColumn(${index})">Delete Column</button>`
+                : ""
+            }
         `;
         th.appendChild(menu);
 
         thead.appendChild(th);
-    });
+      });
 
-    // Render Rows
-    tbody.innerHTML = '';
-    rows.forEach((row, rowIndex) => {
-        const tr = document.createElement('tr');
-        
+      // Render Rows
+      tbody.innerHTML = "";
+      rows.forEach((row, rowIndex) => {
+        const tr = document.createElement("tr");
+
         row.forEach((cellData, colIndex) => {
-            const td = document.createElement('td');
-            td.className = 'data-cell';
-            if (colIndex === 0) td.classList.add('data-cell-first');
+          const td = document.createElement("td");
+          td.className = "data-cell";
+          if (colIndex === 0) td.classList.add("data-cell-first");
 
-            td.style.border = '2px black solid';
-            td.style.padding = '2px';
-            
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = cellData;
-            input.onchange = (e) => updateCell(rowIndex, colIndex, e.target.value);
-            
-            if (colIndex === 0) input.style.fontWeight = 'bold';
-            // Removed green color logic as requested
+          td.style.border = "2px black solid";
+          td.style.padding = "2px";
 
-            td.appendChild(input);
-            
-            // Context Menu for Row (Only in first column)
-            if (colIndex === 0) {
-                const menuBtn = document.createElement('div');
-                menuBtn.className = 'control-btn';
-                menuBtn.innerHTML = '+';
-                menuBtn.onclick = (e) => showRowMenu(rowIndex, e);
-                td.appendChild(menuBtn);
+          const input = document.createElement("input");
+          input.type = "text";
+          input.value = cellData;
+          input.onchange = (e) =>
+            updateCell(rowIndex, colIndex, e.target.value);
 
-                const menu = document.createElement('div');
-                menu.id = `row-menu-${rowIndex}`;
-                menu.className = 'dropdown-menu';
-                menu.innerHTML = `
+          if (colIndex === 0) input.style.fontWeight = "bold";
+          // Removed green color logic as requested
+
+          td.appendChild(input);
+
+          // Context Menu for Row (Only in first column)
+          if (colIndex === 0) {
+            const menuBtn = document.createElement("div");
+            menuBtn.className = "control-btn";
+            menuBtn.innerHTML = "+";
+            menuBtn.onclick = (e) => showRowMenu(rowIndex, e);
+            td.appendChild(menuBtn);
+
+            const menu = document.createElement("div");
+            menu.id = `row-menu-${rowIndex}`;
+            menu.className = "dropdown-menu";
+            menu.innerHTML = `
                     <button onclick="addRowAt(${rowIndex}, 0)">Add Row Before</button>
                     <button onclick="addRowAt(${rowIndex}, 1)">Add Row After</button>
-                    ${rows.length > 1 ? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>` : ''}
+                    ${
+                      rows.length > 1
+                        ? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>`
+                        : ""
+                    }
                 `;
-                td.appendChild(menu);
-            }
+            td.appendChild(menu);
+          }
 
-            tr.appendChild(td);
+          tr.appendChild(td);
         });
         tbody.appendChild(tr);
-    });
-}
+      });
+    }
 
-function showColumnMenu(index, event) {
-    event.stopPropagation();
-    hideMenus();
-    const menu = document.getElementById(`col-menu-${index}`);
-    menu.style.display = 'block';
-    
-    // Position menu: aligned to right edge, below header. 
-    // Ensuring it opens on the right side of the cell.
-    menu.style.top = '100%'; 
-    menu.style.right = '0';
-    menu.style.left = 'auto'; 
-    
-    document.getElementById('click-overlay').style.display = 'block';
-}
+    function showColumnMenu(index, event) {
+      event.stopPropagation();
+      hideMenus();
+      const menu = document.getElementById(`col-menu-${index}`);
+      menu.style.display = "block";
 
-function showRowMenu(index, event) {
-    event.stopPropagation();
-    hideMenus();
-    const menu = document.getElementById(`row-menu-${index}`);
-    menu.style.display = 'block';
-    
-    // Position menu: aligned to right edge, below cell content
-    menu.style.top = '100%';
-    menu.style.right = '0';
-    menu.style.left = 'auto'; 
-    menu.style.zIndex = '101'; 
-    
-    document.getElementById('click-overlay').style.display = 'block';
-}
+      // Position menu: aligned to right edge, below header.
+      // Ensuring it opens on the right side of the cell.
+      menu.style.top = "100%";
+      menu.style.right = "0";
+      menu.style.left = "auto";
 
-function hideMenus() {
-    document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
-    document.getElementById('click-overlay').style.display = 'none';
-}
+      document.getElementById("click-overlay").style.display = "block";
+    }
 
-function addRowAt(index, offset) {
-    const newRow = new Array(headers.length).fill("");
-    // offset 0 = before (splice at index), 1 = after (splice at index + 1)
-    const insertIndex = index + offset;
-    rows.splice(insertIndex, 0, newRow);
-    renderTable();
-}
+    function showRowMenu(index, event) {
+      event.stopPropagation();
+      hideMenus();
+      const menu = document.getElementById(`row-menu-${index}`);
+      menu.style.display = "block";
 
-function addColumnAt(index, offset) {
-    const insertIndex = index + offset;
-    headers.splice(insertIndex, 0, "New Column");
-    rows.forEach(row => row.splice(insertIndex, 0, ""));
-    renderTable();
-}
+      // Position menu: aligned to right edge, below cell content
+      menu.style.top = "100%";
+      menu.style.right = "0";
+      menu.style.left = "auto";
+      menu.style.zIndex = "101";
 
-function deleteRow(index) {
-    if(confirm('Delete this row?')) {
+      document.getElementById("click-overlay").style.display = "block";
+    }
+
+    function hideMenus() {
+      document
+        .querySelectorAll(".dropdown-menu")
+        .forEach((el) => (el.style.display = "none"));
+      document.getElementById("click-overlay").style.display = "none";
+    }
+
+    function addRowAt(index, offset) {
+      const newRow = new Array(headers.length).fill("");
+      // offset 0 = before (splice at index), 1 = after (splice at index + 1)
+      const insertIndex = index + offset;
+      rows.splice(insertIndex, 0, newRow);
+      renderTable();
+    }
+
+    function addColumnAt(index, offset) {
+      const insertIndex = index + offset;
+      headers.splice(insertIndex, 0, "New Column");
+      rows.forEach((row) => row.splice(insertIndex, 0, ""));
+      renderTable();
+    }
+
+    function deleteRow(index) {
+      if (confirm("Delete this row?")) {
         rows.splice(index, 1);
         renderTable();
+      }
     }
-}
 
-function deleteColumn(index) {
-    if(confirm('Delete this column?')) {
+    function deleteColumn(index) {
+      if (confirm("Delete this column?")) {
         headers.splice(index, 1);
-        rows.forEach(row => row.splice(index, 1));
+        rows.forEach((row) => row.splice(index, 1));
         renderTable();
+      }
     }
-}
 
-function updateHeader(index, value) {
-    headers[index] = value;
-    document.getElementById('tableDataInput').value = JSON.stringify({ headers, rows });
-}
+    function updateHeader(index, value) {
+      headers[index] = value;
+      document.getElementById("tableDataInput").value = JSON.stringify({
+        headers,
+        rows,
+      });
+    }
 
-function updateCell(rowIndex, colIndex, value) {
-    rows[rowIndex][colIndex] = value;
-    document.getElementById('tableDataInput').value = JSON.stringify({ headers, rows });
-}
+    function updateCell(rowIndex, colIndex, value) {
+      rows[rowIndex][colIndex] = value;
+      document.getElementById("tableDataInput").value = JSON.stringify({
+        headers,
+        rows,
+      });
+    }
 
-// Initial render
-document.addEventListener('DOMContentLoaded', renderTable);
-
-</script>
-
+    // Initial render
+    document.addEventListener("DOMContentLoaded", renderTable);
+  </script>
 </html>

@@ -36,8 +36,9 @@ const cardSchema = mongoose.Schema({
     welding_inspector: String,
     image: String,
     qr: String,
-    year: String
-})
+    year: String,
+    tableData: mongoose.Schema.Types.Mixed
+}, { minimize: false })
 
 const Card = mongoose.model("Card",cardSchema);
 module.exports = Card

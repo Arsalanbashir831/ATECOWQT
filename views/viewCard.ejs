@@ -69,6 +69,45 @@
 			</p>
 		</div>
 		<div style="width: 592px; border: 2px black solid; margin-top: 10px">
+      <%
+      // Handle tableData - it might be stored as string or object
+      let tableDataObj = null;
+      if (record.tableData) {
+          if (typeof record.tableData === 'string') {
+              try {
+                  tableDataObj = JSON.parse(record.tableData);
+              } catch (e) {
+                  console.error('Error parsing tableData:', e);
+              }
+          } else if (typeof record.tableData === 'object') {
+              tableDataObj = record.tableData;
+          }
+      }
+
+      // Check if we have valid parsed data
+      if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) {
+      %>
+      <table
+        id="dynamicTable"
+        style="width: 100%; border-collapse: separate; border-spacing: 0">
+        <!-- Headers removed as per user request -->
+        <!-- <thead> ... </thead> -->
+        <tbody>
+          <% tableDataObj.rows.forEach(function(row, rowIndex) { %>
+          <tr>
+            <% if (Array.isArray(row)) { %> <% row.forEach(function(cell, index)
+            { %>
+            <td
+              class="<%= (index === 0 || index === 2) ? 'fw-bold' : '' %> <%= (rowIndex === 0 && index === 1) ? 'custom-green-text' : '' %>"
+              style="border: 2px black solid; padding: 8px;">
+              <%= cell %>
+            </td>
+            <% }); %> <% } %>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <% } else { %>
 			<table id="table-2" style="width: 100%">
 				<tr>
 					<td>Card No</td>
@@ -125,6 +164,7 @@
 					<td><%=record.date_of_expiry%></td>
 				</tr>
 			</table>
+      <% } %>
 			<p style="border: 2px black solid; padding: 5px; font-size: 15px">
 				This card, on its own qualifies the welder for 6 months from the Date of
 				test. Beyond this date, welding continuity records shall be consulted to
@@ -218,10 +258,21 @@
 				padding: 5px;
 			}
 
-			td:nth-child(even) {
-				color: #14ab55;
-				/* Apply your styling for even rows */
-			}
+      /* Dynamic Table Styles */
+      #dynamicTable {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+
+      /* td:nth-child(even) removed to prevent unwanted coloring */
+      .fw-bold {
+        font-weight: bold;
+      }
+      .custom-green-text {
+        color: #14ab55;
+        font-weight: bold;
+      }
 		</style>
 	</body>
 </html>

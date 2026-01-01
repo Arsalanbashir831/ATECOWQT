@@ -12,6 +12,7 @@
 			action="/card/update/<%= record.card_no %>"
 			method="POST"
 			enctype="multipart/form-data">
+			<input type="hidden" name="tableData" id="tableDataInput" />
 			<div class="card">
 				<div class="flex-between">
 					<img
@@ -138,176 +139,47 @@
 				</p>
 			</div>
 			<div style="border: 2px black solid; margin-top: 10px">
-				<table id="table-2" style="width: 100%">
-					<tr>
-						<td>Card No</td>
-						<td>
-							<input
-								type="text"
-								hidden
-								name="card_no"
-								id=""
-								value="<%=record.card_no %>" />
-						</td>
-						<td>WPS/PQR No.</td>
-						<td>
-							<input
-								type="text"
-								value="<%=record.wps_pqr_no %>"
-								name="wps_pqr_no"
-								id="" />
-						</td>
-					</tr>
-					<tr>
-						<td>Process</td>
-						<td>
-							<input
-								type="text"
-								name="process"
-								value="<%=record.process %>"
-								id="" />
-						</td>
-						<td>Joint Type</td>
-						<td>
-							<input
-								type="text"
-								value="<%=record.joint_type %>"
-								name="joint_type"
-								id="" />
-						</td>
-					</tr>
-					<tr>
-						<td>Test Position</td>
-						<td>
-							<input
-								type="text"
-								name="test_position"
-								value="<%=record.test_position %>"
-								id="" />
-						</td>
-						<td>Position Qualified</td>
-						<td>
-							<input
-								type="text"
-								value="<%=record.position_qualified %>"
-								name="position_qualified"
-								id="" />
-						</td>
-					</tr>
-					<tr>
-						<td>Vertical Progression</td>
-						<td>
-							<input
-								type="text"
-								value="<%=record.vertical_progression %>"
-								name="vertical_progression"
-								id="" />
-						</td>
-						<td>Test Thickness</td>
-						<td>
-							<input
-								type="text"
-								value="<%=record.test_thickness %>"
-								name="test_thickness"
-								id="" />
-						</td>
-					</tr>
-					<tr>
-						<td>Test Dia</td>
-						<td>
-							<input
-								type="text"
-								value="<%=record.test_dia %>"
-								name="test_dia"
-								id="" />
-						</td>
+				<!-- Global Click Listener to close menus -->
+				<div
+					id="click-overlay"
+					style="
+						display: none;
+						position: fixed;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+						z-index: 90;
+					"
+					onclick="hideMenus()"></div>
 
-						<td>Thickness Qualified</td>
-						<td>
-							<input
-								type="text"
-								value="<%= record.thickness_qualified %>"
-								name="thickness_qualified"
-								id="" />
-						</td>
-					</tr>
-					<tr>
-						<td>P No Qualified</td>
-						<td>
-							<input
-								type="text"
-								value="<%=record.p_no_qualified %>"
-								name="p_no_qualified"
-								id="" />
-						</td>
+				<div style="overflow-x: auto; padding-bottom: 50px">
+					<table
+						id="dynamicTable"
+						style="width: 100%; border-collapse: separate; border-spacing: 0">
+						<thead>
+							<tr
+								id="tableHeaders"
+								style="background-color: #f8f9fa; font-weight: bold">
+								<!-- Headers will be injected here -->
+							</tr>
+						</thead>
+						<tbody id="tableBody">
+							<!-- Rows will be injected here -->
+						</tbody>
+					</table>
+				</div>
 
-						<td>Diameter Qualified</td>
-						<td>
-							<input
-								type="text"
-								name="diameter_qualified"
-								value="<%=record.diameter_qualified %>"
-								id="" />
-						</td>
-					</tr>
-					<tr>
-						<td>F No Qualified</td>
-						<td>
-							<input
-								type="text"
-								name="f_no_qualified"
-								value="<%=record.f_no_qualified %>"
-								id="" />
-						</td>
-						<td>Filler Metal/Electrode Class Used</td>
-						<td>
-							<input
-								type="text"
-								name="electrode_class_used"
-								value="<%=record.electrode_class_used %>"
-								id="" />
-						</td>
-					</tr>
-					<tr>
-						<td>Place of Issue</td>
-						<td>
-							<input
-								type="text"
-								value="<%=record.place_of_issue %>"
-								name="place_of_issue"
-								id="" />
-						</td>
-						<td>Test Method</td>
-						<td>
-							<input
-								type="text"
-								value="<%=record.test_method %>"
-								name="test_method"
-								id="" />
-						</td>
-					</tr>
-					<tr>
-						<td>Date of Weld</td>
-						<td>
-							<input
-								type="date"
-								value="<%=record.date_of_test %>"
-								name="date_of_test"
-								id="" />
-						</td>
-						<td>Date of Exp</td>
-						<td>
-							<input
-								type="date"
-								value="<%=record. date_of_expiry%>"
-								name="date_of_expiry"
-								id="" />
-						</td>
-					</tr>
-				</table>
-				<p style="border: 2px black solid; padding: 5px; font-size: 15px">
+				<p
+					style="
+						border: 2px black solid;
+						padding: 5px;
+						font-size: 15px;
+						margin-top: 0;
+						border-top: none;
+					">
 					This card, on its own qualifies the welder for 6 months from the Date
-					of test. Beynd this date welding records must be consulted to ensure
+					of test. Beyond this date, welding records must be consulted to ensure
 					the welder's qualification has been maintained.
 				</p>
 			</div>
@@ -363,22 +235,150 @@
 				/* Adjust the second value for vertical spacing */
 			}
 
-			#table-2 {
+			/* Dynamic Table Styles */
+			#dynamicTable {
 				border-collapse: separate;
 				border-spacing: 0;
+				width: 100%;
 			}
 
-			#table-2 td {
+			#dynamicTable td,
+			#dynamicTable th {
 				border: 2px black solid;
-				padding: 5px;
+				padding: 0;
+				position: relative;
 			}
 
-			td:nth-child(even) {
-				color: #14ab55;
-				/* Apply your styling for even rows */
+			#dynamicTable input {
+				width: 100%;
+				border: none;
+				padding: 8px;
+				box-sizing: border-box;
+				font-family: inherit;
+				font-weight: inherit;
+			}
+
+			#dynamicTable th input {
+				text-align: center;
+				font-weight: bold;
+				background: #f8f9fa;
+			}
+
+			/* Context Menu Styles */
+			.control-btn {
+				background: #14ab55;
+				color: white;
+				border: none;
+				width: 16px;
+				height: 16px;
+				font-size: 14px;
+				line-height: 14px;
+				cursor: pointer;
+				border-radius: 50%;
+				display: none; /* Hidden by default */
+				align-items: center;
+				justify-content: center;
+				position: absolute;
+				z-index: 10;
+			}
+
+			/* Position for Row Cells (First Column) */
+			.data-cell-first .control-btn {
+				top: 50%;
+				right: 5px;
+				left: auto;
+				bottom: auto;
+				transform: translateY(-50%);
+				margin: 0;
+			}
+
+			/* Show on hover */
+			.data-cell-first:hover .control-btn {
+				display: flex;
+			}
+
+			.dropdown-menu {
+				display: none;
+				position: absolute;
+				background: white;
+				border: 1px solid #ccc;
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+				z-index: 100;
+				min-width: 150px;
+				border-radius: 4px;
+				text-align: left;
+			}
+
+			.dropdown-menu button {
+				display: block;
+				width: 100%;
+				padding: 5px 10px;
+				border: none;
+				background: none;
+				text-align: left;
+				cursor: pointer;
+				font-size: 12px;
+			}
+
+			.dropdown-menu button:hover {
+				background-color: #f0f0f0;
+			}
+
+			.dropdown-menu button.delete-opt {
+				color: #dc3545;
+			}
+
+			@media print {
+				.control-btn,
+				.dropdown-menu {
+					display: none !important;
+				}
 			}
 		</style>
 	</body>
+
+	<!-- Server-side logic to prepare initial data -->
+	<% 
+	let initialTableData = null; 
+	// Handle tableData - it might be stored as string or object 
+	if (record.tableData) { 
+			let tableDataObj = null; 
+			if (typeof record.tableData === 'string') { 
+					try { 
+							tableDataObj = JSON.parse(record.tableData); 
+					} catch (e) { 
+							console.error('Error parsing tableData:', e); 
+					} 
+			} else if (typeof record.tableData === 'object') { 
+					tableDataObj = record.tableData; 
+			} 
+			
+			// Check if we have valid parsed data 
+			if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) { 
+					initialTableData = tableDataObj; 
+			} 
+	} 
+	
+	// If no valid tableData, migrate from legacy fields to 4-column layout
+	if (!initialTableData) { 
+			const legacyRows = [
+					["Card No", record.card_no || '', "WPS/PQR No.", record.wps_pqr_no || ''],
+					["Process", record.process || '', "Joint Type", record.joint_type || ''],
+					["Test Position", record.test_position || '', "Position Qualified", record.position_qualified || ''],
+					["Vertical Progression", record.vertical_progression || '', "Test Thickness", record.test_thickness || ''],
+					["Test Dia", record.test_dia || '', "Thickness Qualified", record.thickness_qualified || ''],
+					["P No Qualified", record.p_no_qualified || '', "Diameter Qualified", record.diameter_qualified || ''],
+					["F No Qualified", record.f_no_qualified || '', "Filler Metal Class", record.electrode_class_used || ''],
+					["Place of Issue", record.place_of_issue || '', "Test Method", record.test_method || ''],
+					["Date of Weld", record.date_of_test || '', "Date of Exp", record.date_of_expiry || '']
+			];
+			initialTableData = { headers: ["Parameter", "Value", "Parameter", "Value"], rows: legacyRows }; 
+	} 
+	%>
+	<!-- Output data as JSON for client-side use -->
+	<script id="initial-table-data" type="application/json">
+		<%- JSON.stringify(initialTableData) %>
+	</script>
 
 	<script>
 		/**
@@ -420,5 +420,144 @@
 				files.value = imageSrc;
 			}
 		};
+
+		// --- Dynamic Table Logic (Row Only) ---
+
+		// Parse table data from hidden JSON script
+		let tableData = null;
+		let headers = [];
+		let rows = [];
+
+		try {
+			const rawData = document.getElementById("initial-table-data").textContent;
+			tableData = JSON.parse(rawData);
+			if (tableData) {
+				headers = tableData.headers || ["Parameter", "Value", "Parameter", "Value"];
+				rows = tableData.rows || [];
+			}
+		} catch (e) {
+			console.error("Error parsing initial table data", e);
+		}
+
+		function renderTable() {
+			const thead = document.getElementById("tableHeaders");
+			const tbody = document.getElementById("tableBody");
+			const hiddenInput = document.getElementById("tableDataInput");
+
+			// Update hidden input for form submission
+			hiddenInput.value = JSON.stringify({ headers, rows });
+
+			// Render Headers - logic removed as per user request to hide headers
+			thead.innerHTML = "";
+			// headers.forEach((header, index) => { ... });
+
+			// Render Rows
+			tbody.innerHTML = "";
+			rows.forEach((row, rowIndex) => {
+				const tr = document.createElement("tr");
+
+				row.forEach((cellData, colIndex) => {
+					const td = document.createElement("td");
+					td.className = "data-cell";
+					if (colIndex === 0) td.classList.add("data-cell-first");
+
+					td.style.border = "2px black solid";
+					td.style.padding = "2px";
+
+					const input = document.createElement("input");
+					input.type = "text";
+					input.value = cellData;
+					input.onchange = (e) =>
+						updateCell(rowIndex, colIndex, e.target.value);
+
+					// Make 1st and 3rd labels bold
+					if (colIndex === 0 || colIndex === 2) {
+						input.style.fontWeight = "bold";
+					}
+
+					// Special Styling for Card No Value (Row 0, Col 1)
+					if (rowIndex === 0 && colIndex === 1) {
+						input.style.color = "#14ab55";
+						input.style.fontWeight = "bold";
+						input.readOnly = true;
+					}
+
+					td.appendChild(input);
+
+					// Context Menu for Row (Only in first column)
+					if (colIndex === 0) {
+						const menuBtn = document.createElement("div");
+						menuBtn.className = "control-btn";
+						menuBtn.innerHTML = "+";
+						menuBtn.onclick = (e) => showRowMenu(rowIndex, e);
+						td.appendChild(menuBtn);
+
+						const menu = document.createElement("div");
+						menu.id = `row-menu-${rowIndex}`;
+						menu.className = "dropdown-menu";
+						menu.innerHTML = `
+										<button onclick="addRowAt(${rowIndex}, 0)">Add Row Before</button>
+										<button onclick="addRowAt(${rowIndex}, 1)">Add Row After</button>
+										${
+											rows.length > 1
+												? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>`
+												: ""
+										}
+								`;
+						td.appendChild(menu);
+					}
+
+					tr.appendChild(td);
+				});
+				tbody.appendChild(tr);
+			});
+		}
+
+		function showRowMenu(index, event) {
+			event.stopPropagation();
+			hideMenus();
+			const menu = document.getElementById(`row-menu-${index}`);
+			menu.style.display = "block";
+
+			// Position menu: aligned to right edge, below cell content
+			menu.style.top = "100%";
+			menu.style.right = "0";
+			menu.style.left = "auto";
+			menu.style.zIndex = "101";
+
+			document.getElementById("click-overlay").style.display = "block";
+		}
+
+		function hideMenus() {
+			document
+				.querySelectorAll(".dropdown-menu")
+				.forEach((el) => (el.style.display = "none"));
+			document.getElementById("click-overlay").style.display = "none";
+		}
+
+		function addRowAt(index, offset) {
+			const newRow = new Array(headers.length).fill("");
+			const insertIndex = index + offset;
+			rows.splice(insertIndex, 0, newRow);
+			renderTable();
+		}
+
+		function deleteRow(index) {
+			if (confirm("Delete this row?")) {
+				rows.splice(index, 1);
+				renderTable();
+			}
+		}
+
+		function updateCell(rowIndex, colIndex, value) {
+			rows[rowIndex][colIndex] = value;
+			document.getElementById("tableDataInput").value = JSON.stringify({
+				headers,
+				rows,
+			});
+		}
+
+		// Initial render
+		document.addEventListener("DOMContentLoaded", renderTable);
 	</script>
 </html>
