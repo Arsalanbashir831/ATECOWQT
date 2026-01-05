@@ -11,7 +11,7 @@ async function computeOperatorNo(req, res, next) {
 		const last = await Operator.findOne().sort({ _id: -1 });
 		console.log('Last operator found:', last ? last.operatorNo : 'None');
 
-		// Derive a safe previous count, even if last.count is missing/invalid
+		//Derive a safe previous count, even if last.count is missing/invalid
 		let prevCount = 0;
 		if (last && Number.isFinite(Number(last.count))) {
 			prevCount = Number(last.count);
