@@ -23,16 +23,23 @@ async function computeOperatorNo(req, res, next) {
 		req.count = count;
 		// Always compute operatorNo for internal use (QR/storage)
 		req.operatorNo = req.operatorNo || `operator_${count}`;
+		// Auto-generate certificateNo in c-count format
+		req.certificateNo = `c-${count}`;
+
 		// Respect manual operatorId if provided; fallback to generated
 		if (!req.body) req.body = {};
 		req.operatorId = req.body.operatorId && req.body.operatorId.trim() !== ''
 			? req.body.operatorId.trim()
 			: `W-${count}`;
 		
+		// Inject auto-generated value into body
+		req.body.certificateNo = req.certificateNo;
+
 		console.log('Generated operator details:', {
 			count: req.count,
 			operatorNo: req.operatorNo,
-			operatorId: req.operatorId
+			operatorId: req.operatorId,
+			certificateNo: req.certificateNo
 		});
 		
 		next();
@@ -169,6 +176,7 @@ module.exports = (upload) => {
 					profilePic: profileImageUrl,
 					qrLink: qrUpload.secure_url,
 					...req.body,
+					certificateNo: req.certificateNo,
 					operatorId: req.body.operatorId && req.body.operatorId.trim() !== ''
 						? req.body.operatorId.trim()
 						: req.operatorId,
@@ -260,9 +268,10 @@ module.exports = (upload) => {
 				});
 				updates.qrLink = qrUpload.secure_url;
 
-				// 3) Preserve only count
+				// 3) Preserve count and certificateNo
 				const existing = await Operator.findOne({ operatorNo: operatorNo });
 				updates.count = existing.count;
+				updates.certificateNo = existing.certificateNo;
 
 				// 4) Apply the update
 				await Operator.findOneAndUpdate({ operatorNo: operatorNo }, updates, {
