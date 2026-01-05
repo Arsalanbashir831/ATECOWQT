@@ -268,10 +268,9 @@ module.exports = (upload) => {
 				});
 				updates.qrLink = qrUpload.secure_url;
 
-				// 3) Preserve count and certificateNo
+				// 3) Preserve count
 				const existing = await Operator.findOne({ operatorNo: operatorNo });
 				updates.count = existing.count;
-				updates.certificateNo = existing.certificateNo;
 
 				// 4) Apply the update
 				await Operator.findOneAndUpdate({ operatorNo: operatorNo }, updates, {
