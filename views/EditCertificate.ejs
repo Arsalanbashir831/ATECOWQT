@@ -20,6 +20,56 @@
     .hide-in-print {
       display: none;
     }
+    .control-btn, .dropdown-menu {
+      display: none !important;
+    }
+  }
+
+  /* Dynamic Table Logic Styles (Welder Card Style) */
+  .control-btn {
+    background: #14ab55;
+    color: white;
+    border: none;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+  .control-btn:hover {
+    transform: scale(1.1);
+  }
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    min-width: 150px;
+    border-radius: 4px;
+    text-align: left;
+  }
+  .dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .dropdown-menu button:hover {
+    background-color: #f0f0f0;
+  }
+  .dropdown-menu button.delete-opt {
+    color: #dc3545;
   }
 </style>
 
@@ -88,13 +138,16 @@
               value="<%=record.qualifcationStandard %>" name="qualifcationStandard" id=""></td>
 
         </tr>
-        <td style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Welder Id No</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" name="welderId"
-            value="<%= record.welderId %>" id=""></td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Date of<span
-            style="color:white;">-</span>Test</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text"
-            value="<%=record.weldDate %>" name="weldDate" id=""></td>
+        <tr>
+          <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Welder Id No</td>
+          <td style="border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" name="welderId"
+              value="<%= record.welderId %>" id=""></td>
+          <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Date of<span
+              style="color:white;">-</span>Test</td>
+          <td style="border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text"
+              value="<%=record.weldDate %>" name="weldDate" id=""></td>
+        </tr>
+        <div id="click-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 90;" onclick="hideMenus()"></div>
         <tr>
 
           <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Base Metal Specification
@@ -134,173 +187,305 @@
         </tr>
       </thead>
       </tbody>
-      <tbody style="text-align: center">
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Welder
-            Process(es)</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;"><input
-              value="<%=record.welderProcessActual %>" type="text" name="welderProcessActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.welderProcessRange %>" type="text" name="welderProcessRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Types of Welder (manual/semi auto)
-          </td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; "><input type="text"
-              value="<%=record.typesOfWeldersActual %>" name="typesOfWeldersActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.typesOfWeldersRange %>" type="text" name="typesOfWeldersRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Backing (With/without)</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text"
-              value="<%=record.brackingActual %>" name="brackingActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.brackingRange %>" type="text" name="brackingRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Types
-            of weld</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text"
-              value="<%=record.typesOfWieldActual %>" name="typesOfWieldActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.typesOfWieldRange %>" type="text" name="typesOfWieldRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black;padding: 4px; font-size: 12px; font-weight: bold;">Product
-            Types(Plate or Pipe)</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text"
-              value="<%=record.productTypeActual %>" name="productTypeActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"> <input
-              value="<%=record.productTypeRange %>" type="text" name="productTypeRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Diameter of Pipe</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.diameterOfPipeActual %>" type="text" name="diameterOfPipeActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              type="text" value="<%=record.diameterOfPipeRange %>" name="diameterOfPipeRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Base
-            Metal P Number to P Number</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.baseMetalp_pActual %>" type="text" name="baseMetalp_pActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.baseMetalp_pRange %>" type="text" name="baseMetalp_pRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Filler Metal or electrode specification
-          </td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.fillerMetalActual %>" type="text" name="fillerMetalActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.fillerMetalRange %>" type="text" name="fillerMetalRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Filler
-            Metal F-Number(S)</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.fillerMetalFNoActual %>" type="text" name="fillerMetalFNoActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.fillerMetalFNoRange %>" type="text" name="fillerMetalFNoRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Filer Metal addition/Deletion (GTAW/PAW)
-          </td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.fillerMetalAdditionActual %>" type="text" name="fillerMetalAdditionActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.fillerMetalAdditionRange %>" type="text" name="fillerMetalAdditionRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Consumable Insert (GTAW or PAW)</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.consumableInsertActual %>" type="text" name="consumableInsertActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.consumableInsertRange %>" type="text" name="consumableInsertRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">
-            Deposit thickness for each process
-          </td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.depositeThicknessActual %>" type="text" name="depositeThicknessActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.depositeThicknessRange %>" type="text" name="depositeThicknessRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Welding
-            position</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.welderPositionActual %>" type="text" name="welderPositionActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.welderPositionRange %>" type="text" name="welderPositionRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Vertical Progression</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.verticalProgressionActual %>" type="text" name="verticalProgressionActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.verticalProgressionRange %>" type="text" name="verticalProgressionRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Type
-            of Fuel Gas(OFW)</td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.typesOfFuelGasActual %>" type="text" name="typesOfFuelGasActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.typesOfFuelGasRange %>" type="text" name="typesOfFuelGasRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Insert gas backing(GTAW,PAW,GMAW)
-          </td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.insertGasBackingActual %>" type="text" name="insertGasBackingActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.insertGasBackingRange %>" type="text" name="insertGasBackingRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Transfer Mode (Spray, Globular, Short)
-          </td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.transferModelActual %>" type="text" name="transferModelActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.transferModelRange %>" type="text" name="transferModelRange" id=""></td>
-        </tr>
-        <tr>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-            Current Type/Polarity(AC,DCEP,DCEN)
-          </td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input
-              value="<%=record.currentTypePolarityActual %>" type="text" name="currentTypePolarityActual" id=""></td>
-          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input
-              value="<%=record.currentTypePolarityRange %>" type="text" name="currentTypePolarityRange" id=""></td>
-        </tr>
-        <% if (record.attributes && record.attributes.length> 0) { %>
+      <tbody style="text-align: center" id="dynamic-tbody">
+        <% if (record.attributes && record.attributes.length > 0 && record.attributes.some(a => a.key === "Welder Process(es)")) { %>
+          <% /* NEW UNIFIED FORMAT: All rows in attributes array */ %>
           <% record.attributes.forEach(function(attr) { %>
-            <tr>
-              <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                <input type="text" value="<%= attr.key %>" name="attrKeys">
+            <tr class="dynamic-row">
+              <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+                <input type="hidden" name="attrKeys" value="<%= attr.key %>">
+                <%= attr.key %>
+                <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+                <div class="dropdown-menu">
+                  <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                  <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                  <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+                </div>
               </td>
               <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                <input type="text" value="<%= attr.value %>" name="attrValues">
+                <input type="text" name="attrValues" value="<%= attr.value %>" style="width: 100%">
               </td>
               <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                <input type="text" value="<%= attr.range %>" name="attrRanges">
+                <input type="text" name="attrRanges" value="<%= attr.range %>" style="width: 100%">
               </td>
             </tr>
+          <% }); %>
+        <% } else { %>
+          <% /* LEGACY FORMAT */ %>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Welder Process(es)">
+              Welder Process(es)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;"><input value="<%=record.welderProcessActual %>" type="text" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.welderProcessRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Types of Welder (manual/semi auto)">
+              Types of Welder (manual/semi auto)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; "><input type="text" value="<%=record.typesOfWeldersActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.typesOfWeldersRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Backing (With/without)">
+              Backing (With/without)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.brackingActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.brackingRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Types of weld">
+              Types of weld
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.typesOfWieldActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.typesOfWieldRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Product Types(Plate or Pipe)">
+              Product Types(Plate or Pipe)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.productTypeActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.productTypeRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Diameter of Pipe">
+              Diameter of Pipe
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.diameterOfPipeActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input type="text" value="<%=record.diameterOfPipeRange %>" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Base Metal P Number to P Number">
+              Base Metal P Number to P Number
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.baseMetalp_pActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.baseMetalp_pRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Filler Metal or electrode specification">
+              Filler Metal or electrode specification
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.fillerMetalActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.fillerMetalRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Filler Metal F-Number(S)">
+              Filler Metal F-Number(S)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.fillerMetalFNoActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.fillerMetalFNoRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Filler Metal addition/Deletion (GTAW/PAW)">
+              Filler Metal addition/Deletion (GTAW/PAW)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.fillerMetalAdditionActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.fillerMetalAdditionRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Consumable Insert (GTAW or PAW)">
+              Consumable Insert (GTAW or PAW)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.consumableInsertActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.consumableInsertRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Deposit thickness for each process">
+              Deposit thickness for each process
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.depositeThicknessActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.depositeThicknessRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Welding position">
+              Welding position
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.welderPositionActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.welderPositionRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Vertical Progression">
+              Vertical Progression
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.verticalProgressionActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.verticalProgressionRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Type of Fuel Gas(OFW)">
+              Type of Fuel Gas(OFW)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.typesOfFuelGasActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.typesOfFuelGasRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Insert gas backing(GTAW,PAW,GMAW)">
+              Insert gas backing(GTAW,PAW,GMAW)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.insertGasBackingActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.insertGasBackingRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Transfer Mode (Spray, Globular, Short)">
+              Transfer Mode (Spray, Globular, Short)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.transferModelActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.transferModelRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <tr>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
+              <input type="hidden" name="attrKeys" value="Current Type/Polarity(AC,DCEP,DCEN)">
+              Current Type/Polarity(AC,DCEP,DCEN)
+              <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+              <div class="dropdown-menu">
+                <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+              </div>
+            </td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"><input type="text" value="<%=record.currentTypePolarityActual %>" name="attrValues" id=""></td>
+            <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"><input value="<%=record.currentTypePolarityRange %>" type="text" name="attrRanges" id=""></td>
+          </tr>
+          <% if (record.attributes && record.attributes.length > 0) { %>
+            <% record.attributes.forEach(function(attr) { %>
+              <tr class="dynamic-row">
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; position: relative;">
+                  <input type="text" value="<%= attr.key %>" name="attrKeys" style="width: calc(100% - 30px)">
+                  <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+                  <div class="dropdown-menu">
+                    <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+                    <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+                    <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+                  </div>
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                  <input type="text" value="<%= attr.value %>" name="attrValues" style="width: 100%">
+                </td>
+                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                  <input type="text" value="<%= attr.range %>" name="attrRanges" style="width: 100%">
+                </td>
+              </tr>
             <% }); %>
-              <% } %>
+          <% } %>
+        <% } %>
 
                 <% if (record.attr1key) { %>
                   <tr>
@@ -333,16 +518,16 @@
                       </tr>
                       <% } %>
 
-                        <tr>
+                        <tr id="add-attributes-row">
                           <td style="text-align: left; border: 1px solid black; padding: 4px; font-weight: bold;">
                             Add More Attributes
                           </td>
                           <td style="text-align: left; border: 1px solid black; padding: 4px;" colspan="3">
-                            <input type="button" value="Add New Attribute" id="btn-add-attr" onclick="change()">
+                            <input type="button" value="Add New Attribute" id="btn-add-attr" onclick="addNewRow()">
                           </td>
                         </tr>
+                      </tbody>
 
-      </tbody>
       <table border style="width: 100%;">
         <thead>
           <tr>
@@ -494,23 +679,68 @@
 </body>
 
 <script>
-  function change() {
-    const btn = document.getElementById("btn-add-attr");
-    const buttonRow = btn.closest("tr");
-
-    const newRow = `<tr>
-        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-          <input type="text" placeholder="Attribute Name" name="attrKeys"> 
+  function createRowHtml() {
+    return `
+      <tr class="dynamic-row">
+        <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; position: relative;">
+          <input type="text" placeholder="Attribute Name" name="attrKeys" style="width: calc(100% - 30px)"> 
+          <div class="control-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);" onclick="showRowMenu(this, event)">+</div>
+          <div class="dropdown-menu">
+            <button type="button" onclick="addRowAt(this, 0)">Add Row Before</button>
+            <button type="button" onclick="addRowAt(this, 1)">Add Row After</button>
+            <button type="button" class="delete-opt" onclick="deleteRow(this)">Delete Row</button>
+          </div>
         </td>
         <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"> 
-          <input type="text" placeholder="Value" name="attrValues">
+          <input type="text" placeholder="Actual Value" name="attrValues" style="width: 100%">
         </td>
         <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2"> 
-          <input type="text" placeholder="Range" name="attrRanges">
+          <input type="text" placeholder="Range Qualified" name="attrRanges" style="width: 100%">
         </td>
       </tr>`;
+  }
 
-    buttonRow.insertAdjacentHTML('beforebegin', newRow);
+  function addNewRow() {
+    const tbody = document.getElementById("dynamic-tbody");
+    const lastRow = document.getElementById("add-attributes-row");
+    lastRow.insertAdjacentHTML('beforebegin', createRowHtml());
+  }
+
+  function showRowMenu(btn, event) {
+    event.stopPropagation();
+    hideMenus();
+    const menu = btn.nextElementSibling;
+    menu.style.display = "block";
+    
+    // Position menu
+    menu.style.top = "100%";
+    menu.style.right = "0";
+    menu.style.left = "auto";
+    
+    document.getElementById("click-overlay").style.display = "block";
+  }
+
+  function hideMenus() {
+    document.querySelectorAll(".dropdown-menu").forEach((el) => (el.style.display = "none"));
+    document.getElementById("click-overlay").style.display = "none";
+  }
+
+  function addRowAt(btn, offset) {
+    const row = btn.closest("tr");
+    if (offset === 0) {
+      row.insertAdjacentHTML('beforebegin', createRowHtml());
+    } else {
+      row.insertAdjacentHTML('afterend', createRowHtml());
+    }
+    hideMenus();
+  }
+
+  function deleteRow(btn) {
+    if (confirm("Delete this row?")) {
+      const row = btn.closest("tr");
+      row.remove();
+    }
+    hideMenus();
   }
 </script>
 
