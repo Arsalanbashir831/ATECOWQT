@@ -3,19 +3,20 @@ const certificateModel = mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: function(date) {
+        get: function (date) {
             return date.toLocaleDateString('en-US');
         }
     },
     count: Number,
     certificateNo: String,
+    tempCertificateNo: String,
     iqamaPic: String,
     profilePic: String,
     qrLink: String,
     clientName: String,
     supervisorName: String,
     welderName: String,
-    welderInspector:String,
+    welderInspector: String,
     identification_wps: String,
     iqamaNo: String,
     qualifcationStandard: String,
@@ -28,7 +29,7 @@ const certificateModel = mongoose.Schema({
     fillerMetalElectrodeClass: String,
     weldType: String,
     weldDate: String,
-    year:String,
+    year: String,
 
     welderProcessActual: String,
     welderProcessRange: String,
@@ -109,7 +110,7 @@ const certificateModel = mongoose.Schema({
         range: String
     }]
 
-    
+
 })
 
 const Certificate = mongoose.model("Certificate", certificateModel);

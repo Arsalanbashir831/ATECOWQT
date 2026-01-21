@@ -169,6 +169,7 @@ module.exports = (upload) => {
 					attributes,
 					count: req.count,
 					certificateNo: req.certificateNo,
+					tempCertificateNo: req.body.tempCertificateNo || req.certificateNo,
 					welderId: req.welderId,
 					profilePic: profileImageUrl,
 					qrLink: qrUpload.secure_url,
@@ -254,6 +255,9 @@ module.exports = (upload) => {
 				}
 
 				const updates = { ...req.body, attributes, certificateNo: certNo };
+				if (!updates.tempCertificateNo) {
+					updates.tempCertificateNo = certNo;
+				}
 
 				// 1) New profile? storage will overwrite the old asset with the same public_id:
 				if (req.file) {
