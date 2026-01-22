@@ -11,78 +11,77 @@
 <body style="width: 216mm; height: 279mm; margin: auto">
 
   <form action="/card/insert" method="post" enctype="multipart/form-data">
-  <!-- Hidden input to store JSON data -->
-  <input type="hidden" name="tableData" id="tableDataInput" />
-  <div class="card">
-    <div class="flex-between">
-      <img  style="width: 150px; height: 100px;" class="logo" src="/images/logo.png" alt="logo" />
-      <div style="text-align: center; color: #14ab55">
-        <p style="text-transform: uppercase">
-          Arabian Testing Evolution Company (ATECO)
-        </p>
-        <p style="margin: 8px 0; font-size: 13px">
-          شارع الزین العابدین, Ar Rabiyah, Dammam 32437
-        </p>
-        <p style="text-transform: uppercase">Welder Qualification Card</p>
+    <!-- Hidden input to store JSON data -->
+    <input type="hidden" name="tableData" id="tableDataInput" />
+    <div class="card">
+      <div class="flex-between">
+        <img style="width: 150px; height: 100px;" class="logo" src="/images/logo.png" alt="logo" />
+        <div style="text-align: center; color: #14ab55">
+          <p style="text-transform: uppercase">
+            Arabian Testing Evolution Company (ATECO)
+          </p>
+          <p style="margin: 8px 0; font-size: 13px">
+            شارع الزین العابدین, Ar Rabiyah, Dammam 32437
+          </p>
+          <p style="text-transform: uppercase">Welder Qualification Card</p>
+        </div>
+        <!-- <img style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
       </div>
-      <!-- <img style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
-    </div>
-    <div>
-      <label style=" cursor: pointer; background-color: rgb(4, 111, 0); color: white; padding: 5px;" for="files"
-        class="btn">Select Image</label>
-      <input  id="files" style="visibility:hidden;" name="card" type="file" accept="image/jpg" onchange="previewImage(event)">
+      <div>
+        <label style=" cursor: pointer; background-color: rgb(4, 111, 0); color: white; padding: 5px;" for="files"
+          class="btn">Select Image</label>
+        <input id="files" style="visibility:hidden;" name="card" type="file" accept="image/jpg"
+          onchange="previewImage(event)">
 
-    </div>
-    <br>
-    <div class="flex">
-      <img  id="preview-selected-image" style="width: 200px; height: 200px;" class="person-img"/>
-      <table id="table-1">
-        <tbody>
-          <tr>
-            <td>Company</td>
-            <td>: <input type ="text" name="company"/> </td>
-          </tr>
-          <tr>
-            <td>Welder Name</td>
-            <td>:<input type="text" name="welder_name"  id=""></td>
-          </tr>
-          <tr>
-            <td>Iqama No</td>
-            <td>:<input type="text" name="iqama_no" id=""></td>
-          </tr>
-          <tr>
+      </div>
+      <br>
+      <div class="flex">
+        <img id="preview-selected-image" style="width: 200px; height: 200px;" class="person-img" />
+        <table id="table-1">
+          <tbody>
+            <tr>
+              <td>Company</td>
+              <td>: <input type="text" name="company" /> </td>
+            </tr>
+            <tr>
+              <td>Welder Name</td>
+              <td>:<input type="text" name="welder_name" id=""></td>
+            </tr>
+            <tr>
+              <td>Iqama No</td>
+              <td>:<input type="text" name="iqama_no" id=""></td>
+            </tr>
+            <tr>
               <td>Welder ID</td>
               <td>: <input type="text" name="welder_id" id=""></td>
             </tr>
-          <!-- <tr>
-              <td>Card No</td>
-              <td>: CAL-2023-1213</td>
-            </tr> -->
-        </tbody>
-      </table>
-    </div>
-    <div class="flex-between" style="margin-top: 20px">
-      <div>
-        <!-- <p style="color: gray">Saroj Kumar Mani</p> -->
-        <input type="text" name="authorized_by" id="">
-        <p style="margin-top: 3px">Authorized by</p>
+            <!-- <tr>
+                <td>Card No</td>
+                <td>: CAL-2023-1213</td>
+              </tr> -->
+          </tbody>
+        </table>
       </div>
-      <div>
-        <!-- <p style="color: gray">Thafseer Thenisseri Kandy</p> -->
-        <input type="text" name="welding_inspector" id="">
-        <p style="margin-top: 3px">Welding Inspector</p>
+      <div class="flex-between" style="margin-top: 20px">
+        <div>
+          <!-- <p style="color: gray">Saroj Kumar Mani</p> -->
+          <input type="text" name="authorized_by" id="">
+          <p style="margin-top: 3px">Authorized by</p>
+        </div>
+        <div>
+          <!-- <p style="color: gray">Thafseer Thenisseri Kandy</p> -->
+          <input type="text" name="welding_inspector" id="">
+          <p style="margin-top: 3px">Welding Inspector</p>
+        </div>
       </div>
+      <p style="margin-top: 8px; font-size: 14px">
+        This is to certify that this person has been tested in accordance with
+        requirements of <span style="color: #14ab55"> <input type="text" name="year" id=""></span>
+      </p>
     </div>
-    <p style="margin-top: 8px; font-size: 14px">
-      This is to certify that this person has been tested in accordance with
-      requirements of <span style="color: #14ab55"> <input type="text" name="year" id=""></span>
-    </p>
-  </div>
-  <div style="border: 2px black solid; margin-top: 10px">
-    <!-- Global Click Listener to close menus -->
-    <div
-      id="click-overlay"
-      style="
+    <div style="border: 2px black solid; margin-top: 10px">
+      <!-- Global Click Listener to close menus -->
+      <div id="click-overlay" style="
         display: none;
         position: fixed;
         top: 0;
@@ -90,41 +89,36 @@
         width: 100%;
         height: 100%;
         z-index: 90;
-      "
-      onclick="hideMenus()"></div>
+      " onclick="hideMenus()"></div>
 
-    <div style="overflow-x: auto; padding-bottom: 50px">
-      <table
-        id="dynamicTable"
-        style="width: 100%; border-collapse: separate; border-spacing: 0">
-        <thead>
-          <tr
-            id="tableHeaders"
-            style="background-color: #f8f9fa; font-weight: bold">
-            <!-- Headers will be injected here -->
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <!-- Rows will be injected here -->
-        </tbody>
-      </table>
-    </div>
+      <div style="overflow-x: auto; padding-bottom: 50px">
+        <table id="dynamicTable" style="width: 100%; border-collapse: separate; border-spacing: 0">
+          <thead>
+            <tr id="tableHeaders" style="background-color: #f8f9fa; font-weight: bold">
+              <!-- Headers will be injected here -->
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Rows will be injected here -->
+          </tbody>
+        </table>
+      </div>
 
-    <p
-      style="
+      <p style="
         border: 2px black solid;
         padding: 5px;
         font-size: 15px;
         margin-top: 0;
         border-top: none;
       ">
-      This card, on its own qualifies the welder for 6 months from the Date of
-      test. Beyond this date, welding continuity records shall be consulted to ensure the welder's qualification has been maintained.
-    </p>
-  </div>
+        This card, on its own qualifies the welder for 6 months from the Date of
+        test. Beyond this date, welding continuity records shall be consulted to ensure the welder's qualification has
+        been maintained.
+      </p>
+    </div>
 
-  <input type="submit" value="Saves"/>
-</form>
+    <input type="submit" value="Saves" />
+  </form>
 
   <style>
     * {
@@ -215,7 +209,8 @@
       line-height: 14px;
       cursor: pointer;
       border-radius: 50%;
-      display: none; /* Hidden by default */
+      display: none;
+      /* Hidden by default */
       align-items: center;
       justify-content: center;
       position: absolute;
@@ -269,6 +264,7 @@
     }
 
     @media print {
+
       .control-btn,
       .dropdown-menu {
         display: none !important;
@@ -282,7 +278,7 @@
   /**
  * Create an arrow function that will be called when an image is selected.
  */
-const previewImage = (event) => {
+  const previewImage = (event) => {
     /**
      * Get the selected files.
      */
@@ -295,165 +291,164 @@ const previewImage = (event) => {
      * If at least one image is selected, then proceed to display the preview.
      */
     if (imageFilesLength > 0) {
-        /**
-         * Get the image path.
-         */
-        const imageSrc = URL.createObjectURL(imageFiles[0]);
-        /**
-         * Select the image preview element.
-         */
-        const imagePreviewElement = document.querySelector("#preview-selected-image");
-        /**
-         * Assign the path to the image preview element.
-         */
-        imagePreviewElement.src = imageSrc;
-        /**
-         * Show the element by changing the display value to "block".
-         */
-        imagePreviewElement.style.display = "block";
+      /**
+       * Get the image path.
+       */
+      const imageSrc = URL.createObjectURL(imageFiles[0]);
+      /**
+       * Select the image preview element.
+       */
+      const imagePreviewElement = document.querySelector("#preview-selected-image");
+      /**
+       * Assign the path to the image preview element.
+       */
+      imagePreviewElement.src = imageSrc;
+      /**
+       * Show the element by changing the display value to "block".
+       */
+      imagePreviewElement.style.display = "block";
     }
-};
+  };
 
-    // --- Dynamic Table Logic (Row Add/Delete Only) ---
+  // --- Dynamic Table Logic (Row Add/Delete Only) ---
 
-    // 4-Column Layout: Parameter, Value, Parameter, Value
-    let headers = ["Parameter", "Value", "Parameter", "Value"];
-    
-    // Initialize with standard fields mapped to 4 columns
-    let rows = [
-      ["Card No", "", "WPS/PQR No.", ""],
-      ["Process", "", "Joint Type", ""],
-      ["Test Position", "", "Position Qualified", ""],
-      ["Vertical Progression", "", "Test Thickness", ""],
-      ["Test Dia", "", "Thickness Qualified", ""],
-      ["P No Qualified", "", "Diameter Qualified", ""],
-      ["F No Qualified", "", "Filler Metal Class", ""],
-      ["Place of Issue", "", "Test Method", ""],
-      ["Date of Weld", "", "Date of Exp", ""]
-    ];
+  // 4-Column Layout: Parameter, Value, Parameter, Value
+  let headers = ["Parameter", "Value", "Parameter", "Value"];
 
-    function renderTable() {
-      const thead = document.getElementById("tableHeaders");
-      const tbody = document.getElementById("tableBody");
-      const hiddenInput = document.getElementById("tableDataInput");
+  // Initialize with standard fields mapped to 4 columns
+  let rows = [
+    ["Card No", "", "WPS/PQR No.", ""],
+    ["Process", "", "Joint Type", ""],
+    ["Test Position", "", "Position Qualified", ""],
+    ["Vertical Progression", "", "Test Thickness", ""],
+    ["Test Dia", "", "Thickness Qualified", ""],
+    ["P No Qualified", "", "Diameter Qualified", ""],
+    ["F No Qualified", "", "Filler Metal Class", ""],
+    ["Place of Issue", "", "Test Method", ""],
+    ["Date of Weld", "", "Date of Exp", ""]
+  ];
 
-      // Update hidden input for form submission
-      hiddenInput.value = JSON.stringify({ headers, rows });
+  function renderTable() {
+    const thead = document.getElementById("tableHeaders");
+    const tbody = document.getElementById("tableBody");
+    const hiddenInput = document.getElementById("tableDataInput");
 
-      // Render Headers - logic removed as per user request to hide headers
-      thead.innerHTML = ""; 
-      // headers.forEach((header, index) => { ... }); // Removed
+    // Update hidden input for form submission
+    hiddenInput.value = JSON.stringify({ headers, rows });
 
-      // Render Rows
-      tbody.innerHTML = "";
-      rows.forEach((row, rowIndex) => {
-        const tr = document.createElement("tr");
+    // Render Headers - logic removed as per user request to hide headers
+    thead.innerHTML = "";
+    // headers.forEach((header, index) => { ... }); // Removed
 
-        row.forEach((cellData, colIndex) => {
-          const td = document.createElement("td");
-          td.className = "data-cell";
-          if (colIndex === 0) td.classList.add("data-cell-first");
+    // Render Rows
+    tbody.innerHTML = "";
+    rows.forEach((row, rowIndex) => {
+      const tr = document.createElement("tr");
 
-          td.style.border = "2px black solid";
-          td.style.padding = "2px";
+      row.forEach((cellData, colIndex) => {
+        const td = document.createElement("td");
+        td.className = "data-cell";
+        if (colIndex === 0) td.classList.add("data-cell-first");
 
-          const input = document.createElement("input");
-          input.type = "text";
-          input.value = cellData;
-          input.onchange = (e) =>
-            updateCell(rowIndex, colIndex, e.target.value);
+        td.style.border = "2px black solid";
+        td.style.padding = "2px";
 
-          // Make 1st and 3rd columns bold (Labels)
-          if (colIndex === 0 || colIndex === 2) {
-             input.style.fontWeight = "bold";
-          }
-          
-          // Special Styling for Card No Value (Row 0, Col 1)
-          if (rowIndex === 0 && colIndex === 1) {
-             input.style.color = "#14ab55";
-             input.style.fontWeight = "bold";
-             // User said "can't write there"
-             input.readOnly = true; 
-          }
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = cellData;
+        input.oninput = (e) =>
+          updateCell(rowIndex, colIndex, e.target.value);
 
-          td.appendChild(input);
+        // Make 1st and 3rd columns bold (Labels)
+        if (colIndex === 0 || colIndex === 2) {
+          input.style.fontWeight = "bold";
+        }
 
-          // Context Menu for Row (Only in first column)
-          if (colIndex === 0) {
-            const menuBtn = document.createElement("div");
-            menuBtn.className = "control-btn";
-            menuBtn.innerHTML = "+";
-            menuBtn.onclick = (e) => showRowMenu(rowIndex, e);
-            td.appendChild(menuBtn);
+        // Special Styling for Card No Value (Row 0, Col 1)
+        if (rowIndex === 0 && colIndex === 1) {
+          input.style.color = "#14ab55";
+          input.style.fontWeight = "bold";
+          // User said "can't write there" (now allowing it)
+          // input.readOnly = true; 
+        }
 
-            const menu = document.createElement("div");
-            menu.id = `row-menu-${rowIndex}`;
-            menu.className = "dropdown-menu";
-            menu.innerHTML = `
+        td.appendChild(input);
+
+        // Context Menu for Row (Only in first column)
+        if (colIndex === 0) {
+          const menuBtn = document.createElement("div");
+          menuBtn.className = "control-btn";
+          menuBtn.innerHTML = "+";
+          menuBtn.onclick = (e) => showRowMenu(rowIndex, e);
+          td.appendChild(menuBtn);
+
+          const menu = document.createElement("div");
+          menu.id = `row-menu-${rowIndex}`;
+          menu.className = "dropdown-menu";
+          menu.innerHTML = `
                     <button onclick="addRowAt(${rowIndex}, 0)">Add Row Before</button>
                     <button onclick="addRowAt(${rowIndex}, 1)">Add Row After</button>
-                    ${
-                      rows.length > 1
-                        ? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>`
-                        : ""
-                    }
+                    ${rows.length > 1
+              ? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>`
+              : ""
+            }
                 `;
-            td.appendChild(menu);
-          }
+          td.appendChild(menu);
+        }
 
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
+        tr.appendChild(td);
       });
-    }
+      tbody.appendChild(tr);
+    });
+  }
 
-    function showRowMenu(index, event) {
-      event.stopPropagation();
-      hideMenus();
-      const menu = document.getElementById(`row-menu-${index}`);
-      menu.style.display = "block";
+  function showRowMenu(index, event) {
+    event.stopPropagation();
+    hideMenus();
+    const menu = document.getElementById(`row-menu-${index}`);
+    menu.style.display = "block";
 
-      // Position menu: aligned to right edge, below cell content
-      menu.style.top = "100%";
-      menu.style.right = "0";
-      menu.style.left = "auto";
-      menu.style.zIndex = "101";
+    // Position menu: aligned to right edge, below cell content
+    menu.style.top = "100%";
+    menu.style.right = "0";
+    menu.style.left = "auto";
+    menu.style.zIndex = "101";
 
-      document.getElementById("click-overlay").style.display = "block";
-    }
+    document.getElementById("click-overlay").style.display = "block";
+  }
 
-    function hideMenus() {
-      document
-        .querySelectorAll(".dropdown-menu")
-        .forEach((el) => (el.style.display = "none"));
-      document.getElementById("click-overlay").style.display = "none";
-    }
+  function hideMenus() {
+    document
+      .querySelectorAll(".dropdown-menu")
+      .forEach((el) => (el.style.display = "none"));
+    document.getElementById("click-overlay").style.display = "none";
+  }
 
-    function addRowAt(index, offset) {
-      // Create new row with same number of columns (4)
-      const newRow = new Array(headers.length).fill(""); 
-      const insertIndex = index + offset;
-      rows.splice(insertIndex, 0, newRow);
+  function addRowAt(index, offset) {
+    // Create new row with same number of columns (4)
+    const newRow = new Array(headers.length).fill("");
+    const insertIndex = index + offset;
+    rows.splice(insertIndex, 0, newRow);
+    renderTable();
+  }
+
+  function deleteRow(index) {
+    if (confirm("Delete this row?")) {
+      rows.splice(index, 1);
       renderTable();
     }
+  }
 
-    function deleteRow(index) {
-      if (confirm("Delete this row?")) {
-        rows.splice(index, 1);
-        renderTable();
-      }
-    }
+  function updateCell(rowIndex, colIndex, value) {
+    rows[rowIndex][colIndex] = value;
+    document.getElementById("tableDataInput").value = JSON.stringify({
+      headers,
+      rows,
+    });
+  }
 
-    function updateCell(rowIndex, colIndex, value) {
-      rows[rowIndex][colIndex] = value;
-      document.getElementById("tableDataInput").value = JSON.stringify({
-        headers,
-        rows,
-      });
-    }
-
-    // Initial render
-    document.addEventListener("DOMContentLoaded", renderTable);
+  // Initial render
+  document.addEventListener("DOMContentLoaded", renderTable);
 </script>
 
 </html>

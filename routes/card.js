@@ -52,23 +52,42 @@ module.exports = (upload) => {
 				if (cardData.tableData && typeof cardData.tableData === 'string') {
 					try {
 						cardData.tableData = JSON.parse(cardData.tableData);
-            // Inject the generated Card No into the table (Row 0, Col 1)
-            if (cardData.tableData.rows && cardData.tableData.rows.length > 0) {
-                 cardData.tableData.rows[0][1] = req.card_no;
-            }
 					} catch (e) {
 						console.error('Failed to parse tableData', e);
 					}
 				}
+
+				// Source of truth for Card No is the table row (Row 0, Col 1)
+				let tempCardNoFromTable = (cardData.tableData && cardData.tableData.rows && cardData.tableData.rows.length > 0)
+					? cardData.tableData.rows[0][1]
+					: null;
+
+				console.log('Insert Card - tempCardNo from table:', tempCardNoFromTable);
+
+				// Use user-provided tempCardNo as fallback if table is empty
+				let tempCardNo = (tempCardNoFromTable && tempCardNoFromTable.trim() !== "")
+					? tempCardNoFromTable
+					: req.card_no;
+
+				console.log('Insert Card - final tempCardNo:', tempCardNo);
+
 
 				const card = await Card.create({
 					...cardData,
 					tableData: cardData.tableData,
 					count: req.count,
 					card_no: req.card_no,
+					tempCardNo: tempCardNo,
 					image: imageUrl,
 					qr: qrUpload.secure_url,
 				});
+
+				// Final check: Ensure the table actually shows the final tempCardNo
+				if (card.tableData && card.tableData.rows && card.tableData.rows.length > 0) {
+					card.tableData.rows[0][1] = tempCardNo;
+					card.markModified('tableData'); // Essential for Mixed types
+					await card.save();
+				}
 
 				res.render("viewCard", { record: card });
 			} catch (err) {
@@ -131,13 +150,29 @@ module.exports = (upload) => {
 				if (updates.tableData && typeof updates.tableData === 'string') {
 					try {
 						updates.tableData = JSON.parse(updates.tableData);
-            // Inject the Card No into the table (Row 0, Col 1) to ensure consistency
-            if (updates.tableData.rows && updates.tableData.rows.length > 0) {
-                 updates.tableData.rows[0][1] = cn;
-            }
 					} catch (e) {
 						console.error('Failed to parse tableData', e);
 					}
+				}
+
+				// Source of truth for Card No is the table row (Row 0, Col 1)
+				let tempCardNoFromTable = (updates.tableData && updates.tableData.rows && updates.tableData.rows.length > 0)
+					? updates.tableData.rows[0][1]
+					: null;
+
+				console.log('Update Card - tempCardNo from table:', tempCardNoFromTable);
+
+				let tempCardNo = (tempCardNoFromTable && tempCardNoFromTable.trim() !== "")
+					? tempCardNoFromTable
+					: cn;
+
+				console.log('Update Card - final tempCardNo:', tempCardNo);
+
+				updates.tempCardNo = tempCardNo;
+
+				// Ensure the table actually shows the final tempCardNo
+				if (updates.tableData && updates.tableData.rows && updates.tableData.rows.length > 0) {
+					updates.tableData.rows[0][1] = tempCardNo;
 				}
 
 				await Card.findOneAndUpdate({ card_no: cn }, updates, { new: true });

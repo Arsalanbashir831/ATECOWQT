@@ -798,6 +798,7 @@
                                 <tr>
                                     <th>Index No</th>
                                     <th>Issued In</th>
+                                    <th>Card No</th>
                                     <th>Welder ID</th>
                                     <th>Welder Name</th>
                                     <th>Actions</th>
@@ -811,6 +812,9 @@
                                         </td>
                                         <td>
                                             <%= card.createdAt %>
+                                        </td>
+                                        <td>
+                                            <%= card.tempCardNo || card.card_no %>
                                         </td>
                                         <td>
                                             <%= card.welder_id %>

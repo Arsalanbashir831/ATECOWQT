@@ -1,148 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<!-- <link rel="stylesheet" href="style.css" /> -->
-		<title>Document</title>
-	</head>
 
-	<body style="width: 216mm; height: 279mm; margin: auto">
-		<form
-			action="/card/update/<%= record.card_no %>"
-			method="POST"
-			enctype="multipart/form-data">
-			<input type="hidden" name="tableData" id="tableDataInput" />
-			<div class="card">
-				<div class="flex-between">
-					<img
-						style="width: 150px; height: 100px"
-						class="logo"
-						src="/images/logo.png"
-						alt="logo" />
-					<div style="text-align: center; color: #14ab55">
-						<p style="text-transform: uppercase">
-							Ateco Arabian Testing Evolution
-						</p>
-						<p style="margin: 8px 0; font-size: 13px">
-							شارع الزین العابدین, Ar Rabiyah, Dammam 32437
-						</p>
-						<p style="text-transform: uppercase">Welder Qualification Card</p>
-					</div>
-					<!-- <img  style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<!-- <link rel="stylesheet" href="style.css" /> -->
+	<title>Document</title>
+</head>
+
+<body style="width: 216mm; height: 279mm; margin: auto">
+	<form action="/card/update/<%= record.card_no %>" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="tableData" id="tableDataInput" />
+		<div class="card">
+			<div class="flex-between">
+				<img style="width: 150px; height: 100px" class="logo" src="/images/logo.png" alt="logo" />
+				<div style="text-align: center; color: #14ab55">
+					<p style="text-transform: uppercase">
+						Ateco Arabian Testing Evolution
+					</p>
+					<p style="margin: 8px 0; font-size: 13px">
+						شارع الزین العابدین, Ar Rabiyah, Dammam 32437
+					</p>
+					<p style="text-transform: uppercase">Welder Qualification Card</p>
 				</div>
-				<div>
-					<label
-						style="
+				<!-- <img  style="width: 100px; height: 100px;" class="qrcode" src="qr.jpg" alt="QR Code" /> -->
+			</div>
+			<div>
+				<label style="
 							cursor: pointer;
 							background-color: rgb(4, 111, 0);
 							color: white;
 							padding: 5px;
-						"
-						for="files"
-						class="btn"
-						>Select Image</label
-					>
-					<input
-						id="files"
-						value="/<%= record.card_no %>/<%= record.image %>"
-						style="visibility: hidden"
-						name="card"
-						type="file"
-						accept="image/jpg"
-						onchange="previewImage(event)" />
-				</div>
-				<br />
-				<div class="flex">
-					<img
-						src="<%= record.image %>"
-						alt="Welder photo"
-						class="person-img" />
-					<table id="table-1">
-						<tbody>
-							<tr>
-								<td>Company</td>
-								<td>
-									:
-									<input
-										type="text"
-										name="company"
-										value="<%=record.company %>" />
-								</td>
-							</tr>
-							<tr>
-								<td>Welder Name</td>
-								<td>
-									:<input
-										type="text"
-										name="welder_name"
-										value="<%=record.welder_name %>"
-										id="" />
-								</td>
-							</tr>
-							<tr>
-								<td>Iqama/Id No:</td>
-								<td>
-									:<input
-										type="text"
-										name="iqama_no"
-										value="<%=record.iqama_no  %>"
-										id="" />
-								</td>
-							</tr>
-							<tr>
-								<td>Welder ID</td>
-								<td>
-									:<input 
-										type="text"
-										name="welder_id"
-										value="<%=record.welder_id %>"
-										id="" />
-								</td>
-							</tr>
-							<!-- <tr>
-              <td>Welder ID</td>
-              <td>: AT-02</td>
-            </tr> -->
-							<!-- <tr>
-              <td>Card No</td>
-              <td>: CAL-2023-1213</td>
-            </tr> -->
-						</tbody>
-					</table>
-				</div>
-				<div class="flex-between" style="margin-top: 20px">
-					<div>
-						<input
-							type="text"
-							value="<%=record.authorized_by %>"
-							name="authorized_by"
-							id="" />
-						<p style="margin-top: 3px">Authorized by</p>
-					</div>
-					<div>
-						<input
-							type="text"
-							value="<%=record.welding_inspector %>"
-							name="welding_inspector"
-							id="" />
-						<p style="margin-top: 3px">Welding Inspector</p>
-					</div>
-				</div>
-				<p style="margin-top: 8px; font-size: 14px">
-					This is to certify that this person has been tested in accordance with
-					requirements of
-					<span style="color: #14ab55"
-						>ASME SEC IX -
-						<input value="<%=record.year %>" type="text" name="year" id=""
-					/></span>
-				</p>
+						" for="files" class="btn">Select Image</label>
+				<input id="files" value="/<%= record.card_no %>/<%= record.image %>" style="visibility: hidden"
+					name="card" type="file" accept="image/jpg" onchange="previewImage(event)" />
 			</div>
-			<div style="border: 2px black solid; margin-top: 10px">
-				<!-- Global Click Listener to close menus -->
-				<div
-					id="click-overlay"
-					style="
+			<br />
+			<div class="flex">
+				<img src="<%= record.image %>" alt="Welder photo" class="person-img" />
+				<table id="table-1">
+					<tbody>
+						<tr>
+							<td>Company</td>
+							<td>
+								:
+								<input type="text" name="company" value="<%=record.company %>" />
+							</td>
+						</tr>
+						<tr>
+							<td>Welder Name</td>
+							<td>
+								:<input type="text" name="welder_name" value="<%=record.welder_name %>" id="" />
+							</td>
+						</tr>
+						<tr>
+							<td>Iqama/Id No:</td>
+							<td>
+								:<input type="text" name="iqama_no" value="<%=record.iqama_no  %>" id="" />
+							</td>
+						</tr>
+						<tr>
+							<td>Welder ID</td>
+							<td>
+								:<input type="text" name="welder_id" value="<%=record.welder_id %>" id="" />
+							</td>
+						</tr>
+						<!-- <tr>
+                <td>Card No</td>
+                <td>: <%= record.tempCardNo || record.card_no %></td>
+              </tr> -->
+					</tbody>
+				</table>
+			</div>
+			<div class="flex-between" style="margin-top: 20px">
+				<div>
+					<input type="text" value="<%=record.authorized_by %>" name="authorized_by" id="" />
+					<p style="margin-top: 3px">Authorized by</p>
+				</div>
+				<div>
+					<input type="text" value="<%=record.welding_inspector %>" name="welding_inspector" id="" />
+					<p style="margin-top: 3px">Welding Inspector</p>
+				</div>
+			</div>
+			<p style="margin-top: 8px; font-size: 14px">
+				This is to certify that this person has been tested in accordance with
+				requirements of
+				<span style="color: #14ab55">ASME SEC IX -
+					<input value="<%=record.year %>" type="text" name="year" id="" /></span>
+			</p>
+		</div>
+		<div style="border: 2px black solid; margin-top: 10px">
+			<!-- Global Click Listener to close menus -->
+			<div id="click-overlay" style="
 						display: none;
 						position: fixed;
 						top: 0;
@@ -150,231 +99,227 @@
 						width: 100%;
 						height: 100%;
 						z-index: 90;
-					"
-					onclick="hideMenus()"></div>
+					" onclick="hideMenus()"></div>
 
-				<div style="overflow-x: auto; padding-bottom: 50px">
-					<table
-						id="dynamicTable"
-						style="width: 100%; border-collapse: separate; border-spacing: 0">
-						<thead>
-							<tr
-								id="tableHeaders"
-								style="background-color: #f8f9fa; font-weight: bold">
-								<!-- Headers will be injected here -->
-							</tr>
-						</thead>
-						<tbody id="tableBody">
-							<!-- Rows will be injected here -->
-						</tbody>
-					</table>
-				</div>
+			<div style="overflow-x: auto; padding-bottom: 50px">
+				<table id="dynamicTable" style="width: 100%; border-collapse: separate; border-spacing: 0">
+					<thead>
+						<tr id="tableHeaders" style="background-color: #f8f9fa; font-weight: bold">
+							<!-- Headers will be injected here -->
+						</tr>
+					</thead>
+					<tbody id="tableBody">
+						<!-- Rows will be injected here -->
+					</tbody>
+				</table>
+			</div>
 
-				<p
-					style="
+			<p style="
 						border: 2px black solid;
 						padding: 5px;
 						font-size: 15px;
 						margin-top: 0;
 						border-top: none;
 					">
-					This card, on its own qualifies the welder for 6 months from the Date
-					of test. Beyond this date, welding records must be consulted to ensure
-					the welder's qualification has been maintained.
-				</p>
-			</div>
+				This card, on its own qualifies the welder for 6 months from the Date
+				of test. Beyond this date, welding records must be consulted to ensure
+				the welder's qualification has been maintained.
+			</p>
+		</div>
 
-			<input type="submit" value="Update" />
-		</form>
+		<input type="submit" value="Update" />
+	</form>
 
-		<style>
-			* {
-				margin: 0;
-				padding: 0;
-				font-family: sans-serif;
-				font-weight: 600;
-			}
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			font-family: sans-serif;
+			font-weight: 600;
+		}
 
-			.card {
-				margin-top: 10px;
-				padding: 10px;
-				border: 4px black solid;
-			}
+		.card {
+			margin-top: 10px;
+			padding: 10px;
+			border: 4px black solid;
+		}
 
-			.flex {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
+		.flex {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
 
-			.flex-between {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-			}
+		.flex-between {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
 
-			.logo {
-				height: 150px;
-				width: 200px;
-			}
+		.logo {
+			height: 150px;
+			width: 200px;
+		}
 
-			.qrcode {
-				height: 150px;
-				width: 150px;
-			}
+		.qrcode {
+			height: 150px;
+			width: 150px;
+		}
 
-			.person-img {
-				height: 200px;
-				width: 200px;
-				object-fit: cover;
-			}
+		.person-img {
+			height: 200px;
+			width: 200px;
+			object-fit: cover;
+		}
 
-			#table-1 {
-				border-collapse: separate;
-				border-spacing: 0 20px;
-				/* Adjust the second value for vertical spacing */
-			}
+		#table-1 {
+			border-collapse: separate;
+			border-spacing: 0 20px;
+			/* Adjust the second value for vertical spacing */
+		}
 
-			/* Dynamic Table Styles */
-			#dynamicTable {
-				border-collapse: separate;
-				border-spacing: 0;
-				width: 100%;
-			}
+		/* Dynamic Table Styles */
+		#dynamicTable {
+			border-collapse: separate;
+			border-spacing: 0;
+			width: 100%;
+		}
 
-			#dynamicTable td,
-			#dynamicTable th {
-				border: 2px black solid;
-				padding: 0;
-				position: relative;
-			}
+		#dynamicTable td,
+		#dynamicTable th {
+			border: 2px black solid;
+			padding: 0;
+			position: relative;
+		}
 
-			#dynamicTable input {
-				width: 100%;
-				border: none;
-				padding: 8px;
-				box-sizing: border-box;
-				font-family: inherit;
-				font-weight: inherit;
-			}
+		#dynamicTable input {
+			width: 100%;
+			border: none;
+			padding: 8px;
+			box-sizing: border-box;
+			font-family: inherit;
+			font-weight: inherit;
+		}
 
-			#dynamicTable th input {
-				text-align: center;
-				font-weight: bold;
-				background: #f8f9fa;
-			}
+		#dynamicTable th input {
+			text-align: center;
+			font-weight: bold;
+			background: #f8f9fa;
+		}
 
-			/* Context Menu Styles */
-			.control-btn {
-				background: #14ab55;
-				color: white;
-				border: none;
-				width: 16px;
-				height: 16px;
-				font-size: 14px;
-				line-height: 14px;
-				cursor: pointer;
-				border-radius: 50%;
-				display: none; /* Hidden by default */
-				align-items: center;
-				justify-content: center;
-				position: absolute;
-				z-index: 10;
-			}
+		/* Context Menu Styles */
+		.control-btn {
+			background: #14ab55;
+			color: white;
+			border: none;
+			width: 16px;
+			height: 16px;
+			font-size: 14px;
+			line-height: 14px;
+			cursor: pointer;
+			border-radius: 50%;
+			display: none;
+			/* Hidden by default */
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+			z-index: 10;
+		}
 
-			/* Position for Row Cells (First Column) */
-			.data-cell-first .control-btn {
-				top: 50%;
-				right: 5px;
-				left: auto;
-				bottom: auto;
-				transform: translateY(-50%);
-				margin: 0;
-			}
+		/* Position for Row Cells (First Column) */
+		.data-cell-first .control-btn {
+			top: 50%;
+			right: 5px;
+			left: auto;
+			bottom: auto;
+			transform: translateY(-50%);
+			margin: 0;
+		}
 
-			/* Show on hover */
-			.data-cell-first:hover .control-btn {
-				display: flex;
-			}
+		/* Show on hover */
+		.data-cell-first:hover .control-btn {
+			display: flex;
+		}
 
+		.dropdown-menu {
+			display: none;
+			position: absolute;
+			background: white;
+			border: 1px solid #ccc;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+			z-index: 100;
+			min-width: 150px;
+			border-radius: 4px;
+			text-align: left;
+		}
+
+		.dropdown-menu button {
+			display: block;
+			width: 100%;
+			padding: 5px 10px;
+			border: none;
+			background: none;
+			text-align: left;
+			cursor: pointer;
+			font-size: 12px;
+		}
+
+		.dropdown-menu button:hover {
+			background-color: #f0f0f0;
+		}
+
+		.dropdown-menu button.delete-opt {
+			color: #dc3545;
+		}
+
+		@media print {
+
+			.control-btn,
 			.dropdown-menu {
-				display: none;
-				position: absolute;
-				background: white;
-				border: 1px solid #ccc;
-				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-				z-index: 100;
-				min-width: 150px;
-				border-radius: 4px;
-				text-align: left;
+				display: none !important;
 			}
+		}
+	</style>
+</body>
 
-			.dropdown-menu button {
-				display: block;
-				width: 100%;
-				padding: 5px 10px;
-				border: none;
-				background: none;
-				text-align: left;
-				cursor: pointer;
-				font-size: 12px;
-			}
-
-			.dropdown-menu button:hover {
-				background-color: #f0f0f0;
-			}
-
-			.dropdown-menu button.delete-opt {
-				color: #dc3545;
-			}
-
-			@media print {
-				.control-btn,
-				.dropdown-menu {
-					display: none !important;
-				}
-			}
-		</style>
-	</body>
-
-	<!-- Server-side logic to prepare initial data -->
-	<% 
-	let initialTableData = null; 
-	// Handle tableData - it might be stored as string or object 
-	if (record.tableData) { 
-			let tableDataObj = null; 
-			if (typeof record.tableData === 'string') { 
-					try { 
-							tableDataObj = JSON.parse(record.tableData); 
-					} catch (e) { 
-							console.error('Error parsing tableData:', e); 
-					} 
-			} else if (typeof record.tableData === 'object') { 
-					tableDataObj = record.tableData; 
-			} 
-			
-			// Check if we have valid parsed data 
-			if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) { 
-					initialTableData = tableDataObj; 
-			} 
-	} 
-	
-	// If no valid tableData, migrate from legacy fields to 4-column layout
-	if (!initialTableData) { 
-			const legacyRows = [
-					["Card No", record.card_no || '', "WPS/PQR No.", record.wps_pqr_no || ''],
-					["Process", record.process || '', "Joint Type", record.joint_type || ''],
-					["Test Position", record.test_position || '', "Position Qualified", record.position_qualified || ''],
-					["Vertical Progression", record.vertical_progression || '', "Test Thickness", record.test_thickness || ''],
-					["Test Dia", record.test_dia || '', "Thickness Qualified", record.thickness_qualified || ''],
-					["P No Qualified", record.p_no_qualified || '', "Diameter Qualified", record.diameter_qualified || ''],
-					["F No Qualified", record.f_no_qualified || '', "Filler Metal Class", record.electrode_class_used || ''],
-					["Place of Issue", record.place_of_issue || '', "Test Method", record.test_method || ''],
-					["Date of Weld", record.date_of_test || '', "Date of Exp", record.date_of_expiry || '']
-			];
-			initialTableData = { headers: ["Parameter", "Value", "Parameter", "Value"], rows: legacyRows }; 
-	} 
-	%>
+<!-- Server-side logic to prepare initial data -->
+<%
+  let initialTableData = null;
+  
+  if (record && record.tableData) {
+    let tableDataObj = null;
+    if (typeof record.tableData === 'string') {
+      try {
+        tableDataObj = JSON.parse(record.tableData);
+      } catch (e) {
+        console.error('Error parsing tableData:', e);
+      }
+    } else if (typeof record.tableData === 'object') {
+      tableDataObj = record.tableData;
+    }
+    if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) {
+      initialTableData = tableDataObj;
+    }
+  }
+  
+  if (!initialTableData && record) {
+    const legacyRows = [
+      ["Card No", record.tempCardNo || record.card_no || "", "WPS/PQR No.", record.wps_pqr_no || ""],
+      ["Process", record.process || "", "Joint Type", record.joint_type || ""],
+      ["Test Position", record.test_position || "", "Position Qualified", record.position_qualified || ""],
+      ["Vertical Progression", record.vertical_progression || "", "Test Thickness", record.test_thickness || ""],
+      ["Test Dia", record.test_dia || "", "Thickness Qualified", record.thickness_qualified || ""],
+      ["P No Qualified", record.p_no_qualified || "", "Diameter Qualified", record.diameter_qualified || ""],
+      ["F No Qualified", record.f_no_qualified || "", "Filler Metal Class", record.electrode_class_used || ""],
+      ["Place of Issue", record.place_of_issue || "", "Test Method", record.test_method || ""],
+      ["Date of Weld", record.date_of_test || "", "Date of Exp", record.date_of_expiry || ""]
+    ];
+    initialTableData = {
+      headers: ["Parameter", "Value", "Parameter", "Value"],
+      rows: legacyRows
+    };
+  }
+%>
 	<!-- Output data as JSON for client-side use -->
 	<script id="initial-table-data" type="application/json">
 		<%- JSON.stringify(initialTableData) %>
@@ -424,16 +369,16 @@
 		// --- Dynamic Table Logic (Row Only) ---
 
 		// Parse table data from hidden JSON script
-		let tableData = null;
+		let tableDataStore = null;
 		let headers = [];
 		let rows = [];
 
 		try {
 			const rawData = document.getElementById("initial-table-data").textContent;
-			tableData = JSON.parse(rawData);
-			if (tableData) {
-				headers = tableData.headers || ["Parameter", "Value", "Parameter", "Value"];
-				rows = tableData.rows || [];
+			tableDataStore = JSON.parse(rawData);
+			if (tableDataStore) {
+				headers = tableDataStore.headers || ["Parameter", "Value", "Parameter", "Value"];
+				rows = tableDataStore.rows || [];
 			}
 		} catch (e) {
 			console.error("Error parsing initial table data", e);
@@ -467,7 +412,7 @@
 					const input = document.createElement("input");
 					input.type = "text";
 					input.value = cellData;
-					input.onchange = (e) =>
+					input.oninput = (e) =>
 						updateCell(rowIndex, colIndex, e.target.value);
 
 					// Make 1st and 3rd labels bold
@@ -479,7 +424,7 @@
 					if (rowIndex === 0 && colIndex === 1) {
 						input.style.color = "#14ab55";
 						input.style.fontWeight = "bold";
-						input.readOnly = true;
+						// input.readOnly = true;
 					}
 
 					td.appendChild(input);
@@ -498,11 +443,10 @@
 						menu.innerHTML = `
 										<button onclick="addRowAt(${rowIndex}, 0)">Add Row Before</button>
 										<button onclick="addRowAt(${rowIndex}, 1)">Add Row After</button>
-										${
-											rows.length > 1
-												? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>`
-												: ""
-										}
+										${rows.length > 1
+								? `<button class="delete-opt" onclick="deleteRow(${rowIndex})">Delete Row</button>`
+								: ""
+							}
 								`;
 						td.appendChild(menu);
 					}
@@ -560,4 +504,5 @@
 		// Initial render
 		document.addEventListener("DOMContentLoaded", renderTable);
 	</script>
+
 </html>
