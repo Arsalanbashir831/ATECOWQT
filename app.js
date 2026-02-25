@@ -26,13 +26,13 @@ cloudinary.config({
 
 // Test Cloudinary connection
 cloudinary.api.ping()
-	.then(() => {})
+	.then(() => console.log('Cloudinary connection successful'))
 	.catch(err => console.error('Cloudinary connection failed:', err));
 
 // --- certificates storage+upload ---
 const certStorage = new CloudinaryStorage({
 	cloudinary,
-	params: async (req, file) => {
+	params: async (req) => {
 		try {
 			// For certificate insertion, certificateNo should be set by computeCertNo middleware
 			// For certificate updates, it comes from the URL parameter
@@ -262,14 +262,18 @@ if (!process.env.DB) {
 	process.exit(1);
 }
 
+console.log("Connecting to MongoDB...");
 mongoose
 	.connect(process.env.DB)
 	.then(() => {
+		console.log("Connected to MongoDB");
 		// Try to start server with better error handling
 		const startServer = (port) => {
 			app.listen(port, () => {
+				console.log(`Server running on port ${port}`);
 			}).on('error', (err) => {
 				if (err.code === 'EADDRINUSE') {
+					console.log(`Port ${port} is busy, trying port ${port + 1}...`);
 					startServer(port + 1);
 				} else {
 					console.error('Server error:', err);
