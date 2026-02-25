@@ -7,9 +7,9 @@ const path = require("path");
 
 async function computeOperatorNo(req, res, next) {
 	try {
-		console.log('🔢 Computing operator number...');
+
 		const last = await Operator.findOne().sort({ _id: -1 });
-		console.log('Last operator found:', last ? last.operatorNo : 'None');
+
 
 		//Derive a safe previous count, even if last.count is missing/invalid
 		let prevCount = 0;
@@ -35,12 +35,7 @@ async function computeOperatorNo(req, res, next) {
 		// Inject auto-generated value into body
 		req.body.certificateNo = req.certificateNo;
 
-		console.log('Generated operator details:', {
-			count: req.count,
-			operatorNo: req.operatorNo,
-			operatorId: req.operatorId,
-			certificateNo: req.certificateNo
-		});
+
 		
 		next();
 	} catch (error) {
@@ -73,9 +68,7 @@ module.exports = (upload) => {
 	// test upload endpoint
 	router.post("/test-upload", upload.single('profile'), (req, res) => {
 		try {
-			console.log('Test upload - File:', req.file);
-			console.log('Test upload - Body:', req.body);
-			console.log('Test upload - File error:', req.fileError);
+
 			
 			if (req.fileError) {
 				return res.status(400).json({
@@ -115,17 +108,13 @@ module.exports = (upload) => {
 		"/insert",
 		computeOperatorNo, // <— sets req.operatorNo, req.count, and respects manual operatorId
 		(req, res, next) => {
-			console.log('📁 About to process file upload...');
-			console.log('Operator number for upload:', req.operatorNo);
-			console.log('Request headers:', req.headers['content-type']);
+
 			next();
 		},
 		upload.single('profile'), // <— Use the pre-configured upload middleware
 		async (req, res, next) => {
 			try {
-				console.log('Operator insertion started for:', req.operatorNo);
-				console.log('Request body:', req.body);
-				console.log('File uploaded:', req.file);
+
 
 				// Check for upload errors
 				if (req.fileError) {
@@ -144,7 +133,7 @@ module.exports = (upload) => {
 
 				// Cloudinary URL for profile:
 				const profileImageUrl = req.file.path;
-				console.log('Profile image URL:', profileImageUrl);
+
 
 				// Check if FRONTEND_URL is configured
 				if (!process.env.FRONTEND_URL) {
@@ -153,13 +142,13 @@ module.exports = (upload) => {
 
 				// generate QR code in-memory:
 				const viewUrl = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/operator/view/${req.operatorNo}`;
-				console.log('View URL for QR:', viewUrl);
+
 				
 				const qrDataUri = await qrcode.toDataURL(viewUrl, {
 					margin: 1,
 					width: 200,
 				});
-				console.log('QR code generated successfully');
+
 
 				// upload QR under same folder, named operator-<id>-qr
 				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
@@ -167,7 +156,7 @@ module.exports = (upload) => {
 					public_id: `operator-${req.operatorNo}-qr`,
 					overwrite: true,
 				});
-				console.log('QR code uploaded to Cloudinary:', qrUpload.secure_url);
+
 
 				// Prepare operator data. Keep manual operatorId if supplied.
 				const operatorData = {
@@ -182,11 +171,11 @@ module.exports = (upload) => {
 						: req.operatorId,
 				};
 
-				console.log('Operator data to save:', operatorData);
+
 
 				// save to Mongo:
 				const savedOperator = await Operator.create(operatorData);
-				console.log('Operator saved successfully:', savedOperator._id);
+
 
 				res.redirect(`/operator/view/${req.operatorNo}`);
 			} catch (err) {
@@ -204,7 +193,7 @@ module.exports = (upload) => {
 				operatorNo: req.params.operatorNo,
 			});
 			if (!record) return res.status(404).send("Not found");
-			console.log("➡️ record =", record);
+
 			res.render("viewOperator", { record });
 		} catch (err) {
 			next(err);
@@ -231,17 +220,14 @@ module.exports = (upload) => {
 	router.post(
 		"/update/:operatorNo",
 		(req, res, next) => {
-			console.log('📁 About to process update file upload...');
-			console.log('Operator number for update:', req.params.operatorNo);
+
 			next();
 		},
 		upload.single('profile'), // <— Use the pre-configured upload middleware
 		async (req, res, next) => {
 			try {
 				const operatorNo = req.params.operatorNo;
-				console.log('Operator update started for:', operatorNo);
-				console.log('Request body:', req.body);
-				console.log('File uploaded:', req.file);
+
 
 				// Check for upload errors
 				if (req.fileError) {

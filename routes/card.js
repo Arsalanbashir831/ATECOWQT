@@ -62,14 +62,14 @@ module.exports = (upload) => {
 					? cardData.tableData.rows[0][1]
 					: null;
 
-				console.log('Insert Card - tempCardNo from table:', tempCardNoFromTable);
+
 
 				// Use user-provided tempCardNo as fallback if table is empty
 				let tempCardNo = (tempCardNoFromTable && tempCardNoFromTable.trim() !== "")
 					? tempCardNoFromTable
 					: req.card_no;
 
-				console.log('Insert Card - final tempCardNo:', tempCardNo);
+
 
 
 				const card = await Card.create({
@@ -100,7 +100,7 @@ module.exports = (upload) => {
 	router.get("/edit/:card_no", async (req, res) => {
 		let card_no = req.params.card_no;
 		const record = await Card.findOne({ card_no: card_no }).exec();
-		console.log(record);
+
 		if (record) {
 			res.render("editCard", { record: record });
 		} else {
@@ -160,13 +160,13 @@ module.exports = (upload) => {
 					? updates.tableData.rows[0][1]
 					: null;
 
-				console.log('Update Card - tempCardNo from table:', tempCardNoFromTable);
+
 
 				let tempCardNo = (tempCardNoFromTable && tempCardNoFromTable.trim() !== "")
 					? tempCardNoFromTable
 					: cn;
 
-				console.log('Update Card - final tempCardNo:', tempCardNo);
+
 
 				updates.tempCardNo = tempCardNo;
 

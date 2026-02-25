@@ -488,9 +488,7 @@
                 const password = document.getElementById('password').value.trim();
                 const userRole = document.querySelector('input[name="user_role"]:checked');
 
-                console.log('Form validation - User ID:', userId);
-                console.log('Form validation - Password:', password ? '***' : 'empty');
-                console.log('Form validation - Role:', userRole ? userRole.value : 'not selected');
+
 
                 if (!userId) {
                     showError('Please enter your User ID');
@@ -550,7 +548,7 @@
 
                 // Add a fallback timeout for production environments
                 const fallbackTimeout = setTimeout(() => {
-                    console.log('AJAX timeout, using fallback form submission');
+
                     setLoading(false);
                     // Submit the form traditionally
                     loginForm.submit();
@@ -563,11 +561,6 @@
                     formData.append('password', document.getElementById('password').value.trim());
                     formData.append('user_role', document.querySelector('input[name="user_role"]:checked').value);
                     
-                    // Debug: Log form data
-                    console.log('Form data being sent:');
-                    console.log('id:', document.getElementById('userId').value.trim());
-                    console.log('password:', '***');
-                    console.log('user_role:', document.querySelector('input[name="user_role"]:checked').value);
                     
                     const response = await fetch('/auth', {
                         method: 'POST',
@@ -578,15 +571,12 @@
                         body: formData
                     });
 
-                    console.log('Response status:', response.status);
-                    console.log('Response redirected:', response.redirected);
-                    console.log('Response URL:', response.url);
-                    console.log('Response headers:', response.headers);
+
                     
                     // Try to parse JSON response first
                     try {
                         const result = await response.json();
-                        console.log('JSON response:', result);
+
                         
                         if (result.success) {
                             showSuccess('Login successful! Redirecting...');
@@ -596,7 +586,7 @@
                                 try {
                                     const sessionCheck = await fetch('/check-session');
                                     const sessionData = await sessionCheck.json();
-                                    console.log('Session check result:', sessionData);
+
                                     
                                     if (sessionData.authenticated) {
                                         window.location.href = result.redirectUrl;
@@ -614,21 +604,21 @@
                             showError(result.message || 'Authentication failed. Please check your credentials.');
                         }
                     } catch (parseError) {
-                        console.log('Not JSON response, checking for redirect...');
+
                         
                         // Check for successful redirect (302 status)
                         if (response.status === 302 || response.redirected) {
                             showSuccess('Login successful! Redirecting...');
                             // Get the redirect URL from Location header or response.url
                             const redirectUrl = response.headers.get('Location') || response.url;
-                            console.log('Redirecting to:', redirectUrl);
+
                             setTimeout(() => {
                                 window.location.href = redirectUrl;
                             }, 1000);
                         } else if (response.status === 200) {
                             // Check if response contains redirect information
                             const result = await response.text();
-                            console.log('Response text:', result);
+
                             if (result.includes('Found. Redirecting to') || result.includes('/supervisor') || result.includes('/inspector')) {
                                 showSuccess('Login successful! Redirecting...');
                                 // Extract redirect URL from response text
@@ -666,7 +656,7 @@
             // Fallback button handler
             fallbackButton.addEventListener('click', function() {
                 if (validateForm()) {
-                    console.log('Using traditional form submission');
+
                     loginForm.submit();
                 }
             });

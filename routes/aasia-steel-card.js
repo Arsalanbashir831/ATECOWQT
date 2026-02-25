@@ -96,7 +96,7 @@ module.exports = (upload) => {
 	router.get("/edit/:card_no", async (req, res) => {
 		let card_no = req.params.card_no;
 		const record = await AasiaSteelCard.findOne({ card_no: card_no }).exec();
-		console.log(record);
+
 		if (record) {
 			res.render("editAasiaSteelCard", { record: record });
 		} else {

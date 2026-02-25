@@ -7,20 +7,16 @@ const path = require("path"); // Added for serving static files
 
 async function computeCertNo(req, res, next) {
 	try {
-		console.log('🔢 Computing certificate number...');
+
 		const last = await Certificate.findOne().sort({ _id: -1 });
-		console.log('Last certificate found:', last ? last.certificateNo : 'None');
+
 
 		const count = last ? last.count + 1 : 1;
 		req.count = count;
 		req.certificateNo = `certificate_${count}`;
 		req.welderId = `w-${count}`;
 
-		console.log('Generated certificate details:', {
-			count: req.count,
-			certificateNo: req.certificateNo,
-			welderId: req.welderId
-		});
+
 
 		next();
 	} catch (error) {
@@ -53,9 +49,7 @@ module.exports = (upload) => {
 	// test upload endpoint
 	router.post("/test-upload", upload, (req, res) => {
 		try {
-			console.log('Test upload - File:', req.file);
-			console.log('Test upload - Body:', req.body);
-			console.log('Test upload - File error:', req.fileError);
+
 
 			if (req.fileError) {
 				return res.status(400).json({
@@ -95,17 +89,13 @@ module.exports = (upload) => {
 		"/insert",
 		computeCertNo, // <— sets req.certificateNo, req.count, req.welderId
 		(req, res, next) => {
-			console.log('📁 About to process file upload...');
-			console.log('Certificate number for upload:', req.certificateNo);
-			console.log('Request headers:', req.headers['content-type']);
+
 			next();
 		},
 		upload, // <— Use the pre-configured upload middleware
 		async (req, res, next) => {
 			try {
-				console.log('Certificate insertion started for:', req.certificateNo);
-				console.log('Request body:', req.body);
-				console.log('File uploaded:', req.file);
+
 
 				// Check for upload errors
 				if (req.fileError) {
@@ -124,7 +114,7 @@ module.exports = (upload) => {
 
 				// Cloudinary URL for profile:
 				const profileImageUrl = req.file.path;
-				console.log('Profile image URL:', profileImageUrl);
+
 
 				// Check if FRONTEND_URL is configured
 				if (!process.env.FRONTEND_URL) {
@@ -133,13 +123,13 @@ module.exports = (upload) => {
 
 				// generate QR code in-memory:
 				const viewUrl = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/certificate/view/${req.certificateNo}`;
-				console.log('View URL for QR:', viewUrl);
+
 
 				const qrDataUri = await qrcode.toDataURL(viewUrl, {
 					margin: 1,
 					width: 200,
 				});
-				console.log('QR code generated successfully');
+
 
 				// upload QR under same folder, named cert-<id>-qr
 				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
@@ -147,7 +137,7 @@ module.exports = (upload) => {
 					public_id: `cert-${req.certificateNo}-qr`,
 					overwrite: true,
 				});
-				console.log('QR code uploaded to Cloudinary:', qrUpload.secure_url);
+
 
 				// Process dynamic attributes
 				let attributes = [];
@@ -175,11 +165,11 @@ module.exports = (upload) => {
 					qrLink: qrUpload.secure_url,
 				};
 
-				console.log('Certificate data to save:', certificateData);
+
 
 				// save to Mongo:
 				const savedCertificate = await Certificate.create(certificateData);
-				console.log('Certificate saved successfully:', savedCertificate._id);
+
 
 				res.redirect(`/certificate/view/${req.certificateNo}`);
 			} catch (err) {
@@ -197,7 +187,7 @@ module.exports = (upload) => {
 				certificateNo: req.params.certificateNo,
 			});
 			if (!record) return res.status(404).send("Not found");
-			console.log("➡️ record.profileImageUrl =", record);
+
 			res.render("viewCertificate", { record });
 		} catch (err) {
 			next(err);
@@ -223,17 +213,14 @@ module.exports = (upload) => {
 	router.post(
 		"/update/:certificateNo",
 		(req, res, next) => {
-			console.log('📁 About to process update file upload...');
-			console.log('Certificate number for update:', req.params.certificateNo);
+
 			next();
 		},
 		upload, // <— Use the pre-configured upload middleware
 		async (req, res, next) => {
 			try {
 				const certNo = req.params.certificateNo;
-				console.log('Certificate update started for:', certNo);
-				console.log('Request body:', req.body);
-				console.log('File uploaded:', req.file);
+
 
 				// Check for upload errors
 				if (req.fileError) {

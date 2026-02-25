@@ -292,7 +292,7 @@ button {
         })
         .then(async(response)   => { window.location= await response.text()})
         .then(result => {
-            console.log(result); // Handle the server response as needed
+
             sendDataButton.innerText = 'Data Sent';
         })
         .catch(error => {

@@ -57,7 +57,7 @@ router.post("/insert", async (req, res) => {
 
 router.post("/edit/:doc_id", async (req, res) => {
   let doc_id = req.params.doc_id;
-  console.log(doc_id);
+
   let record = await Report.findOne({ doc_id: doc_id });
 
   if (record) {
@@ -173,9 +173,9 @@ router.post("/update/:doc_id", async (req, res) => {
   
 router.post("/view/:doc_id", async (req, res) => {
   let doc_id = req.params.doc_id;
-  console.log(doc_id);
+
   const record = await Report.findOne({ doc_id: doc_id });
-  console.log(record);
+
   if (record) {
     res.status(200).render("ViewReport", { record: record, doc_id: doc_id , 'session':req.session.user });
     return;

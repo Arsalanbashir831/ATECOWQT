@@ -9,14 +9,13 @@ var router = express.Router();
 
 // Authentication middleware
 const requireAuth = (req, res, next) => {
-  console.log('requireAuth check - Session:', req.session);
-  console.log('requireAuth check - Session user:', req.session.user);
+
   
   if (req.session.user) {
-    console.log('requireAuth: User authenticated, proceeding');
+
     next();
   } else {
-    console.log('requireAuth: No user session, redirecting to login');
+
     res.redirect('/');
   }
 };
@@ -51,11 +50,11 @@ const USERS = {
 };
 
 router.get('/', function (req, res, next) {
-  console.log('Root route accessed - Session before destroy:', req.session);
+
   
   // Only destroy session if user is not authenticated
   if (req.session.user) {
-    console.log('User already authenticated, redirecting to appropriate dashboard');
+
     const redirectUrl = req.session.user === 'supervisor' ? '/supervisor' : '/inspector';
     return res.redirect(redirectUrl);
   }
@@ -71,7 +70,7 @@ router.get('/', function (req, res, next) {
 // Protected supervisor route
 router.get('/supervisor', requireAuth, requireRole('supervisor'), async (req, res) => {
   try {
-    console.log(`Supervisor dashboard accessed by: ${req.session.user}`);
+
     
     const cardData = await Card.find().sort({ createdAt: -1 }).exec();
     const reportData = await Report.find().sort({ createdAt: -1 }).exec();
@@ -79,12 +78,8 @@ router.get('/supervisor', requireAuth, requireRole('supervisor'), async (req, re
     const operatorData = await Operator.find().sort({ createdAt: -1 }).exec();
     const aasiaSteelCardData = await AasiaSteelCard.find().sort({ createdAt: -1 }).exec();
 
-    console.log("Dashboard data loaded successfully");
-    console.log(`- Cards: ${cardData.length}`);
-    console.log(`- Reports: ${reportData.length}`);
-    console.log(`- Certificates: ${certificateData.length}`);
-    console.log(`- Operators: ${operatorData.length}`);
-    console.log(`- Aasia Steel Cards: ${aasiaSteelCardData.length}`);
+
+
 
     res.render('Supervisor', { 
       cardData, 
@@ -110,11 +105,11 @@ router.get('/supervisor', requireAuth, requireRole('supervisor'), async (req, re
 // Protected inspector route
 router.get('/inspector', requireAuth, requireRole('inspector'), async (req, res) => {
   try {
-    console.log(`Inspector dashboard accessed by: ${req.session.user}`);
+
     
     const reportData = await Report.find().sort({ createdAt: -1 }).exec();
     
-    console.log(`Inspector dashboard loaded with ${reportData.length} reports`);
+
     
     res.render('inspector', { 
       reportData,
@@ -138,13 +133,11 @@ router.post('/auth', async function (req, res) {
   try {
     const { id, password, user_role } = req.body;
     
-    console.log(`Authentication attempt - ID: ${id}, Role: ${user_role}`);
-    console.log('Environment:', process.env.NODE_ENV || 'development');
-    console.log('Request headers:', req.headers);
+
     
     // Input validation
     if (!id || !password || !user_role) {
-      console.log('Authentication failed: Missing required fields');
+
       return res.status(400).json({ 
         error: 'Missing required fields',
         message: 'Please provide User ID, Password, and Role'
@@ -153,7 +146,7 @@ router.post('/auth', async function (req, res) {
 
     // Validate user role
     if (!['supervisor', 'inspector'].includes(user_role)) {
-      console.log(`Authentication failed: Invalid role - ${user_role}`);
+
       return res.status(400).json({ 
         error: 'Invalid user role',
         message: 'Please select a valid role'
@@ -164,7 +157,7 @@ router.post('/auth', async function (req, res) {
     const user = USERS[user_role];
     
     if (!user) {
-      console.log(`Authentication failed: User not found for role - ${user_role}`);
+
       return res.status(401).json({ 
         error: 'User not found',
         message: 'Invalid user role'
@@ -180,11 +173,10 @@ router.post('/auth', async function (req, res) {
       req.session.userEmail = user.email;
       req.session.loginTime = new Date();
       
-      console.log(`Authentication successful for ${user_role}: ${user.name}`);
-      console.log('Session after setting:', req.session);
+
       
       // Log successful login
-      console.log(`User ${user.name} (${user.email}) logged in at ${new Date().toISOString()}`);
+
       
       // Check if this is an AJAX request
       const isAjax = req.headers['x-requested-with'] === 'XMLHttpRequest' || 
@@ -209,7 +201,7 @@ router.post('/auth', async function (req, res) {
         res.redirect(redirectUrl);
       }
     } else {
-      console.log(`Authentication failed: Invalid credentials for ${user_role}`);
+
       // Return JSON response for AJAX requests
       if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
         return res.status(401).json({ 
@@ -242,7 +234,7 @@ router.get('/logout', (req, res) => {
     loginTime: req.session.loginTime
   };
   
-  console.log(`User logout: ${userInfo.name} (${userInfo.role})`);
+
   
   // Destroy session
   req.session.destroy((err) => {
@@ -255,7 +247,7 @@ router.get('/logout', (req, res) => {
 
 // Session check route (for AJAX requests)
 router.get('/check-session', (req, res) => {
-  console.log('Session check - Session data:', req.session);
+
   if (req.session.user) {
     res.json({ 
       authenticated: true, 
@@ -268,18 +260,6 @@ router.get('/check-session', (req, res) => {
 });
 
 // Debug route to check session after login
-router.get('/debug-session', (req, res) => {
-  console.log('Debug session route accessed');
-  console.log('Session:', req.session);
-  console.log('Session ID:', req.sessionID);
-  console.log('Cookies:', req.headers.cookie);
-  
-  res.json({
-    session: req.session,
-    sessionID: req.sessionID,
-    cookies: req.headers.cookie,
-    environment: process.env.NODE_ENV || 'development'
-  });
-});
+
 
 module.exports = router;

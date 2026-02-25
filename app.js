@@ -26,7 +26,7 @@ cloudinary.config({
 
 // Test Cloudinary connection
 cloudinary.api.ping()
-	.then(() => console.log('Cloudinary connection successful'))
+	.then(() => {})
 	.catch(err => console.error('Cloudinary connection failed:', err));
 
 // --- certificates storage+upload ---
@@ -39,7 +39,7 @@ const certStorage = new CloudinaryStorage({
 			const certificateNo = req.certificateNo || req.params?.certificateNo || 'temp';
 			
 			if (!certificateNo || certificateNo === 'temp') {
-				console.warn('Certificate number not available, using temporary folder');
+
 			}
 			
 			return {
@@ -68,7 +68,7 @@ const createUploadMiddleware = () => {
 	const upload = multer({ 
 		storage: certStorage,
 		fileFilter: (req, file, cb) => {
-			console.log('Processing file:', file.originalname, 'Type:', file.mimetype);
+
 			if (file.mimetype.startsWith('image/')) {
 				cb(null, true);
 			} else {
@@ -131,7 +131,7 @@ const aasiaSteelCardStorage = new CloudinaryStorage({
 			const cardNo = req.card_no || req.params?.card_no || 'temp';
 			
 			if (!cardNo || cardNo === 'temp') {
-				console.warn('Aasia Steel Card number not available, using temporary folder');
+
 			}
 			
 			return {
@@ -160,7 +160,7 @@ const createAasiaSteelCardUploadMiddleware = () => {
 	const upload = multer({ 
 		storage: aasiaSteelCardStorage,
 		fileFilter: (req, file, cb) => {
-			console.log('Processing Aasia Steel Card file:', file.originalname, 'Type:', file.mimetype);
+
 			if (file.mimetype.startsWith('image/')) {
 				cb(null, true);
 			} else {
@@ -265,15 +265,11 @@ if (!process.env.DB) {
 mongoose
 	.connect(process.env.DB)
 	.then(() => {
-		console.log("Connected to MongoDB");
-		
 		// Try to start server with better error handling
 		const startServer = (port) => {
 			app.listen(port, () => {
-				console.log(`Server running on port ${port}`);
 			}).on('error', (err) => {
 				if (err.code === 'EADDRINUSE') {
-					console.log(`Port ${port} is busy, trying port ${port + 1}...`);
 					startServer(port + 1);
 				} else {
 					console.error('Server error:', err);
