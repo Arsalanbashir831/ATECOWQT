@@ -35,7 +35,7 @@
       <th>
         <div>
           <h2 style=" font-size: medium; font-weight: bold ; color: green; font-family: Arial, sans-serif;">
-            Welder / Welder operator performance Qualification Record</h2>
+            <%= record.certificateTitle || "Welder / Welder operator performance Qualification Record" %></h2>
           <h3 style=" font-size: medium; font-weight: bold ; color: black; font-family: Arial, sans-serif;">
             <%= record.clientName %>
           </h3>
@@ -60,8 +60,7 @@
         </tr>
       </thead>
       <tr>
-        <td style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Welder's/Welder
-          Operator's Name</td>
+        <td style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;"><%= record.welderNameLabel || "Welder's/Welder Operator's Name" %></td>
         <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
           <%= record.welderName %>
         </td>
@@ -83,7 +82,7 @@
         </td>
       </tr>
       <tr>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Welder ID No</td>
+        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;"><%= record.welderIdLabel || "Welder Id No" %></td>
         <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
           <%= record.welderId %>
         </td>

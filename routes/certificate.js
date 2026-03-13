@@ -159,6 +159,9 @@ module.exports = (upload) => {
 					attributes,
 					count: req.count,
 					certificateNo: req.certificateNo,
+					certificateTitle: req.body.certificateTitle || "Welder / Welder operator performance Qualification Record",
+					welderNameLabel: req.body.welderNameLabel || "Welder's/Welder Operator's Name",
+					welderIdLabel: req.body.welderIdLabel || "Welder Id No",
 					tempCertificateNo: req.body.tempCertificateNo || req.certificateNo,
 					welderId: req.welderId,
 					profilePic: profileImageUrl,
@@ -241,7 +244,20 @@ module.exports = (upload) => {
 					})).filter(attr => attr.key && attr.key.trim() !== '');
 				}
 
-				const updates = { ...req.body, attributes, certificateNo: certNo };
+				const updates = { 
+					...req.body, 
+					attributes, 
+					certificateNo: certNo 
+				};
+				if (!updates.certificateTitle) {
+					updates.certificateTitle = "Welder / Welder operator performance Qualification Record";
+				}
+				if (!updates.welderNameLabel) {
+					updates.welderNameLabel = "Welder's/Welder Operator's Name";
+				}
+				if (!updates.welderIdLabel) {
+					updates.welderIdLabel = "Welder Id No";
+				}
 				if (!updates.tempCertificateNo) {
 					updates.tempCertificateNo = certNo;
 				}

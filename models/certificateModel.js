@@ -9,6 +9,10 @@ const certificateModel = mongoose.Schema({
     },
     count: Number,
     certificateNo: String,
+    certificateTitle: {
+        type: String,
+        default: "Welder / Welder operator performance Qualification Record"
+    },
     tempCertificateNo: String,
     iqamaPic: String,
     profilePic: String,
@@ -16,11 +20,19 @@ const certificateModel = mongoose.Schema({
     clientName: String,
     supervisorName: String,
     welderName: String,
+    welderNameLabel: {
+        type: String,
+        default: "Welder's/Welder Operator's Name"
+    },
     welderInspector: String,
     identification_wps: String,
     iqamaNo: String,
     qualifcationStandard: String,
     welderId: String,
+    welderIdLabel: {
+        type: String,
+        default: "Welder Id No"
+    },
     baseMetalSpecs: String,
     wtaRef: String,
     jointType: String,

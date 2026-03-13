@@ -58,6 +58,9 @@ async function testCertificateInsertion() {
             jointType: 'Butt Joint',
             date_of_test: '2024-01-01',
             weldType: 'GMAW',
+            certificateTitle: 'Custom Test Title',
+            welderNameLabel: 'Custom Welder Label',
+            welderIdLabel: 'BRAZER ID',
             year: '2024',
             supervisorName: 'Test Supervisor',
             welderInspector: 'Test Inspector'
