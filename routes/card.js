@@ -77,6 +77,7 @@ module.exports = (upload) => {
 					tableData: cardData.tableData,
 					count: req.count,
 					card_no: req.card_no,
+					cardTitle: req.body.cardTitle || "Welder Qualification Card",
 					tempCardNo: tempCardNo,
 					image: imageUrl,
 					qr: qrUpload.secure_url,
@@ -169,6 +170,9 @@ module.exports = (upload) => {
 
 
 				updates.tempCardNo = tempCardNo;
+				if (!updates.cardTitle) {
+					updates.cardTitle = "Welder Qualification Card";
+				}
 
 				// Ensure the table actually shows the final tempCardNo
 				if (updates.tableData && updates.tableData.rows && updates.tableData.rows.length > 0) {

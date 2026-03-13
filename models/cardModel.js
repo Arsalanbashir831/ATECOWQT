@@ -14,6 +14,10 @@ const cardSchema = mongoose.Schema({
     iqama_no: String,
     welder_id: String,
     card_no: String,
+    cardTitle: {
+        type: String,
+        default: "Welder Qualification Card"
+    },
     tempCardNo: String,
     process: String,
     test_position: String,
