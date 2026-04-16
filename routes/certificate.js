@@ -247,7 +247,10 @@ module.exports = (upload) => {
 				const updates = { 
 					...req.body, 
 					attributes, 
-					certificateNo: certNo 
+					certificateNo: certNo,
+					virtualInspectorChecked: req.body.virtualInspectorChecked || "",
+					radiographyChecked: req.body.radiographyChecked || "",
+					mechTestChecked: req.body.mechTestChecked || ""
 				};
 				if (!updates.certificateTitle) {
 					updates.certificateTitle = "Welder / Welder operator performance Qualification Record";
