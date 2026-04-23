@@ -192,7 +192,7 @@ module.exports = (upload) => {
 			const record = await Operator.findOne({
 				operatorNo: req.params.operatorNo,
 			});
-			if (!record) return res.status(404).send("Not found");
+			if (!record) return res.render("dataLost");
 
 			res.render("viewOperator", { record });
 		} catch (err) {

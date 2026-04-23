@@ -189,7 +189,7 @@ module.exports = (upload) => {
 			const record = await Certificate.findOne({
 				certificateNo: req.params.certificateNo,
 			});
-			if (!record) return res.status(404).send("Not found");
+			if (!record) return res.render("dataLost");
 
 			res.render("viewCertificate", { record });
 		} catch (err) {

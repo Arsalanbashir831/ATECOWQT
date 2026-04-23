@@ -113,7 +113,7 @@ module.exports = (upload) => {
 	router.get("/view/:card_no", async (req, res, next) => {
 		try {
 			const record = await Card.findOne({ card_no: req.params.card_no });
-			if (!record) return res.status(404).send("Not found");
+			if (!record) return res.render("dataLost");
 			res.render("viewCard", { record });
 		} catch (err) {
 			next(err);
