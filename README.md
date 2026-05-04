@@ -38,3 +38,21 @@ mongorestore --uri="mongodb://localhost:27017" --nsFrom="test.*" --nsTo="ateco.*
 | :--- | :--- |
 | **Backup** | `mongodump --uri="[CLOUD_URI]" --out=backup_folder` |
 | **Restore** | `mongorestore --uri="[LOCAL_URI]" --nsFrom="test.*" --nsTo="ateco.*" --drop backup_folder` |
+
+## Utility Scripts
+
+### Convert PDFs to PNG Images
+If you have PDF files in the `recovered_records/` folder that need to be extracted into individual PNG images, use the provided conversion script. 
+
+**Prerequisites:** You must have `poppler` installed (`brew install poppler` on Mac).
+
+To convert all PDFs in the folder:
+```bash
+./scripts/convert_pdfs.sh
+```
+
+To convert a specific PDF:
+```bash
+./scripts/convert_pdfs.sh recovered_records/your_document.pdf
+```
+The images will be saved automatically to `recovered_records/new/`.
