@@ -3,11 +3,19 @@ const express = require("express");
 const qrcode = require("qrcode");
 const cloudinary = require("cloudinary").v2;
 const Card = require("../models/cardModel");
+const https = require("https");
 
+function checkFileExists(url) {
+	return new Promise((resolve) => {
+		https.request(url, { method: 'HEAD' }, (res) => {
+			resolve(res.statusCode === 200);
+		}).on('error', () => resolve(false)).end();
+	});
+}
 // before Multer runs, assign req.card_no & req.count
 async function computeCardNo(req, res, next) {
 	const last = await Card.findOne().sort({ _id: -1 });
-	const count = last ? last.count + 1 : 1;
+	const count = last && last.count >= 1000 ? last.count + 1 : 1000;
 	req.count = count;
 	req.card_no = `c-${count}`;
 	req.welder_id = `w-${count}`;
@@ -112,7 +120,28 @@ module.exports = (upload) => {
 	// VIEW
 	router.get("/view/:card_no", async (req, res, next) => {
 		try {
-			const record = await Card.findOne({ card_no: req.params.card_no });
+			const cn = req.params.card_no;
+
+			// Check if this is a lost record
+			const match = cn.match(/c-(\d+)/);
+			if (match) {
+				const num = parseInt(match[1], 10);
+				if (num <= 955) {
+					// It's a lost record. Check Cloudinary for recovered file.
+					const cloudName = cloudinary.config().cloud_name;
+					// Note: user must disable "Add random characters to public ID" in Cloudinary settings
+					const expectedUrl = `https://res.cloudinary.com/${cloudName}/image/upload/${cn}.png`;
+					
+					const exists = await checkFileExists(expectedUrl);
+					if (exists) {
+						return res.redirect(expectedUrl);
+					} else {
+						return res.render("dataLost");
+					}
+				}
+			}
+
+			const record = await Card.findOne({ card_no: cn });
 			if (!record) return res.render("dataLost");
 			res.render("viewCard", { record });
 		} catch (err) {

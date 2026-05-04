@@ -4,6 +4,15 @@ const qrcode = require("qrcode");
 const cloudinary = require("cloudinary").v2;
 const Certificate = require("../models/certificateModel");
 const path = require("path"); // Added for serving static files
+const https = require("https");
+
+function checkFileExists(url) {
+	return new Promise((resolve) => {
+		https.request(url, { method: 'HEAD' }, (res) => {
+			resolve(res.statusCode === 200);
+		}).on('error', () => resolve(false)).end();
+	});
+}
 
 async function computeCertNo(req, res, next) {
 	try {
@@ -11,7 +20,7 @@ async function computeCertNo(req, res, next) {
 		const last = await Certificate.findOne().sort({ _id: -1 });
 
 
-		const count = last ? last.count + 1 : 1;
+		const count = last && last.count >= 1000 ? last.count + 1 : 1000;
 		req.count = count;
 		req.certificateNo = `certificate_${count}`;
 		req.welderId = `w-${count}`;
@@ -186,8 +195,29 @@ module.exports = (upload) => {
 	// VIEW
 	router.get("/view/:certificateNo", async (req, res, next) => {
 		try {
+			const certNo = req.params.certificateNo;
+
+			// Check if this is a lost record
+			const match = certNo.match(/certificate_(\d+)/);
+			if (match) {
+				const num = parseInt(match[1], 10);
+				if (num <= 951) {
+					// It's a lost record. Check Cloudinary for recovered file.
+					const cloudName = cloudinary.config().cloud_name;
+					// Note: user must disable "Add random characters to public ID" in Cloudinary settings
+					const expectedUrl = `https://res.cloudinary.com/${cloudName}/image/upload/${certNo}.png`;
+					
+					const exists = await checkFileExists(expectedUrl);
+					if (exists) {
+						return res.redirect(expectedUrl);
+					} else {
+						return res.render("dataLost");
+					}
+				}
+			}
+
 			const record = await Certificate.findOne({
-				certificateNo: req.params.certificateNo,
+				certificateNo: certNo,
 			});
 			if (!record) return res.render("dataLost");
 
