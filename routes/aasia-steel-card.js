@@ -7,7 +7,7 @@ const AasiaSteelCard = require("../models/aasiaSteelCardModel");
 // before Multer runs, assign req.card_no & req.count
 async function computeCardNo(req, res, next) {
 	const last = await AasiaSteelCard.findOne().sort({ _id: -1 });
-	const count = last ? last.count + 1 : 1;
+	const count = last && last.count >= 1000 ? last.count + 1 : 1000;
 	req.count = count;
 	req.card_no = `asc-${count}`;
 	req.welder_id = `w-${count}`;

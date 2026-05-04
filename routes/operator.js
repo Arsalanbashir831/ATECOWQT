@@ -19,7 +19,7 @@ async function computeOperatorNo(req, res, next) {
 			const total = await Operator.countDocuments();
 			prevCount = Number.isFinite(total) ? total : 0;
 		}
-		const count = prevCount + 1;
+		const count = prevCount >= 1000 ? prevCount + 1 : 1000;
 		req.count = count;
 		// Always compute operatorNo for internal use (QR/storage)
 		req.operatorNo = req.operatorNo || `operator_${count}`;
