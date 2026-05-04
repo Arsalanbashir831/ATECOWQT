@@ -8,6 +8,7 @@ node_modules/
 
 # Recovered records (large image files - managed separately)
 recovered_records/
+backup_folder/
 
 # Logs
 logs/
