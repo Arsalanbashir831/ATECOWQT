@@ -120,7 +120,11 @@ const certificateModel = mongoose.Schema({
         key: String,
         value: String,
         range: String
-    }]
+    }],
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
 
 
 })

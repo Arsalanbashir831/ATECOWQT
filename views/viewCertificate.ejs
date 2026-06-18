@@ -29,562 +29,605 @@
 </style>
 
 <body>
-  <table border style="margin: auto; width: 100%;">
-    <thead>
-      <th><img style="width:200px" src="/images/logo.png" alt=""></th>
-      <th>
-        <div>
-          <h2 style=" font-size: medium; font-weight: bold ; color: green; font-family: Arial, sans-serif;">
-            <%= record.certificateTitle || "Welder / Welder operator performance Qualification Record" %>
-          </h2>
-          <h3 style=" font-size: medium; font-weight: bold ; color: black; font-family: Arial, sans-serif;">
-            <%= record.clientName %>
-          </h3>
-        </div>
-      </th>
-      <th>
-        <!-- <img style="width:150px" src="/certificates/<%= record.certificateNo %>/profile.jpg" alt=cert""> -->
-        <img src="<%= record.profilePic %>" alt="Profile for <%= record.certificateNo %>" style="width:150px">
+  <% if (typeof record !=='undefined' && record.isDeleted) { %>
+    <div class="hide-in-print"
+      style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 15px; margin: 15px auto; width: calc(100% - 30px); max-width: 100%; box-sizing: border-box; border-radius: 8px; font-family: Arial, sans-serif; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+      <div>
+        <strong>Notice:</strong> This certificate is inactive.
+      </div>
+      <form action="/certificate/restore/<%= record.certificateNo %>" method="POST" style="margin: 0;">
+        <button type="submit"
+          style="background-color: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.2s;">
+          Revert Delete
+        </button>
+      </form>
+    </div>
+    <% } %>
+      <table border style="margin: auto; width: 100%;">
+        <thead>
+          <th><img style="width:200px" src="/images/logo.png" alt=""></th>
+          <th>
+            <div>
+              <h2 style=" font-size: medium; font-weight: bold ; color: green; font-family: Arial, sans-serif;">
+                <%= record.certificateTitle || "Welder / Welder operator performance Qualification Record" %>
+              </h2>
+              <h3 style=" font-size: medium; font-weight: bold ; color: black; font-family: Arial, sans-serif;">
+                <%= record.clientName %>
+              </h3>
+            </div>
+          </th>
+          <th>
+            <!-- <img style="width:150px" src="/certificates/<%= record.certificateNo %>/profile.jpg" alt=cert""> -->
+            <img src="<%= record.profilePic %>" alt="Profile for <%= record.certificateNo %>" style="width:150px">
 
-      </th>
+          </th>
 
-    </thead>
+        </thead>
 
-  </table>
-  <table id="tab" style="margin: auto; width: 100%; border-collapse: collapse; border: 1px solid black;">
-    <tbody>
-      <thead>
-        <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tr>
-        <td style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">
-          <%= record.welderNameLabel || "Welder's/Welder Operator's Name" %>
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.welderName %>
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Identification of WPS/PQR
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-          <%= record.identification_wps %>
-        </td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Iqama / ID No</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%=record.iqamaNo%>
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Qualification Standard
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%=record.qualifcationStandard %>
-        </td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-          <%= record.welderIdLabel || "Welder Id No" %>
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.welderId %>
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Base Metal Specification
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%=record.baseMetalSpecs %>
-        </td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Certificate Ref No</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%= record.tempCertificateNo || record.certificateNo %>
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Joint Type</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%=record.jointType %>
-        </td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Date of<span
-            style="color:white;">-</span>Test</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%=record.weldDate %>
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;"></td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;"></td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Date of<span
-            style="color:white;">-</span>Weld</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%=record.date_of_test %>
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Weld Type</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%=record.weldType %>
-        </td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Test Coupon Size</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%=record.testCouponSize %>
-        </td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Filler Metal / Electrode
-          Class</td>
-        <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
-          <%=record.fillerMetalElectrodeClass %>
-        </td>
-      </tr>
-    </tbody>
-    <thead>
-      <tr>
-        <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Welder variables</th>
-        <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Actual Values</th>
-        <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;" colspan="2">Range
-          Qualified</th>
-      </tr>
-    </thead>
-    </tbody>
-    <tbody style="text-align: center">
-      <% var isNewFormat=false; if (record.attributes && record.attributes.length> 0) {
-        var standardKeys = [
-        "Welder Process(es)", "Types of Welder (manual/semi auto)", "Backing (With/without)",
-        "Types of weld", "Product Types(Plate or Pipe)", "Diameter of Pipe",
-        "Base Metal P Number to P Number", "Filler Metal or electrode specification",
-        "Filler Metal F-Number(S)", "Filler Metal addition/Deletion (GTAW/PAW)",
-        "Consumable Insert (GTAW or PAW)", "Deposit thickness for each process",
-        "Welding position", "Vertical Progression", "Type of Fuel Gas(OFW)",
-        "Insert gas backing(GTAW,PAW,GMAW)", "Transfer Mode (Spray, Globular, Short)",
-        "Current Type/Polarity(AC,DCEP,DCEN)"
-        ];
-        isNewFormat = record.attributes.some(function(a) { return standardKeys.indexOf(a.key) > -1; });
-        }
-        %>
-        <% if (isNewFormat) { %>
-          <% /* NEW UNIFIED FORMAT: All rows in attributes array */ %>
-            <% record.attributes.forEach(function(attr) { %>
-              <tr>
-                <td
-                  style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                  <%= attr.key %>
-                </td>
-                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                  <%= attr.value %>
-                </td>
-                <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                  <%= attr.range %>
-                </td>
-              </tr>
-              <% }); %>
-                <% } else { %>
-                  <% /* LEGACY FORMAT */ %>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Welder Process(es)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.welderProcessActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.welderProcessRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Types of Welder (manual/semi auto)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.typesOfWeldersActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.typesOfWeldersRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Backing (With/without)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.brackingActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.brackingRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Types of weld</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.typesOfWieldActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.typesOfWieldRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Product Types(Plate or Pipe)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.productTypeActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.productTypeRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Diameter of Pipe</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.diameterOfPipeActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.diameterOfPipeRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Base Metal P Number to P Number</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.baseMetalp_pActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.baseMetalp_pRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Filler Metal or electrode specification</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.fillerMetalActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.fillerMetalRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Filler Metal F-Number(S)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.fillerMetalFNoActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.fillerMetalFNoRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Filler Metal addition/Deletion (GTAW/PAW)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.fillerMetalAdditionActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.fillerMetalAdditionRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Consumable Insert (GTAW or PAW)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.consumableInsertActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.consumableInsertRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Deposit thickness for each process</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.depositeThicknessActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.depositeThicknessRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Welding position</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.welderPositionActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.welderPositionRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Vertical Progression</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.verticalProgressionActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.verticalProgressionRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Type of Fuel Gas(OFW)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.typesOfFuelGasActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.typesOfFuelGasRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Insert gas backing(GTAW,PAW,GMAW)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.insertGasBackingActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.insertGasBackingRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Transfer Mode (Spray, Globular, Short)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.transferModelActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.transferModelRange %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                        Current Type/Polarity(AC,DCEP,DCEN)</td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                        <%=record.currentTypePolarityActual %>
-                      </td>
-                      <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
-                        <%=record.currentTypePolarityRange %>
-                      </td>
-                    </tr>
-                    <% if (record.attributes && record.attributes.length> 0) { %>
-                      <% record.attributes.forEach(function(attr) { %>
+      </table>
+      <table id="tab" style="margin: auto; width: 100%; border-collapse: collapse; border: 1px solid black;">
+        <tbody>
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tr>
+            <td style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">
+              <%= record.welderNameLabel || "Welder's/Welder Operator's Name" %>
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%= record.welderName %>
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Identification of
+              WPS/PQR
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+              <%= record.identification_wps %>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Iqama / ID No</td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%=record.iqamaNo%>
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Qualification
+              Standard
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%=record.qualifcationStandard %>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+              <%= record.welderIdLabel || "Welder Id No" %>
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%= record.welderId %>
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Base Metal
+              Specification
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%=record.baseMetalSpecs %>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Certificate Ref No
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%= record.tempCertificateNo || record.certificateNo %>
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Joint Type</td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%=record.jointType %>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Date of<span
+                style="color:white;">-</span>Test</td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%=record.weldDate %>
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;"></td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;"></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Date of<span
+                style="color:white;">-</span>Weld</td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%=record.date_of_test %>
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Weld Type</td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%=record.weldType %>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Test Coupon Size</td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%=record.testCouponSize %>
+            </td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">Filler Metal /
+              Electrode
+              Class</td>
+            <td style="border: 1px solid black; padding: 4px; font-size: 12px;">
+              <%=record.fillerMetalElectrodeClass %>
+            </td>
+          </tr>
+        </tbody>
+        <thead>
+          <tr>
+            <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Welder variables
+            </th>
+            <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Actual Values</th>
+            <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;" colspan="2">Range
+              Qualified</th>
+          </tr>
+        </thead>
+        </tbody>
+        <tbody style="text-align: center">
+          <% var isNewFormat=false; if (record.attributes && record.attributes.length> 0) {
+            var standardKeys = [
+            "Welder Process(es)", "Types of Welder (manual/semi auto)", "Backing (With/without)",
+            "Types of weld", "Product Types(Plate or Pipe)", "Diameter of Pipe",
+            "Base Metal P Number to P Number", "Filler Metal or electrode specification",
+            "Filler Metal F-Number(S)", "Filler Metal addition/Deletion (GTAW/PAW)",
+            "Consumable Insert (GTAW or PAW)", "Deposit thickness for each process",
+            "Welding position", "Vertical Progression", "Type of Fuel Gas(OFW)",
+            "Insert gas backing(GTAW,PAW,GMAW)", "Transfer Mode (Spray, Globular, Short)",
+            "Current Type/Polarity(AC,DCEP,DCEN)"
+            ];
+            isNewFormat = record.attributes.some(function(a) { return standardKeys.indexOf(a.key) > -1; });
+            }
+            %>
+            <% if (isNewFormat) { %>
+              <% /* NEW UNIFIED FORMAT: All rows in attributes array */ %>
+                <% record.attributes.forEach(function(attr) { %>
+                  <tr>
+                    <td
+                      style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                      <%= attr.key %>
+                    </td>
+                    <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                      <%= attr.value %>
+                    </td>
+                    <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;" colspan="2">
+                      <%= attr.range %>
+                    </td>
+                  </tr>
+                  <% }); %>
+                    <% } else { %>
+                      <% /* LEGACY FORMAT */ %>
                         <tr>
                           <td
                             style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                            <%= attr.key %>
-                          </td>
+                            Welder Process(es)</td>
                           <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                            <%= attr.value %>
+                            <%=record.welderProcessActual %>
                           </td>
                           <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
                             colspan="2">
-                            <%= attr.range %>
+                            <%=record.welderProcessRange %>
                           </td>
                         </tr>
-                        <% }); %>
-                          <% } %>
-                            <% } %>
-
-                              <% if (record.attr1key) { %>
-                                <tr>
-                                  <td
-                                    style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                                    <%= record.attr1key %>
-                                  </td>
-                                  <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                                    <%= record.attr1value %>
-                                  </td>
-                                  <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
-                                    colspan="2">
-                                    <%= record.attr1range %>
-                                  </td>
-                                </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Types of Welder (manual/semi auto)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.typesOfWeldersActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.typesOfWeldersRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Backing (With/without)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.brackingActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.brackingRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Types of weld</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.typesOfWieldActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.typesOfWieldRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Product Types(Plate or Pipe)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.productTypeActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.productTypeRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Diameter of Pipe</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.diameterOfPipeActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.diameterOfPipeRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Base Metal P Number to P Number</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.baseMetalp_pActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.baseMetalp_pRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Filler Metal or electrode specification</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.fillerMetalActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.fillerMetalRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Filler Metal F-Number(S)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.fillerMetalFNoActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.fillerMetalFNoRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Filler Metal addition/Deletion (GTAW/PAW)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.fillerMetalAdditionActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.fillerMetalAdditionRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Consumable Insert (GTAW or PAW)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.consumableInsertActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.consumableInsertRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Deposit thickness for each process</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.depositeThicknessActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.depositeThicknessRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Welding position</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.welderPositionActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.welderPositionRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Vertical Progression</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.verticalProgressionActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.verticalProgressionRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Type of Fuel Gas(OFW)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.typesOfFuelGasActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.typesOfFuelGasRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Insert gas backing(GTAW,PAW,GMAW)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.insertGasBackingActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.insertGasBackingRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Transfer Mode (Spray, Globular, Short)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.transferModelActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.transferModelRange %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                            Current Type/Polarity(AC,DCEP,DCEN)</td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                            <%=record.currentTypePolarityActual %>
+                          </td>
+                          <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                            colspan="2">
+                            <%=record.currentTypePolarityRange %>
+                          </td>
+                        </tr>
+                        <% if (record.attributes && record.attributes.length> 0) { %>
+                          <% record.attributes.forEach(function(attr) { %>
+                            <tr>
+                              <td
+                                style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                                <%= attr.key %>
+                              </td>
+                              <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                                <%= attr.value %>
+                              </td>
+                              <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                                colspan="2">
+                                <%= attr.range %>
+                              </td>
+                            </tr>
+                            <% }); %>
+                              <% } %>
                                 <% } %>
-                                  <% if (record.attr2key) { %>
+
+                                  <% if (record.attr1key) { %>
                                     <tr>
                                       <td
                                         style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                                        <%= record.attr2key %>
+                                        <%= record.attr1key %>
                                       </td>
                                       <td
                                         style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
-                                        <%= record.attr2value %>
+                                        <%= record.attr1value %>
                                       </td>
                                       <td
                                         style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
                                         colspan="2">
-                                        <%= record.attr2range %>
+                                        <%= record.attr1range %>
                                       </td>
                                     </tr>
                                     <% } %>
-    </tbody>
-    <table border style="width: 100%;">
-      <thead>
-        <tr>
-          <th style="  padding: 4px; font-size: 12px; font-weight: bold;">Test Conducted/ Type of Test</th>
-          <th style="  padding: 4px; font-size: 12px; font-weight: bold;">Report No</th>
-          <th style=" padding: 4px; font-size: 12px; font-weight: bold;" colspan="2">Results</th>
-        </tr>
-      </thead>
+                                      <% if (record.attr2key) { %>
+                                        <tr>
+                                          <td
+                                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
+                                            <%= record.attr2key %>
+                                          </td>
+                                          <td
+                                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
+                                            <%= record.attr2value %>
+                                          </td>
+                                          <td
+                                            style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;"
+                                            colspan="2">
+                                            <%= record.attr2range %>
+                                          </td>
+                                        </tr>
+                                        <% } %>
+        </tbody>
+        <table border style="width: 100%;">
+          <thead>
+            <tr>
+              <th style="  padding: 4px; font-size: 12px; font-weight: bold;">Test Conducted/ Type of Test</th>
+              <th style="  padding: 4px; font-size: 12px; font-weight: bold;">Report No</th>
+              <th style=" padding: 4px; font-size: 12px; font-weight: bold;" colspan="2">Results</th>
+            </tr>
+          </thead>
 
-      <tbody style="text-align: center; border: 1px solid black;">
-        <tr style="height: 10px; padding: 2px; font-size: 12px; line-height: 1;">
+          <tbody style="text-align: center; border: 1px solid black;">
+            <tr style="height: 10px; padding: 2px; font-size: 12px; line-height: 1;">
 
-          <td>
-            <div style="display: flex; flex-direction: column; justify-content: center; gap: 2px;">
-              <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;">Visual Inspection</h4>
-              <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;">NDT</h4>
-              <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;">Mechanical Test</h4>
-            </div>
-          </td>
-          <td style="text-align: center;">
-            <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
-              <% if (record.virtualInspectorChecked==="on" ) { %>
-                <input type="checkbox" disabled checked name="" id="" style="width: 12px; height: 12px; margin: 0;">
-                <% } else { %>
-                  <input disabled type="checkbox" name="" id="" style="width: 12px; height: 12px; margin: 0;">
-                  <% } %>
-                    <h6 style="margin: 0; line-height: 1; height: 12px;">
-                      <%= record.virtualInspectorReportNo%>
-                    </h6>
-            </div>
-            <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
-              <% if (record.radiographyChecked==="on" ) { %>
-                <input type="checkbox" disabled checked name="" id="" style="width: 12px; height: 12px; margin: 0;">
-                <% } else { %>
-                  <input disabled type="checkbox" name="" id="" style="width: 12px; height: 12px; margin: 0;">
-                  <% } %>
-                    <h6 style="margin: 0; line-height: 1;">
-                      <%= record.radiographyReportNo%>
-                    </h6>
-            </div>
-            <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
-              <% if (record.mechTestChecked==="on" ) { %>
-                <input disabled type="checkbox" checked name="" id="" style="width: 12px; height: 12px; margin: 0;">
-                <% } else { %>
-                  <input disabled type="checkbox" name="" id="" style="width: 12px; height: 12px; margin: 0;">
-                  <% } %>
-                    <h6 style="margin: 0; line-height: 1;">
-                      <%= record.mechTestReportNo%>
-                    </h6>
-            </div>
+              <td>
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 2px;">
+                  <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;">Visual Inspection</h4>
+                  <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;">NDT</h4>
+                  <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;">Mechanical Test</h4>
+                </div>
+              </td>
+              <td style="text-align: center;">
+                <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
+                  <% if (record.virtualInspectorChecked==="on" ) { %>
+                    <input type="checkbox" disabled checked name="" id="" style="width: 12px; height: 12px; margin: 0;">
+                    <% } else { %>
+                      <input disabled type="checkbox" name="" id="" style="width: 12px; height: 12px; margin: 0;">
+                      <% } %>
+                        <h6 style="margin: 0; line-height: 1; height: 12px;">
+                          <%= record.virtualInspectorReportNo%>
+                        </h6>
+                </div>
+                <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
+                  <% if (record.radiographyChecked==="on" ) { %>
+                    <input type="checkbox" disabled checked name="" id="" style="width: 12px; height: 12px; margin: 0;">
+                    <% } else { %>
+                      <input disabled type="checkbox" name="" id="" style="width: 12px; height: 12px; margin: 0;">
+                      <% } %>
+                        <h6 style="margin: 0; line-height: 1;">
+                          <%= record.radiographyReportNo%>
+                        </h6>
+                </div>
+                <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
+                  <% if (record.mechTestChecked==="on" ) { %>
+                    <input disabled type="checkbox" checked name="" id="" style="width: 12px; height: 12px; margin: 0;">
+                    <% } else { %>
+                      <input disabled type="checkbox" name="" id="" style="width: 12px; height: 12px; margin: 0;">
+                      <% } %>
+                        <h6 style="margin: 0; line-height: 1;">
+                          <%= record.mechTestReportNo%>
+                        </h6>
+                </div>
 
-          </td>
-          <td>
-            <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
+              </td>
+              <td>
+                <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
 
-              <h6 style="margin: 0; line-height: 1;">
-                <%= record.virtualInspectorResults %>
-              </h6>
-            </div>
-            <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
+                  <h6 style="margin: 0; line-height: 1;">
+                    <%= record.virtualInspectorResults %>
+                  </h6>
+                </div>
+                <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
 
-              <h6 style="margin: 0; line-height: 1;">
-                <%= record.radiographyResults%>
-              </h6>
-            </div>
-            <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
+                  <h6 style="margin: 0; line-height: 1;">
+                    <%= record.radiographyResults%>
+                  </h6>
+                </div>
+                <div style="display: flex; gap: 4px; justify-content: center; align-items: center; height: 16px;">
 
-              <h6 style="margin: 0; line-height: 1;">
-                <%= record.mechTestResults%>
-              </h6>
-            </div>
-          </td>
-        </tr>
+                  <h6 style="margin: 0; line-height: 1;">
+                    <%= record.mechTestResults%>
+                  </h6>
+                </div>
+              </td>
+            </tr>
 
-      </tbody>
-      <thead>
-        <tr>
-          <th colspan="4">
-            <p style="font-size: 11px;">We, the undersigned, certify that the statements in the record are correct and
-              that the test coupons were welded and tested in accordance with the requirements of <span
-                style="color: rgb(0, 131, 254); ">
-                <%= record.year %>
-              </span>.</p>
-          </th>
-        </tr>
-      </thead>
+          </tbody>
+          <thead>
+            <tr>
+              <th colspan="4">
+                <p style="font-size: 11px;">We, the undersigned, certify that the statements in the record are correct
+                  and
+                  that the test coupons were welded and tested in accordance with the requirements of <span
+                    style="color: rgb(0, 131, 254); ">
+                    <%= record.year %>
+                  </span>.</p>
+              </th>
+            </tr>
+          </thead>
 
-    </table>
-    <table style="width: 100%; border-collapse: collapse;">
-      <tbody>
-        <tr>
-          <td style="padding: 20px; ">
-            <div style="display: flex; flex-direction: column; gap: 20px; position: relative; top: -31px;">
-              <p style=" font-size: 13px; width: 300px; font-weight: bold;"> Arabian Testing Evolution Company (ATECO)
-              </p>
-              <div style="display: flex; align-items: center; justify-content: space-between;">
+        </table>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tbody>
+            <tr>
+              <td style="padding: 20px; ">
+                <div style="display: flex; flex-direction: column; gap: 20px; position: relative; top: -31px;">
+                  <p style=" font-size: 13px; width: 300px; font-weight: bold;"> Arabian Testing Evolution Company
+                    (ATECO)
+                  </p>
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
 
-                <span style="font-weight: bold;">Testing Witnessed / Welder Inspector</span>
-                <span style="text-decoration: underline;">
-                  <%=record.welderInspector%>
-                </span>
-              </div>
+                    <span style="font-weight: bold;">Testing Witnessed / Welder Inspector</span>
+                    <span style="text-decoration: underline;">
+                      <%=record.welderInspector%>
+                    </span>
+                  </div>
 
-              <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-weight: bold;">Test Supervisor / Technical Manager</span>
-                <span style="text-decoration: underline;">
-                  <%= record.supervisorName%>
-                </span>
-              </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: bold;">Test Supervisor / Technical Manager</span>
+                    <span style="text-decoration: underline;">
+                      <%= record.supervisorName%>
+                    </span>
+                  </div>
 
-            </div>
-          </td>
-          <td style="padding: 20px; ">
-            <div style="display: flex; flex-direction: column; gap: 20px; ">
-              <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-weight: bold; ">Client Name:</span>
-                <span style="text-decoration: underline;">
-                  <%= record.clientName %>
-                </span>
-              </div>
-              <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-weight: bold; ">Client Signature:</span>
-                <span style="text-decoration: underline;">____________________</span>
-              </div>
+                </div>
+              </td>
+              <td style="padding: 20px; ">
+                <div style="display: flex; flex-direction: column; gap: 20px; ">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: bold; ">Client Name:</span>
+                    <span style="text-decoration: underline;">
+                      <%= record.clientName %>
+                    </span>
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: bold; ">Client Signature:</span>
+                    <span style="text-decoration: underline;">____________________</span>
+                  </div>
 
-              <div
-                style="display: flex; justify-content: end; align-items: center; background-color: rgb(223, 223, 223); width: 100%; font-weight: bold;">
-                <p>To verify the information about the certificate. Please scan the QR code using any QR scan app</p>
-                <!-- <img width="90px" src="/certificates/<%= record.certificateNo%>/qrcode.png" alt=""> -->
-                <img src="<%= record.qrLink %>" alt="QR Code for <%= record.certificateNo %>" width="90">
-              </div>
+                  <div
+                    style="display: flex; justify-content: end; align-items: center; background-color: rgb(223, 223, 223); width: 100%; font-weight: bold;">
+                    <p>To verify the information about the certificate. Please scan the QR code using any QR scan app
+                    </p>
+                    <!-- <img width="90px" src="/certificates/<%= record.certificateNo%>/qrcode.png" alt=""> -->
+                    <img src="<%= record.qrLink %>" alt="QR Code for <%= record.certificateNo %>" width="90">
+                  </div>
 
-            </div>
-          </td>
-        </tr>
-        <td colspan="4">
-          <h3 style="border: 2px black solid; text-align: center; padding: 20px; font-weight: normal;">
+                </div>
+              </td>
+            </tr>
+            <td colspan="4">
+              <h3 style="border: 2px black solid; text-align: center; padding: 20px; font-weight: normal;">
 
-            Address: 3658 Ar Rabiyah District Unit No:02, P.0 Box 32437 Dammam
-            6621 KSA ةيدوتسلا ‏المملكة العريية‎ ٦٦٢١ ‏الدمام‎ ٣٢٤٣٧ ‏ص.ب‎ ، ٠٢ ‏حي
-            الرابية الوحدة رقم‎ ،٣٦٥٨ ‏عنوان:‎
-            <br>Tel: +966138383130 ٩٦٦١٣٨٣٢٨٢١٢٠ ‏جوال Website:
-            www.atecosaudia.com <br>Email: info@atecosaudia.com:‏البريد
-            الإلكتروني: Cr# 2051226809 ٢٠٥١٢٢٦٨٠٩ ‏س_ص:‎
-          </h3>
-          <!-- <p style="text-align: center;">Address : شارع الزین العابدین, Ar Rabiyah, Dammam 32437,Saudi Arabia  | Email :<span style="color: blue;"> Inspection@atecosaudia.com</span></p>  <a class="hide-in-print" href="#" onclick="window.print(); return false;" style="text-decoration: none; background-color: red; color: white; padding: 2px;">Download PDF</a></td> -->
-        </td>
-      </tbody>
-    </table>
+                Address: 3658 Ar Rabiyah District Unit No:02, P.0 Box 32437 Dammam
+                6621 KSA ةيدوتسلا ‏المملكة العريية‎ ٦٦٢١ ‏الدمام‎ ٣٢٤٣٧ ‏ص.ب‎ ، ٠٢ ‏حي
+                الرابية الوحدة رقم‎ ،٣٦٥٨ ‏عنوان:‎
+                <br>Tel: +966138383130 ٩٦٦١٣٨٣٢٨٢١٢٠ ‏جوال Website:
+                www.atecosaudia.com <br>Email: info@atecosaudia.com:‏البريد
+                الإلكتروني: Cr# 2051226809 ٢٠٥١٢٢٦٨٠٩ ‏س_ص:‎
+              </h3>
+              <!-- <p style="text-align: center;">Address : شارع الزین العابدین, Ar Rabiyah, Dammam 32437,Saudi Arabia  | Email :<span style="color: blue;"> Inspection@atecosaudia.com</span></p>  <a class="hide-in-print" href="#" onclick="window.print(); return false;" style="text-decoration: none; background-color: red; color: white; padding: 2px;">Download PDF</a></td> -->
+            </td>
+          </tbody>
+        </table>
 
-    <a class="hide-in-print" href="#" onclick="window.print(); return false;"
-      style="text-decoration: none; background-color: red; color: white; padding: 2px;">Download PDF</a>
-    <a class="hide-in-print" href="/Supervisor"
-      style="text-decoration: none; background-color: green; color: white; padding: 2px;">Back to Home</a>
+        <a class="hide-in-print" href="#" onclick="window.print(); return false;"
+          style="text-decoration: none; background-color: red; color: white; padding: 2px;">Download PDF</a>
+        <a class="hide-in-print" href="/Supervisor"
+          style="text-decoration: none; background-color: green; color: white; padding: 2px;">Back to Home</a>
 
 </body>
 

@@ -333,22 +333,58 @@ module.exports = (upload) => {
 	router.get("/delete/:certificateNo", async (req, res, next) => {
 		try {
 			const certNo = req.params.certificateNo;
+			const record = await Certificate.findOne({ certificateNo: certNo });
 
-			// 1) remove both profile + qr from Cloudinary
-			await cloudinary.api.delete_resources(
-				[
-					`certificates/${certNo}/cert-${certNo}`, // profile image
-					`certificates/${certNo}/cert-${certNo}-qr`, // QR code
-				],
-				{ resource_type: "image" }
-			);
+			if (!record) {
+				return res.render("dataLost");
+			}
 
-			// 2) optionally delete the empty folder
-			await cloudinary.api.delete_folder(`certificates/${certNo}`);
+			if (record.isDeleted) {
+				// Hard delete
+				// 1) remove both profile + qr from Cloudinary
+				try {
+					await cloudinary.api.delete_resources(
+						[
+							`certificates/${certNo}/cert-${certNo}`, // profile image
+							`certificates/${certNo}/cert-${certNo}-qr`, // QR code
+						],
+						{ resource_type: "image" }
+					);
+					// 2) optionally delete the empty folder
+					await cloudinary.api.delete_folder(`certificates/${certNo}`);
+				} catch (cloudinaryErr) {
+					console.error("Cloudinary resources deletion failed during hard delete:", cloudinaryErr);
+				}
 
-			// 3) remove from Mongo
-			await Certificate.findOneAndDelete({ certificateNo: certNo });
+				// 3) remove from Mongo
+				await Certificate.findOneAndDelete({ certificateNo: certNo });
+			} else {
+				// Soft delete
+				record.isDeleted = true;
+				await record.save();
+			}
 
+			res.redirect("/supervisor");
+		} catch (err) {
+			next(err);
+		}
+	});
+
+	// RESTORE
+	router.get("/restore/:certificateNo", async (req, res, next) => {
+		try {
+			const certNo = req.params.certificateNo;
+			await Certificate.findOneAndUpdate({ certificateNo: certNo }, { isDeleted: false });
+			res.redirect("/supervisor");
+		} catch (err) {
+			next(err);
+		}
+	});
+
+	router.post("/restore/:certificateNo", async (req, res, next) => {
+		try {
+			const certNo = req.params.certificateNo;
+			await Certificate.findOneAndUpdate({ certificateNo: certNo }, { isDeleted: false });
 			res.redirect("/supervisor");
 		} catch (err) {
 			next(err);
