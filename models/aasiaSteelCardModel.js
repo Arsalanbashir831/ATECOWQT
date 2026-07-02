@@ -55,6 +55,7 @@ const aasiaSteelCardSchema = mongoose.Schema({
   image: String,
   qr: String,
   tableData: mongoose.Schema.Types.Mixed,
+  temp_card_no: String,
 }, { minimize: false });
 
 const AasiaSteelCard = mongoose.model("AasiaSteelCard", aasiaSteelCardSchema);

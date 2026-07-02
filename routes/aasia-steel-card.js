@@ -81,6 +81,7 @@ module.exports = (upload) => {
                     tableData: cardData.tableData, // Explicitly assign tableData 
 					count: req.count,
 					card_no: req.card_no,
+					temp_card_no: req.body.temp_card_no || req.card_no,
 					image: imageUrl,
 					qr: qrUpload.secure_url,
 				});
@@ -132,7 +133,11 @@ module.exports = (upload) => {
 				}
 
 				const cn = req.params.card_no;
-				const updates = { ...req.body, card_no: cn };
+				const updates = { 
+					...req.body, 
+					card_no: cn,
+					temp_card_no: req.body.temp_card_no || cn 
+				};
 
 				if (req.file) updates.image = req.file.path;
 
