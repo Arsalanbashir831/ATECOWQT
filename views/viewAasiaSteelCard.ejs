@@ -80,11 +80,23 @@
     </div>
   </div>
   <div style="width: 100%; border: 2px black solid; margin-top: 10px">
-    <% // Handle tableData - it might be stored as string or object let tableDataObj=null; if (record.tableData) { if
-      (typeof record.tableData==='string' ) { try { tableDataObj=JSON.parse(record.tableData); } catch (e) {
-      console.error('Error parsing tableData:', e); } } else if (typeof record.tableData==='object' ) {
-      tableDataObj=record.tableData; } } // Check if we have valid parsed data if (tableDataObj &&
-      Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) { %>
+    <% 
+      // Handle tableData - it might be stored as string or object
+      let tableDataObj = null; 
+      if (record.tableData) { 
+        if (typeof record.tableData === 'string') { 
+          try { 
+            tableDataObj = JSON.parse(record.tableData); 
+          } catch (e) {
+            console.error('Error parsing tableData:', e); 
+          } 
+        } else if (typeof record.tableData === 'object') {
+          tableDataObj = record.tableData; 
+        } 
+      } 
+      // Check if we have valid parsed data 
+      if (tableDataObj && Array.isArray(tableDataObj.headers) && Array.isArray(tableDataObj.rows)) { 
+    %>
       <table id="dynamicTable" style="width: 100%; border-collapse: separate; border-spacing: 0">
         <thead>
           <tr style="background-color: #f8f9fa; font-weight: bold">
