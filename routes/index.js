@@ -1,5 +1,7 @@
 var express = require('express');
 const User = require('../models/userModel')
+const bcrypt = require('bcrypt');
+const { sign, verify, cookieOptions } = require('../middleware/jwt');
 const Report = require('../models/reportModel')
 const Card = require('../models/cardModel')
 const Certificate = require('../models/certificateModel')
@@ -11,7 +13,7 @@ var router = express.Router();
 const requireAuth = (req, res, next) => {
 
   
-  if (req.session.user) {
+  if (req.auth) {
 
     next();
   } else {
@@ -23,7 +25,7 @@ const requireAuth = (req, res, next) => {
 // Role-based access control
 const requireRole = (role) => {
   return (req, res, next) => {
-    if (req.session.user === role) {
+    if (req.auth && req.auth.role === role) {
       next();
     } else {
       res.status(403).json({ error: 'Access denied. Insufficient permissions.' });
@@ -31,36 +33,18 @@ const requireRole = (role) => {
   };
 };
 
-// User credentials (in production, these should be in a database with hashed passwords)
-const USERS = {
-  supervisor: {
-    id: 'user123',
-    password: 'supervisor1@3',
-    role: 'supervisor',
-    name: 'Supervisor',
-    email: 'supervisor@ateco.com'
-  },
-  inspector: {
-    id: 'user456',
-    password: 'inspector1@3',
-    role: 'inspector',
-    name: 'Inspector',
-    email: 'inspector@ateco.com'
-  }
-};
-
 router.get('/', function (req, res, next) {
 
   
   // Only destroy session if user is not authenticated
-  if (req.session.user) {
+  if (req.auth) {
 
-    const redirectUrl = req.session.user === 'supervisor' ? '/supervisor' : '/inspector';
+    const redirectUrl = req.auth.role === 'supervisor' ? '/supervisor' : '/inspector';
     return res.redirect(redirectUrl);
   }
   
   // Clear any existing session only if not authenticated
-  req.session.destroy();
+  res.clearCookie('ateco-token');
   
   // Handle error parameters
   const error = req.query.error;
@@ -88,9 +72,9 @@ router.get('/supervisor', requireAuth, requireRole('supervisor'), async (req, re
       operatorData,
       aasiaSteelCardData,
       user: {
-        name: USERS.supervisor.name,
+        name: req.auth.name,
         role: 'supervisor',
-        email: USERS.supervisor.email
+        email: req.auth.email
       }
     });
   } catch (error) {
@@ -114,9 +98,9 @@ router.get('/inspector', requireAuth, requireRole('inspector'), async (req, res)
     res.render('inspector', { 
       reportData,
       user: {
-        name: USERS.inspector.name,
+        name: req.auth.name,
         role: 'inspector',
-        email: USERS.inspector.email
+        email: req.auth.email
       }
     });
   } catch (error) {
@@ -153,37 +137,12 @@ router.post('/auth', async function (req, res) {
       });
     }
 
-    // Get user credentials
-    const user = USERS[user_role];
-    
-    if (!user) {
-
-      return res.status(401).json({ 
-        error: 'User not found',
-        message: 'Invalid user role'
-      });
+    const user = await User.findOne({ userId: id, user_role }).lean();
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ error: 'Invalid credentials', message: 'User ID or password is incorrect.' });
     }
-
-    // Verify credentials
-    if (id === user.id && password === user.password) {
-      // Set session
-      req.session.user = user_role;
-      req.session.userId = user.id;
-      req.session.userName = user.name;
-      req.session.userEmail = user.email;
-      req.session.loginTime = new Date();
-
-      // Ensure the session is persisted before the client performs /check-session.
-      // This avoids a race with the default in-memory session store (and works
-      // with external stores as well).
-      return req.session.save((saveError) => {
-        if (saveError) {
-          console.error('Error saving login session:', saveError);
-          return res.status(500).json({
-            error: 'Session error',
-            message: 'Unable to create a login session. Please try again.'
-          });
-        }
+    const token = sign({ sub: String(user._id), userId: user.userId, role: user.user_role, name: user.name, email: user.email });
+    res.cookie('ateco-token', token, cookieOptions);
       
 
       
@@ -212,20 +171,6 @@ router.post('/auth', async function (req, res) {
         const redirectUrl = user_role === 'supervisor' ? '/supervisor' : '/inspector';
         res.redirect(redirectUrl);
         }
-      });
-    } else {
-
-      // Return JSON response for AJAX requests
-      if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
-        return res.status(401).json({ 
-          error: 'Invalid credentials',
-          message: 'User ID or Password is incorrect. Please check your credentials and try again.'
-        });
-      } else {
-        // For form submissions, redirect back with error
-        return res.redirect('/?error=invalid_credentials');
-      }
-    }
   } catch (error) {
     console.error('Authentication error:', error);
     if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
@@ -241,34 +186,38 @@ router.post('/auth', async function (req, res) {
 
 // Logout route
 router.get('/logout', (req, res) => {
-  const userInfo = {
-    name: req.session.userName,
-    role: req.session.user,
-    loginTime: req.session.loginTime
-  };
-  
-
-  
-  // Destroy session
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Error destroying session:', err);
-    }
-    res.redirect('/');
-  });
+  res.clearCookie('ateco-token', { path: '/' });
+  res.redirect('/');
 });
 
 // Session check route (for AJAX requests)
 router.get('/check-session', (req, res) => {
 
-  if (req.session.user) {
+  if (req.auth) {
     res.json({ 
       authenticated: true, 
-      user: req.session.user,
-      name: req.session.userName
+      user: req.auth.role,
+      name: req.auth.name
     });
   } else {
     res.json({ authenticated: false });
+  }
+});
+
+// Creates a user with a bcrypt password hash. Keep this endpoint private or
+// disable it after initial provisioning.
+router.post('/auth/register', async (req, res) => {
+  try {
+    const { userId, password, user_role, name, email } = req.body;
+    if (!userId || !password || !user_role || !name || !email || !['supervisor', 'inspector'].includes(user_role)) {
+      return res.status(400).json({ error: 'userId, password, user_role, name and email are required' });
+    }
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = await User.create({ userId, password: hashedPassword, user_role, name, email });
+    res.status(201).json({ success: true, user: { userId: user.userId, user_role: user.user_role, name: user.name, email: user.email } });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ error: 'Unable to register users' });
   }
 });
 

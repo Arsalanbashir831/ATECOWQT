@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const { verify } = require('./middleware/jwt');
 
 // ––– Cloudinary & Multer setupss –––
 const cloudinary = require("cloudinary").v2;
@@ -215,6 +216,20 @@ app.use(session({
   name: 'ateco-session',
   proxy: process.env.NODE_ENV === 'production'
 }));
+
+// JWT authentication context. Existing views can still access req.session,
+// but authorization is based on the signed token rather than server memory.
+app.use((req, res, next) => {
+  const token = req.cookies['ateco-token'];
+  req.auth = token ? verify(token) : null;
+  if (req.auth) {
+    req.session.user = req.auth.role;
+    req.session.userId = req.auth.userId;
+    req.session.userName = req.auth.name;
+    req.session.userEmail = req.auth.email;
+  }
+  next();
+});
 
 // serve static for your frontend assets
 app.use(express.static(path.join(__dirname, "public")));
