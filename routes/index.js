@@ -172,6 +172,18 @@ router.post('/auth', async function (req, res) {
       req.session.userName = user.name;
       req.session.userEmail = user.email;
       req.session.loginTime = new Date();
+
+      // Ensure the session is persisted before the client performs /check-session.
+      // This avoids a race with the default in-memory session store (and works
+      // with external stores as well).
+      return req.session.save((saveError) => {
+        if (saveError) {
+          console.error('Error saving login session:', saveError);
+          return res.status(500).json({
+            error: 'Session error',
+            message: 'Unable to create a login session. Please try again.'
+          });
+        }
       
 
       
@@ -199,7 +211,8 @@ router.post('/auth', async function (req, res) {
         // Redirect for traditional form submissions
         const redirectUrl = user_role === 'supervisor' ? '/supervisor' : '/inspector';
         res.redirect(redirectUrl);
-      }
+        }
+      });
     } else {
 
       // Return JSON response for AJAX requests

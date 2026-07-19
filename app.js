@@ -190,6 +190,7 @@ const uploadAasiaSteelCard = createAasiaSteelCardUploadMiddleware();
 // ––– Express app setup –––
 const app = express();
 
+app.set("trust proxy", 1);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -204,17 +205,24 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    // Let express-session determine this from X-Forwarded-Proto when behind nginx.
+    // A hard-coded `true` drops the cookie when the upstream request is HTTP.
+    secure: 'auto',
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'lax' // Use 'lax' for better compatibility
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: 'lax'
   },
   name: 'ateco-session',
-  proxy: process.env.NODE_ENV === 'production' // Trust proxy in production
+  proxy: process.env.NODE_ENV === 'production'
 }));
 
 // serve static for your frontend assets
 app.use(express.static(path.join(__dirname, "public")));
+
+// health check endpoint for deployment and monitoring
+app.get("/healthz", (req, res) => {
+	res.status(200).send("ok");
+});
 
 // ––– Your routers –––
 const indexRouter = require("./routes/index");
