@@ -74,26 +74,31 @@ const operatorModel = mongoose.Schema({
 
     // Type of Qualification Test
     visualExamination: {
+        label: { type: String, default: 'Visual Examination' },
         performed: Boolean,
         results: String,
         reportNumber: String
     },
     liquidPenetrantExamination: {
+        label: { type: String, default: 'Liquid Penetrant Examination (PT)' },
         performed: Boolean,
         results: String,
         reportNumber: String
     },
     ultrasonicTesting: {
+        label: { type: String, default: 'Ultrasonic Testing (UT)' },
         performed: Boolean,
         results: String,
         reportNumber: String
     },
     bendTest: {
+        label: { type: String, default: 'Bend Test' },
         performed: Boolean,
         results: String,
         reportNumber: String
     },
     radiographicExamination: {
+        label: { type: String, default: 'Radiographic Examination (RT)' },
         performed: Boolean,
         results: String,
         reportNumber: String

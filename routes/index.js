@@ -1,6 +1,6 @@
 var express = require('express');
 const User = require('../models/userModel')
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { sign, verify, cookieOptions } = require('../middleware/jwt');
 const Report = require('../models/reportModel')
 const Card = require('../models/cardModel')

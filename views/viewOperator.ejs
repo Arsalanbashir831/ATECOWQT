@@ -365,11 +365,11 @@
         <tr style="height: 10px; padding: 2px; line-height: 1;">
           <td>
             <div style="display: flex; flex-direction: column; gap: 2px; justify-content: center;">
-              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;">Visual Inspection</h4>
-              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;">Liquid Penetrant Examination (PT)</h4>
-              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;">Ultrasonic Testig (UT)</h4>
-              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;">Bend Test</h4>
-              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;">Radiographic Examination (RT)</h4>
+              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;"><%= record.visualExamination && record.visualExamination.label || 'Visual Examination' %></h4>
+              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;"><%= record.liquidPenetrantExamination && record.liquidPenetrantExamination.label || 'Liquid Penetrant Examination (PT)' %></h4>
+              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;"><%= record.ultrasonicTesting && record.ultrasonicTesting.label || 'Ultrasonic Testing (UT)' %></h4>
+              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;"><%= record.bendTest && record.bendTest.label || 'Bend Test' %></h4>
+              <h4 style="margin: 0; line-height: 1.1; font-size: 12px;"><%= record.radiographicExamination && record.radiographicExamination.label || 'Radiographic Examination (RT)' %></h4>
 
             </div>
           </td>

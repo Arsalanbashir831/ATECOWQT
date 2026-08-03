@@ -322,13 +322,13 @@
           <tbody>
             <% const tests=['visualExamination', 'liquidPenetrantExamination' , 'ultrasonicTesting' , 'bendTest'
               , 'radiographicExamination' ]; %>
-              <% const labels=['Visual Inspection', 'Liquid Penetrant (PT)' , 'Ultrasonic Testing (UT)' , 'Bend Test'
-                , 'Radiographic (RT)' ]; %>
+              <% const labels=['Visual Examination', 'Liquid Penetrant Examination (PT)' , 'Ultrasonic Testing (UT)' , 'Bend Test'
+                , 'Radiographic Examination (RT)' ]; %>
                 <% tests.forEach((test, i)=> { %>
                   <tr>
-                    <td>
-                      <%= labels[i] %>
-                    </td>
+                    <td><input type="text" name="<%= test %>[label]"
+                        value="<%= record[test] && record[test].label || labels[i] %>"
+                        aria-label="<%= labels[i] %> label"></td>
                     <td><input type="checkbox" name="<%= test %>[performed]" value="true" <%=record[test] &&
                         record[test].performed ? 'checked' : '' %>></td>
                     <td><input type="text" name="<%= test %>[results]"
