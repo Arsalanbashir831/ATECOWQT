@@ -160,7 +160,7 @@
         </tbody>
         <thead>
           <tr>
-            <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Welder variables
+            <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Welding variables
             </th>
             <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;">Actual Values</th>
             <th style="border: 1px solid black;  padding: 4px; font-size: 12px; font-weight: bold;" colspan="2">Range
@@ -204,7 +204,7 @@
                         <tr>
                           <td
                             style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                            Welder Process(es)</td>
+                            Welding Process(es)</td>
                           <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
                             <%=record.welderProcessActual %>
                           </td>
@@ -216,7 +216,7 @@
                         <tr>
                           <td
                             style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                            Types of Welder (manual/semi auto)</td>
+                            Types of Welding (manual/semi auto)</td>
                           <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
                             <%=record.typesOfWeldersActual %>
                           </td>
@@ -384,7 +384,7 @@
                         <tr>
                           <td
                             style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                            Insert gas backing(GTAW,PAW,GMAW)</td>
+                            Inert gas backing(GTAW,PAW,GMAW)</td>
                           <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
                             <%=record.insertGasBackingActual %>
                           </td>
@@ -485,9 +485,9 @@
 
               <td>
                 <div style="display: flex; flex-direction: column; justify-content: center; gap: 2px;">
-                  <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;">Visual Inspection</h4>
-                  <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;">NDT</h4>
-                  <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;">Mechanical Test</h4>
+                  <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;"><%= record.visualInspectionTestLabel || 'Visual Inspection' %></h4>
+                  <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;"><%= record.ndtTestLabel || 'NDT' %></h4>
+                  <h4 style="margin: 0; line-height: 1.1; font-size: 12px; font-weight: bold;"><%= record.mechanicalTestLabel || 'Mechanical Test' %></h4>
                 </div>
               </td>
               <td style="text-align: center;">

@@ -97,14 +97,17 @@ const certificateModel = mongoose.Schema({
     currentTypePolarityRange: String,
 
     virtualInspectorChecked: String,
+    visualInspectionTestLabel: { type: String, default: "Visual Inspection" },
     virtualInspectorReportNo: String,
     virtualInspectorResults: String,
 
     radiographyChecked: String,
+    ndtTestLabel: { type: String, default: "NDT" },
     radiographyReportNo: String,
     radiographyResults: String,
 
     mechTestChecked: String,
+    mechanicalTestLabel: { type: String, default: "Mechanical Test" },
     mechTestReportNo: String,
     mechTestResults: String,
 
