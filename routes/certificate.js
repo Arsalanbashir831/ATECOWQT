@@ -5,6 +5,7 @@ const cloudinary = require("cloudinary").v2;
 const Certificate = require("../models/certificateModel");
 const path = require("path"); // Added for serving static files
 const https = require("https");
+const { duplicateRecordData } = require("../utils/duplicateRecord");
 
 function checkFileExists(url) {
 	return new Promise((resolve) => {
@@ -37,6 +38,11 @@ async function computeCertNo(req, res, next) {
 function setCertNoFromParam(req, res, next) {
 	req.certificateNo = req.params.certificateNo;
 	next();
+}
+
+function requireSupervisor(req, res, next) {
+	if (req.auth && req.auth.role === "supervisor") return next();
+	return res.status(403).send("Supervisor access is required");
 }
 
 module.exports = (upload) => {
@@ -227,21 +233,64 @@ module.exports = (upload) => {
 		}
 	});
 
-	// UPDATE (render edit form)
+	// DUPLICATE
 	router.post(
-		"/edit/:certificateNo",
-		setCertNoFromParam,
+		"/duplicate/:certificateNo",
+		requireSupervisor,
+		computeCertNo,
 		async (req, res, next) => {
 			try {
-				const certNo = req.params.certificateNo;
-				const record = await Certificate.findOne({ certificateNo: certNo });
-				if (!record) return res.status(404).send("Certificate not found");
-				res.render("EditCertificate", { record });
+				const source = await Certificate.findOne({
+					certificateNo: req.params.certificateNo,
+				});
+				if (!source) return res.status(404).send("Certificate not found");
+
+				const profileUpload = await cloudinary.uploader.upload(source.profilePic, {
+					folder: `certificates/${req.certificateNo}`,
+					public_id: `cert-${req.certificateNo}`,
+					format: "jpg",
+					overwrite: true,
+					resource_type: "image",
+				});
+
+				const viewUrl = `${process.env.FRONTEND_URL || "http://localhost:4200"}/certificate/view/${req.certificateNo}`;
+				const qrDataUri = await qrcode.toDataURL(viewUrl, { margin: 1, width: 200 });
+				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
+					folder: `certificates/${req.certificateNo}`,
+					public_id: `cert-${req.certificateNo}-qr`,
+					overwrite: true,
+				});
+
+				const duplicate = await Certificate.create(duplicateRecordData(source, {
+					count: req.count,
+					certificateNo: req.certificateNo,
+					tempCertificateNo: req.certificateNo,
+					welderId: req.welderId,
+					profilePic: profileUpload.secure_url,
+					qrLink: qrUpload.secure_url,
+					isDeleted: false,
+				}));
+
+				res.redirect(`/certificate/edit/${duplicate.certificateNo}`);
 			} catch (err) {
 				next(err);
 			}
 		}
 	);
+
+	// UPDATE (render edit form)
+	const renderEditForm = async (req, res, next) => {
+		try {
+			const certNo = req.params.certificateNo;
+			const record = await Certificate.findOne({ certificateNo: certNo });
+			if (!record) return res.status(404).send("Certificate not found");
+			res.render("EditCertificate", { record });
+		} catch (err) {
+			next(err);
+		}
+	};
+	router.get("/edit/:certificateNo", setCertNoFromParam, renderEditForm);
+	router.post("/edit/:certificateNo", setCertNoFromParam, renderEditForm);
 	// UPDATE (apply changes)
 	router.post(
 		"/update/:certificateNo",

@@ -3,6 +3,7 @@ const express = require("express");
 const qrcode = require("qrcode");
 const cloudinary = require("cloudinary").v2;
 const AasiaSteelCard = require("../models/aasiaSteelCardModel");
+const { duplicateRecordData, duplicateTableData } = require("../utils/duplicateRecord");
 
 // before Multer runs, assign req.card_no & req.count
 async function computeCardNo(req, res, next) {
@@ -17,6 +18,11 @@ async function computeCardNo(req, res, next) {
 function setCardNoFromParam(req, res, next) {
 	req.card_no = req.params.card_no;
 	next();
+}
+
+function requireSupervisor(req, res, next) {
+	if (req.auth && req.auth.role === "supervisor") return next();
+	return res.status(403).send("Supervisor access is required");
 }
 
 module.exports = (upload) => {
@@ -104,6 +110,48 @@ module.exports = (upload) => {
 			res.status(404).json({ Status: "FAILED" });
 		}
 	});
+
+	// DUPLICATE
+	router.post(
+		"/duplicate/:card_no",
+		requireSupervisor,
+		computeCardNo,
+		async (req, res, next) => {
+			try {
+				const source = await AasiaSteelCard.findOne({ card_no: req.params.card_no });
+				if (!source) return res.status(404).send("Aasia Steel card not found");
+
+				const imageUpload = await cloudinary.uploader.upload(source.image, {
+					folder: `aasia-steel-cards/${req.card_no}`,
+					public_id: `aasia-steel-card-${req.card_no}`,
+					format: "jpg",
+					overwrite: true,
+					resource_type: "image",
+				});
+
+				const viewLink = `${process.env.FRONTEND_URL || "http://localhost:4200"}/aasia-steel-card/view/${req.card_no}`;
+				const qrDataUri = await qrcode.toDataURL(viewLink, { width: 200, margin: 1 });
+				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
+					folder: `aasia-steel-cards/${req.card_no}`,
+					public_id: `aasia-steel-card-${req.card_no}-qr`,
+					overwrite: true,
+				});
+
+				const duplicate = await AasiaSteelCard.create(duplicateRecordData(source, {
+					count: req.count,
+					card_no: req.card_no,
+					temp_card_no: req.card_no,
+					tableData: duplicateTableData(source.tableData, req.card_no),
+					image: imageUpload.secure_url,
+					qr: qrUpload.secure_url,
+				}));
+
+				res.redirect(`/aasia-steel-card/edit/${duplicate.card_no}`);
+			} catch (err) {
+				next(err);
+			}
+		}
+	);
 
 	// VIEW
 	router.get("/view/:card_no", async (req, res, next) => {

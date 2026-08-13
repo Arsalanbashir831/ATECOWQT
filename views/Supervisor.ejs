@@ -662,6 +662,14 @@
                                                             <i class="fas fa-edit"></i>
                                                         </button>
                                                     </form>
+                                                    <form action="/certificate/duplicate/<%= certificate.certificateNo %>"
+                                                        method="POST" style="display: inline;">
+                                                        <button type="submit" class="btn btn-secondary btn-sm" title="Duplicate"
+                                                            aria-label="Duplicate certificate"
+                                                            onclick="return confirm('Duplicate this certificate and open the new copy for editing?')">
+                                                            <i class="fas fa-copy" aria-hidden="true"></i>
+                                                        </button>
+                                                    </form>
                                                     <form action="/certificate/view/<%= certificate.certificateNo %>"
                                                         style="display: inline;">
                                                         <button type="submit" class="btn btn-info btn-sm" title="View">
@@ -853,8 +861,16 @@
                                             <div class="action-buttons">
                                                 <form action="/card/edit/<%= card.card_no %>" method="GET"
                                                     style="display: inline;">
-                                                    <button type="submit" class="btn btn-primary btn-sm">
+                                                    <button type="submit" class="btn btn-primary btn-sm" title="Edit">
                                                         <i class="fas fa-edit"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="/card/duplicate/<%= card.card_no %>" method="POST"
+                                                    style="display: inline;">
+                                                    <button type="submit" class="btn btn-secondary btn-sm" title="Duplicate"
+                                                        aria-label="Duplicate card"
+                                                        onclick="return confirm('Duplicate this card and open the new copy for editing?')">
+                                                        <i class="fas fa-copy" aria-hidden="true"></i>
                                                     </button>
                                                 </form>
                                                 <form action="/card/view/<%= card.card_no %>" style="display: inline;">
@@ -949,8 +965,16 @@
                                                 <div class="action-buttons">
                                                     <form action="/aasia-steel-card/edit/<%= card.card_no %>"
                                                         method="GET" style="display: inline;">
-                                                        <button type="submit" class="btn btn-primary btn-sm">
+                                                        <button type="submit" class="btn btn-primary btn-sm" title="Edit">
                                                             <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form action="/aasia-steel-card/duplicate/<%= card.card_no %>"
+                                                        method="POST" style="display: inline;">
+                                                        <button type="submit" class="btn btn-secondary btn-sm" title="Duplicate"
+                                                            aria-label="Duplicate Aasia Steel card"
+                                                            onclick="return confirm('Duplicate this Aasia Steel card and open the new copy for editing?')">
+                                                            <i class="fas fa-copy" aria-hidden="true"></i>
                                                         </button>
                                                     </form>
                                                     <form action="/aasia-steel-card/view/<%= card.card_no %>"

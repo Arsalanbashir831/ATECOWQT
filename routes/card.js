@@ -4,6 +4,7 @@ const qrcode = require("qrcode");
 const cloudinary = require("cloudinary").v2;
 const Card = require("../models/cardModel");
 const https = require("https");
+const { duplicateRecordData, duplicateTableData } = require("../utils/duplicateRecord");
 
 function checkFileExists(url) {
 	return new Promise((resolve) => {
@@ -25,6 +26,11 @@ async function computeCardNo(req, res, next) {
 function setCardNoFromParam(req, res, next) {
 	req.card_no = req.params.card_no;
 	next();
+}
+
+function requireSupervisor(req, res, next) {
+	if (req.auth && req.auth.role === "supervisor") return next();
+	return res.status(403).send("Supervisor access is required");
 }
 
 module.exports = (upload) => {
@@ -116,6 +122,48 @@ module.exports = (upload) => {
 			res.status(404).json({ Status: "FAILED" });
 		}
 	});
+
+	// DUPLICATE
+	router.post(
+		"/duplicate/:card_no",
+		requireSupervisor,
+		computeCardNo,
+		async (req, res, next) => {
+			try {
+				const source = await Card.findOne({ card_no: req.params.card_no });
+				if (!source) return res.status(404).send("Card not found");
+
+				const imageUpload = await cloudinary.uploader.upload(source.image, {
+					folder: `cards/${req.card_no}`,
+					public_id: `card-${req.card_no}`,
+					format: "jpg",
+					overwrite: true,
+					resource_type: "image",
+				});
+
+				const viewLink = `${process.env.FRONTEND_URL || "http://localhost:4200"}/card/view/${req.card_no}`;
+				const qrDataUri = await qrcode.toDataURL(viewLink, { width: 200, margin: 1 });
+				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
+					folder: `cards/${req.card_no}`,
+					public_id: `card-${req.card_no}-qr`,
+					overwrite: true,
+				});
+
+				const duplicate = await Card.create(duplicateRecordData(source, {
+					count: req.count,
+					card_no: req.card_no,
+					tempCardNo: req.card_no,
+					tableData: duplicateTableData(source.tableData, req.card_no),
+					image: imageUpload.secure_url,
+					qr: qrUpload.secure_url,
+				}));
+
+				res.redirect(`/card/edit/${duplicate.card_no}`);
+			} catch (err) {
+				next(err);
+			}
+		}
+	);
 
 	// VIEW
 	router.get("/view/:card_no", async (req, res, next) => {
