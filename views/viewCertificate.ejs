@@ -171,13 +171,13 @@
         <tbody style="text-align: center">
           <% var isNewFormat=false; if (record.attributes && record.attributes.length> 0) {
             var standardKeys = [
-            "Welder Process(es)", "Types of Welder (manual/semi auto)", "Backing (With/without)",
+            "Welding Process(es)", "Types of Welding (manual/semi auto)", "Backing (With/without)",
             "Types of weld", "Product Types(Plate or Pipe)", "Diameter of Pipe",
             "Base Metal P Number to P Number", "Filler Metal or electrode specification",
             "Filler Metal F-Number(S)", "Filler Metal addition/Deletion (GTAW/PAW)",
-            "Consumable Insert (GTAW or PAW)", "Deposit thickness for each process",
+            "Consumable Inert (GTAW or PAW)", "Deposit thickness for each process",
             "Welding position", "Vertical Progression", "Type of Fuel Gas(OFW)",
-            "Insert gas backing(GTAW,PAW,GMAW)", "Transfer Mode (Spray, Globular, Short)",
+            "Inert gas backing(GTAW,PAW,GMAW)", "Transfer Mode (Spray, Globular, Short)",
             "Current Type/Polarity(AC,DCEP,DCEN)"
             ];
             isNewFormat = record.attributes.some(function(a) { return standardKeys.indexOf(a.key) > -1; });
