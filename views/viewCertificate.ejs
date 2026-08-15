@@ -177,7 +177,7 @@
             "Filler Metal F-Number(S)", "Filler Metal addition/Deletion (GTAW/PAW)",
             "Consumable Inert (GTAW or PAW)", "Deposit thickness for each process",
             "Welding position", "Vertical Progression", "Type of Fuel Gas(OFW)",
-            "Inert gas backing(GTAW,PAW,GMAW)", "Transfer Mode (Spray, Globular, Short)",
+            "Insert gas backing(GTAW,PAW,GMAW)", "Transfer Mode (Spray, Globular, Short)",
             "Current Type/Polarity(AC,DCEP,DCEN)"
             ];
             isNewFormat = record.attributes.some(function(a) { return standardKeys.indexOf(a.key) > -1; });
@@ -384,7 +384,7 @@
                         <tr>
                           <td
                             style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold;">
-                            Inert gas backing(GTAW,PAW,GMAW)</td>
+                            Insert gas backing(GTAW,PAW,GMAW)</td>
                           <td style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px;">
                             <%=record.insertGasBackingActual %>
                           </td>

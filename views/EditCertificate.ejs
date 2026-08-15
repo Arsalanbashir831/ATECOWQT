@@ -217,7 +217,7 @@
               "Filler Metal F-Number(S)", "Filler Metal addition/Deletion (GTAW/PAW)",
               "Consumable Inert (GTAW or PAW)", "Deposit thickness for each process",
               "Welding position", "Vertical Progression", "Type of Fuel Gas(OFW)",
-              "Inert gas backing(GTAW,PAW,GMAW)", "Transfer Mode (Spray, Globular, Short)",
+              "Insert gas backing(GTAW,PAW,GMAW)", "Transfer Mode (Spray, Globular, Short)",
               "Current Type/Polarity(AC,DCEP,DCEN)"
             ];
             isNewFormat = record.attributes.some(function(a) { return standardKeys.indexOf(a.key) > -1; });
@@ -253,7 +253,7 @@
                     <tr>
                       <td
                         style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
-                        <input type="hidden" name="attrKeys" value="Welder Process(es)">
+                        <input type="hidden" name="attrKeys" value="Welding Process(es)">
                         Welding Process(es)
                         <div class="control-btn"
                           style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);"
@@ -275,7 +275,7 @@
                     <tr>
                       <td
                         style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
-                        <input type="hidden" name="attrKeys" value="Types of Welder (manual/semi auto)">
+                        <input type="hidden" name="attrKeys" value="Types of Welding (manual/semi auto)">
                         Types of Welding (manual/semi auto)
                         <div class="control-btn"
                           style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);"
@@ -556,7 +556,7 @@
                       <td
                         style="text-align: left; border: 1px solid black; padding: 4px; font-size: 12px; font-weight: bold; position: relative;">
                         <input type="hidden" name="attrKeys" value="Insert gas backing(GTAW,PAW,GMAW)">
-                        Inert gas backing(GTAW,PAW,GMAW)
+                        Insert gas backing(GTAW,PAW,GMAW)
                         <div class="control-btn"
                           style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%);"
                           onclick="showRowMenu(this, event)">+</div>
