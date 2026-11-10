@@ -4,6 +4,7 @@ const qrcode = require("qrcode");
 const cloudinary = require("cloudinary").v2;
 const Operator = require("../models/operatorModel");
 const path = require("path");
+const awsFormat = require("../utils/awsOperatorFormat");
 
 async function computeOperatorNo(req, res, next) {
 	try {
@@ -53,7 +54,7 @@ module.exports = (upload) => {
 	const router = express.Router();
 
 	// show the form
-	router.get("/", (req, res) => res.render("insertOperator"));
+	router.get("/", (req, res) => res.render("insertOperator", { awsFormat }));
 
 	// test form for debugging
 	router.get("/test", (req, res) => {
@@ -200,6 +201,35 @@ module.exports = (upload) => {
 		}
 	});
 
+	// VIEW in AWS D1.1 format
+	router.get("/view-aws/:operatorNo", async (req, res, next) => {
+		try {
+			const record = await Operator.findOne({
+				operatorNo: req.params.operatorNo,
+			});
+			if (!record) return res.render("dataLost");
+
+			// QR that opens this AWS-format view (the stored qrLink opens the ASME view)
+			const awsViewUrl = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/operator/view-aws/${record.operatorNo}`;
+			let awsQr = record.qrLink;
+			try {
+				awsQr = await qrcode.toDataURL(awsViewUrl, { margin: 1, width: 200 });
+			} catch (qrErr) {
+				console.error('AWS QR generation failed, using stored QR:', qrErr);
+			}
+
+			res.render("viewOperatorAws", {
+				record,
+				awsQr,
+				awsRows: awsFormat.awsRowsFor(record),
+				awsTitle: record.awsVariablesTitle || awsFormat.AWS_DEFAULT_TITLE,
+				awsLaw: record.awsLawName || awsFormat.AWS_DEFAULT_LAW,
+			});
+		} catch (err) {
+			next(err);
+		}
+	});
+
 	// UPDATE (render edit form)
 	router.post(
 		"/edit/:operatorNo",
@@ -209,7 +239,11 @@ module.exports = (upload) => {
 			const operatorNo = req.params.operatorNo;
 			const record = await Operator.findOne({ operatorNo: operatorNo });
 			if (!record) return res.status(404).send("Operator not found");
-			res.render("EditOperator", { record });
+			res.render("EditOperator", {
+				record,
+				awsFormat,
+				awsRows: awsFormat.awsRowsFor(record),
+			});
 		  } catch (err) {
 			next(err);
 		  }
@@ -235,6 +269,8 @@ module.exports = (upload) => {
 				}
 
 				const updates = { ...req.body, operatorNo: operatorNo };
+				// Removing every AWS row sends no awsVariables field; save that as empty.
+				updates.awsVariables = Array.isArray(req.body.awsVariables) ? req.body.awsVariables : [];
 
 				// 1) New profile? storage will overwrite the old asset with the same public_id:
 				if (req.file) {

@@ -309,6 +309,38 @@
       </div>
 
       <div class="section">
+        <div class="section-title">AWS D1.1 Format &ndash; Testing Variables and Qualification Limits</div>
+        <p style="margin-top: 0; color: #555;">Used only by the &quot;View AWS D1.1&quot; certificate. The ASME Sec IX
+          certificate uses the tables above.</p>
+        <div class="form-grid" style="margin-bottom: 10px;">
+          <div class="form-group">
+            <label for="awsVariablesTitle">Table Title:</label>
+            <input type="text" id="awsVariablesTitle" name="awsVariablesTitle"
+              value="<%= record.awsVariablesTitle || awsFormat.AWS_DEFAULT_TITLE %>">
+          </div>
+          <div class="form-group">
+            <label for="awsLawName">Tested in accordance with (AWS format):</label>
+            <input type="text" id="awsLawName" name="awsLawName"
+              value="<%= record.awsLawName || awsFormat.AWS_DEFAULT_LAW %>">
+          </div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Welding Variables</th>
+              <th>Actual Values</th>
+              <th>Range Qualified</th>
+              <th class="hide-in-print">Action</th>
+            </tr>
+          </thead>
+          <tbody id="awsVariablesBody"></tbody>
+        </table>
+        <div class="hide-in-print" style="margin-top: 10px;"><button type="button" onclick="addAwsRow()"
+            style="background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">+
+            Add Variable Row</button></div>
+      </div>
+
+      <div class="section">
         <div class="section-title">Type of Qualification Test</div>
         <table class="test-table">
           <thead>
@@ -466,6 +498,32 @@
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
       else init();
     })();
+
+    // AWS D1.1 format variables
+    const awsVariablesBody = document.getElementById('awsVariablesBody');
+
+    function addAwsRow(label, actual, range) {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><input type="text" name="awsVariables[0][label]" value="${escapeHtml(label || '')}" placeholder="Variable Name"></td>
+        <td><input type="text" name="awsVariables[0][actualValue]" value="${escapeHtml(actual || '')}" placeholder="Enter Actual Value"></td>
+        <td><input type="text" name="awsVariables[0][rangeQualified]" value="${escapeHtml(range || '')}" placeholder="Enter Range Qualified"></td>
+        <td class="hide-in-print"><button type="button" onclick="this.closest('tr').remove(); reindexAwsRows()" style="background:#dc3545; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Remove</button></td>
+      `;
+      awsVariablesBody.appendChild(row);
+      reindexAwsRows();
+    }
+
+    function reindexAwsRows() {
+      Array.from(awsVariablesBody.rows).forEach((row, index) => {
+        row.querySelectorAll('input').forEach(input => {
+          input.name = input.name.replace(/\[\d+\]/, '[' + index + ']');
+        });
+      });
+    }
+
+    const awsInitialRows = <%- JSON.stringify(awsRows).replace(/</g, '\\u003c') %>;
+    awsInitialRows.forEach(v => addAwsRow(v.label, v.actualValue, v.rangeQualified));
   </script>
 </body>
 

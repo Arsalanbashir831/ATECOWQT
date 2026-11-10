@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CERTIFICATE</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 8mm;
+    }
+
+    body {
+      font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+      font-size: 15px;
+      color: #000;
+      margin: 0 auto;
+      max-width: 900px;
+      padding: 10px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .sheet {
+      border: 1px solid #000;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    td,
+    th {
+      border: 1px solid #000;
+      padding: 2px 7px;
+      line-height: 1.25;
+      vertical-align: middle;
+      word-wrap: break-word;
+    }
+
+    .head td {
+      border: none;
+      border-bottom: 1px solid #000;
+      text-align: center;
+      padding: 6px;
+    }
+
+    .head td+td {
+      border-left: 1px solid #000;
+    }
+
+    .doc-title {
+      color: green;
+      font-weight: bold;
+      font-size: 18px;
+      margin: 0 0 6px;
+    }
+
+    .client-title {
+      font-weight: bold;
+      font-size: 19px;
+      margin: 0;
+    }
+
+    .band {
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 4px;
+    }
+
+    .lbl {
+      font-weight: bold;
+    }
+
+    .cert-no {
+      color: green;
+      font-weight: bold;
+    }
+
+    .tests td {
+      text-align: center;
+    }
+
+    .tests td:first-child {
+      text-align: left;
+    }
+
+    .box {
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .statement {
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 6px 30px;
+    }
+
+    .law {
+      color: rgb(0, 131, 254);
+    }
+
+    .sign td {
+      border: none;
+      padding: 4px 10px;
+    }
+
+    .sign .org {
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .sign .role {
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .sign .name {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .sign .line {
+      border-bottom: 1px solid #000;
+    }
+
+    .verify {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+
+    .verify p {
+      margin: 0;
+      font-size: 11px;
+    }
+
+    .verify img {
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+
+    .address {
+      border: 1.5px solid #000;
+      margin: 0 14px 10px;
+      padding: 5px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .actions {
+      margin-top: 14px;
+    }
+
+    .actions a {
+      text-decoration: none;
+      color: white;
+      padding: 4px 8px;
+      margin-right: 6px;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        max-width: none;
+      }
+
+      .hide-in-print {
+        display: none;
+      }
+
+      /* keep the whole certificate on one A4 page */
+      .sheet {
+        zoom: 0.87;
+      }
+    }
+  </style>
+</head>
+
+<%
+  const v = (x) => (x === undefined || x === null || x === '') ? 'N/A' : x;
+  const tests = [
+    ['visualExamination', 'Visual Examination'],
+    ['liquidPenetrantExamination', 'Liquid Penetrant Examination (PT)'],
+    ['ultrasonicTesting', 'Ultrasonic Testing (UT)'],
+    ['bendTest', 'Mechanical Test'],
+    ['radiographicExamination', 'Radiographic Examination (RT)'],
+  ];
+%>
+
+<body>
+  <div class="sheet">
+    <table class="head">
+      <colgroup>
+        <col style="width: 26%">
+        <col style="width: 55%">
+        <col style="width: 19%">
+      </colgroup>
+      <tr>
+        <td><img style="width: 100%; max-width: 200px;" src="/images/logo.png" alt="ATECO"></td>
+        <td>
+          <p class="doc-title">Welding Operator Performance Qualification Test Record (WOPQT)</p>
+          <p class="client-title"><%= record.clientName || 'N/A' %></p>
+        </td>
+        <td><img src="<%= record.profilePic %>" alt="Photo of <%= record.operatorName %>"
+            style="max-width: 100%; max-height: 105px;"></td>
+      </tr>
+    </table>
+
+    <table>
+      <colgroup>
+        <col style="width: 29%">
+        <col style="width: 31%">
+        <col style="width: 21%">
+        <col style="width: 19%">
+      </colgroup>
+      <tr>
+        <td colspan="4" class="band">Welding Operator Data &amp; Test Description</td>
+      </tr>
+      <tr>
+        <td class="lbl">Operator Name</td>
+        <td><%= v(record.operatorName) %></td>
+        <td class="lbl">Certificate No</td>
+        <td class="cert-no"><%= v(record.certificateNo) %></td>
+      </tr>
+      <tr>
+        <td class="lbl">Operator ID / Symbol</td>
+        <td><%= v(record.operatorId) %></td>
+        <td class="lbl">Iqama / Passport</td>
+        <td><%= v(record.iqamaPassport) %></td>
+      </tr>
+      <tr>
+        <td class="lbl">WPS Followed</td>
+        <td><%= v(record.wpsFollowed) %></td>
+        <td class="lbl">Date of Issue</td>
+        <td><%= v(record.dateOfIssue) %></td>
+      </tr>
+      <tr>
+        <td class="lbl">Joint / Weld Type</td>
+        <td><%= v(record.jointWeldType) %></td>
+        <td class="lbl">Date of Welding</td>
+        <td><%= v(record.dateOfWelding) %></td>
+      </tr>
+      <tr>
+        <td class="lbl">Base Metal Spec.</td>
+        <td><%= v(record.baseMetalSpec) %></td>
+        <td class="lbl">Base Metal P-No.</td>
+        <td><%= v(record.baseMetalPNo) %></td>
+      </tr>
+
+      <tr>
+        <td colspan="4" class="band">Testing Variables and Qualification Limits</td>
+      </tr>
+      <tr>
+        <td colspan="4" class="band"><%= awsTitle %></td>
+      </tr>
+      <tr>
+        <td class="lbl">Welding variables</td>
+        <td class="lbl" colspan="1">Actual Values</td>
+        <td class="lbl" colspan="2">Range Qualified</td>
+      </tr>
+      <% awsRows.forEach(function (row) { %>
+        <tr>
+          <td class="lbl"><%= row.label %></td>
+          <td><%= v(row.actualValue) %></td>
+          <td colspan="2"><%= v(row.rangeQualified) %></td>
+        </tr>
+      <% }) %>
+    </table>
+
+    <table class="tests">
+      <colgroup>
+        <col style="width: 35%">
+        <col style="width: 17%">
+        <col style="width: 16%">
+        <col style="width: 32%">
+      </colgroup>
+      <tr>
+        <td class="lbl">Test Conducted/ Type of Test</td>
+        <td class="lbl">Test Performed</td>
+        <td class="lbl">Results</td>
+        <td class="lbl" style="text-align: left;">Report Number</td>
+      </tr>
+      <% tests.forEach(function (t) { const test = record[t[0]] || {}; %>
+        <tr>
+          <td class="lbl"><%= (t[0] === 'bendTest' && (!test.label || test.label === 'Bend Test')) ? t[1] : (test.label || t[1]) %></td>
+          <td><span class="box"><%= test.performed ? '☑' : '☐' %></span></td>
+          <td class="lbl"><%= test.results || '' %></td>
+          <td class="lbl" style="text-align: left;"><%= test.reportNumber || '' %></td>
+        </tr>
+      <% }) %>
+      <tr>
+        <td colspan="4" class="statement">We certify that the statements in this record are correct and that the test
+          coupons were prepared, welded and tested in accordance with the requirements of
+          <span class="law"><%= awsLaw %></span>.</td>
+      </tr>
+    </table>
+
+    <table class="sign">
+      <colgroup>
+        <col style="width: 30%">
+        <col style="width: 25%">
+        <col style="width: 15%">
+        <col style="width: 30%">
+      </colgroup>
+      <tr>
+        <td colspan="2" class="org">Arabian Testing Evolution Company (ATECO)</td>
+        <td colspan="2" class="org">Manufacturer / Contractor</td>
+      </tr>
+      <tr>
+        <td class="role">Testing Witnessed / Welder Inspector</td>
+        <td class="name"><%= record.witnessedBy || '____________________' %></td>
+        <td class="lbl">Client Name:</td>
+        <td class="lbl"><%= record.clientName || '____________________' %></td>
+      </tr>
+      <tr>
+        <td class="role">Test Supervisor / Technical Manager</td>
+        <td class="name"><%= record.supervisorName || '____________________' %></td>
+        <td class="lbl">Client Signature:</td>
+        <td><div class="line">&nbsp;</div></td>
+      </tr>
+      <% if (typeof awsQr !== 'undefined' && awsQr) { %>
+        <tr>
+          <td colspan="4" style="padding-top: 0; padding-bottom: 4px;">
+            <div class="verify">
+              <p>To verify the information about the certificate. Please scan the QR code using any QR scan app</p>
+              <img src="<%= awsQr %>" alt="QR Code for <%= record.operatorNo %>">
+            </div>
+          </td>
+        </tr>
+      <% } %>
+    </table>
+
+    <div class="address">
+      Address: 3658 Ar Rabiyah District Unit No:02, P.0 Box 32437 Dammam 6621 KSA
+      <span dir="rtl">المملكة العربية السعودية الدمام ٦٦٢١ ص.ب ٣٢٤٣٧ ، حي الرابية ٠٢ الوحدة رقم ٣٦٥٨ :عنوان</span>
+      <br>Tel: +966138383130 <span dir="rtl">جوال ٩٦٦١٣٨٣٢٨٢١٢٠</span> Website: www.atecosaudia.com
+      <br>Email: info@atecosaudia.com <span dir="rtl">:البريد الإلكتروني</span> Cr# 2051226809
+      <span dir="rtl">س_ص ٢٠٥١٢٢٦٨٠٩</span>
+    </div>
+  </div>
+
+  <div class="actions hide-in-print">
+    <a href="#" onclick="window.print(); return false;" style="background-color: red;">Download PDF</a>
+    <a href="/operator/view/<%= record.operatorNo %>" style="background-color: #0d6efd;">View ASME Sec IX Format</a>
+    <a href="/Supervisor" style="background-color: green;">Back to Home</a>
+  </div>
+</body>
+
+</html>

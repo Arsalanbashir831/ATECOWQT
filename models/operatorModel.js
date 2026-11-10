@@ -72,6 +72,15 @@ const operatorModel = mongoose.Schema({
         rangeQualified: String
     }],
 
+    // AWS D1.1 format (separate view: /operator/view-aws/:operatorNo)
+    awsVariablesTitle: String,
+    awsLawName: String,
+    awsVariables: [{
+        label: String,
+        actualValue: String,
+        rangeQualified: String
+    }],
+
     // Type of Qualification Test
     visualExamination: {
         label: { type: String, default: 'Visual Examination' },
