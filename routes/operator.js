@@ -5,6 +5,7 @@ const cloudinary = require("cloudinary").v2;
 const Operator = require("../models/operatorModel");
 const path = require("path");
 const awsFormat = require("../utils/awsOperatorFormat");
+const { duplicateRecordData } = require("../utils/duplicateRecord");
 
 async function computeOperatorNo(req, res, next) {
 	try {
@@ -48,6 +49,11 @@ async function computeOperatorNo(req, res, next) {
 function setOperatorNoFromParam(req, res, next) {
 	req.operatorNo = req.params.operatorNo;
 	next();
+}
+
+function requireSupervisor(req, res, next) {
+	if (req.auth && req.auth.role === "supervisor") return next();
+	return res.status(403).send("Supervisor access is required");
 }
 
 module.exports = (upload) => {
@@ -230,12 +236,54 @@ module.exports = (upload) => {
 		}
 	});
 
-	// UPDATE (render edit form)
+	// DUPLICATE
 	router.post(
-		"/edit/:operatorNo",
-		setOperatorNoFromParam,
+		"/duplicate/:operatorNo",
+		requireSupervisor,
+		computeOperatorNo,
 		async (req, res, next) => {
-		  try {
+			try {
+				const source = await Operator.findOne({
+					operatorNo: req.params.operatorNo,
+				});
+				if (!source) return res.status(404).send("Operator not found");
+
+				// Copy the profile image into the new operator's folder so deleting
+				// either record never removes the other's image.
+				const profileUpload = await cloudinary.uploader.upload(source.profilePic, {
+					folder: `operators/${req.operatorNo}`,
+					public_id: `operator-${req.operatorNo}`,
+					overwrite: true,
+					resource_type: "image",
+				});
+
+				const viewUrl = `${process.env.FRONTEND_URL || 'http://localhost:4200'}/operator/view/${req.operatorNo}`;
+				const qrDataUri = await qrcode.toDataURL(viewUrl, { margin: 1, width: 200 });
+				const qrUpload = await cloudinary.uploader.upload(qrDataUri, {
+					folder: `operators/${req.operatorNo}`,
+					public_id: `operator-${req.operatorNo}-qr`,
+					overwrite: true,
+				});
+
+				const duplicate = await Operator.create(duplicateRecordData(source, {
+					count: req.count,
+					operatorNo: req.operatorNo,
+					certificateNo: req.certificateNo,
+					operatorId: req.operatorId,
+					profilePic: profileUpload.secure_url,
+					qrLink: qrUpload.secure_url,
+				}));
+
+				res.redirect(`/operator/edit/${duplicate.operatorNo}`);
+			} catch (err) {
+				next(err);
+			}
+		}
+	);
+
+	// UPDATE (render edit form)
+	const renderEditForm = async (req, res, next) => {
+		try {
 			const operatorNo = req.params.operatorNo;
 			const record = await Operator.findOne({ operatorNo: operatorNo });
 			if (!record) return res.status(404).send("Operator not found");
@@ -244,11 +292,12 @@ module.exports = (upload) => {
 				awsFormat,
 				awsRows: awsFormat.awsRowsFor(record),
 			});
-		  } catch (err) {
+		} catch (err) {
 			next(err);
-		  }
 		}
-	  );
+	};
+	router.get("/edit/:operatorNo", setOperatorNoFromParam, renderEditForm);
+	router.post("/edit/:operatorNo", setOperatorNoFromParam, renderEditForm);
 
 	// UPDATE (apply changes)
 	router.post(

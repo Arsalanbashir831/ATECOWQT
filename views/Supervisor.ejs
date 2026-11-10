@@ -764,6 +764,14 @@
                                                             <i class="fas fa-edit"></i>
                                                         </button>
                                                     </form>
+                                                    <form action="/operator/duplicate/<%= operator.operatorNo %>"
+                                                        method="POST" style="display: inline;">
+                                                        <button type="submit" class="btn btn-secondary btn-sm" title="Duplicate"
+                                                            aria-label="Duplicate operator certificate"
+                                                            onclick="return confirm('Duplicate this operator certificate and open the new copy for editing?')">
+                                                            <i class="fas fa-copy" aria-hidden="true"></i>
+                                                        </button>
+                                                    </form>
                                                     <form action="/operator/view/<%= operator.operatorNo %>"
                                                         method="GET" style="display: inline;">
                                                         <button type="submit" class="btn btn-info btn-sm"
